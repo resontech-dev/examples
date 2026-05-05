@@ -1,0 +1,7 @@
+torch>=2.7.1
+nvflare
+huggingface_hub
+transformers
+sentence-transformers
+datasets
+numpy

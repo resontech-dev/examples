@@ -1,0 +1,11 @@
+torch>=2.7.1
+nvflare
+huggingface_hub
+sentencepiece
+unsloth
+xformers
+bitsandbytes
+transformers
+peft
+accelerate
+datasets

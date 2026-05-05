@@ -1,0 +1,10 @@
+torch>=2.7.1
+nvflare
+huggingface_hub
+transformers
+peft
+accelerate
+datasets
+librosa
+soundfile
+sentencepiece

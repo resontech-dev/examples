@@ -1,0 +1,9 @@
+torch>=2.7.1
+transformers
+peft
+trl
+accelerate
+datasets
+nvflare
+huggingface_hub
+sentencepiece

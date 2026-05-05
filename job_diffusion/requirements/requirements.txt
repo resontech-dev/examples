@@ -1,0 +1,12 @@
+torch>=2.7.1
+torchvision
+nvflare
+huggingface_hub
+diffusers
+transformers
+peft
+accelerate
+datasets
+pillow
+sentencepiece
+ftfy

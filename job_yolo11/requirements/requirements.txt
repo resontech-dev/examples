@@ -1,0 +1,9 @@
+torch>=2.7.1
+torchvision
+nvflare
+ultralytics
+huggingface_hub
+numpy
+pyyaml
+pillow
+opencv-python-headless

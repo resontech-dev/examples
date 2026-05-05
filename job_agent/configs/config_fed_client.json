@@ -1,0 +1,27 @@
+{
+  "format_version": 2,
+  "submit_task_result_timeout": 300,
+  "executors": [
+    {
+      "tasks": [
+        "train",
+        "validate",
+        "submit_model"
+      ],
+      "executor": {
+        "path": "custom_client_executor.GenericClientExecutor",
+        "args": {
+          "data_root": "/var/tmp/nvflare/data",
+          "adapter_module": "model_def",
+          "train_fn": "fl_train_model",
+          "local_epochs": 2,
+          "batch_size": 32,
+          "learning_rate": 0.0002
+        }
+      }
+    }
+  ],
+  "task_result_filters": [],
+  "task_data_filters": [],
+  "components": []
+}
