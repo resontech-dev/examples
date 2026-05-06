@@ -89,6 +89,9 @@ huggingface_hub/
 # --- Unsloth's auto-generated kernel cache (per-machine) ---
 unsloth_compiled_cache/
 
+# --- Unsloth's auto-generated kernel cache (per-machine) ---
+unsloth_compiled_cache/
+
 # --- Per-platform secrets / tokens ---
 .env
 .env.local
