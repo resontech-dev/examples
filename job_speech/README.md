@@ -89,6 +89,29 @@ print(processor.batch_decode(gen, skip_special_tokens=True))
 
 LibriSpeech is read speech — *not* private. But the **same FL pipeline applies to private call-center recordings, medical dictation, voice-assistant logs**. Each org's audio stays local; only the LoRA delta moves. This is the textbook FL pitch for ASR.
 
+## Original training recipe (canonical Whisper LoRA from HF blog + PEFT examples)
+
+Source: https://huggingface.co/blog/fine-tune-whisper, https://github.com/Vaibhavs10/fast-whisper-finetuning, PEFT `examples/int8_training/peft_bnb_whisper_large_v2_training.ipynb`
+
+| Param | Value | Source |
+|---|---|---|
+| Optimizer | **adamw_torch** (or 8-bit Adam in PEFT examples) | HF blog / PEFT |
+| Learning rate | **1e-3** (LoRA — higher than full-FT 1e-5) | PEFT example |
+| LR schedule | linear (HF default) | PEFT example |
+| Warmup steps | **50** | PEFT example |
+| Batch size | **8** per-device, grad_accum=1 | blog/PEFT |
+| Epochs | **3** (LoRA) — or max_steps=5000 in full-FT blog | PEFT example |
+| Audio length | 30s chunks @ 16 kHz | Whisper standard |
+| Mixed precision | fp16 + gradient_checkpointing | PEFT example |
+| LoRA | **r=32, alpha=64, dropout=0.05**, target_modules=["q_proj", "v_proj"], task_type=SEQ_2_SEQ_LM | PEFT example |
+| Loss | cross-entropy on text tokens (Whisper Seq2Seq) | architecture |
+| Preprocessing | WhisperFeatureExtractor (80-bin log-Mel) + WhisperTokenizer; resample → 16 kHz | architecture |
+| generation_max_length | 225, predict_with_generate=True | PEFT example |
+| Final metric (base, no FT) | **WER 3.43% on LibriSpeech test-clean**, 7.63% test-other | https://huggingface.co/openai/whisper-small |
+| Final metric (LoRA target) | ~3-4% WER on test-clean (depends on data) | community runs |
+
+**FL config matches**: `learning_rate: 1e-3`, `batch_size: 8`, `local_epochs: 1`, 5 rounds → effective ~3 epochs (close to canonical). `lora_rank=32` set in `model_def.py`.
+
 ## Caveats
 
 - **LoRA-only**: trains attention projections only. For dramatic adaptation (new language, new domain vocab), consider full fine-tuning — but that's ~1 GB / round / direction in transfer, impractical for FL.

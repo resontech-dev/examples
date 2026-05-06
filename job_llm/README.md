@@ -98,8 +98,32 @@ We surveyed 3 candidates for "small LLM for FL fine-tuning":
 
 Phi-3.5-mini's card is the most reproducibly documented.
 
+## Original training recipe (verbatim from Microsoft's `sample_finetune.py`)
+
+Source: https://huggingface.co/microsoft/Phi-3.5-mini-instruct/resolve/main/sample_finetune.py
+
+| Param | Value | Source |
+|---|---|---|
+| Optimizer | adamw_torch (HF default) | script |
+| Learning rate | **5e-6** | script |
+| LR schedule | **cosine** | script |
+| Warmup ratio | **0.2** (= 20% of total steps) | script |
+| Batch size | **4** per-device × grad_accum 1 | script |
+| Epochs | **1** | script |
+| Sequence length | **2048** | script |
+| Weight decay | 0.0 (HF default) | inferred |
+| Grad clip | 1.0 (HF default) | inferred |
+| Mixed precision | **bf16=True**, gradient_checkpointing=True | script |
+| LoRA | **r=16, alpha=32, dropout=0.05**, bias="none", task_type="CAUSAL_LM", target_modules="all-linear" | script |
+| Loss | causal LM cross-entropy (TRL SFTTrainer) | script |
+| Default dataset | `HuggingFaceH4/ultrachat_200k` (script default; we swap to Alpaca for FL demo) | script |
+| Base model context | trained on 3.4T tokens, 512×H100-80G, 10 days; SFT + DPO + PPO | model card |
+| Final published metric | MMLU 69, GSM8K 86.2, HumanEval 62.8 | model card |
+
+**FL config matches**: `learning_rate: 5e-6`, `batch_size: 4`, `local_epochs: 1`, 5 rounds → effective 5 epochs of accumulation. LoRA `r=16`, `alpha=32`.
+
 ## Caveats
 
 - This is the **vanilla LLM FL setup**. For 7B+ models or faster training, use `job_agent` (Unsloth-based).
 - Phi-3.5-mini uses a Phi-specific tokenizer — instruction template isn't quite Alpaca-standard, but the simple `### Instruction: / ### Response:` formatting still trains effectively.
-- LR clamp at 2e-4 enforced in `make_fl_adapter` — if you bump it, gradients explode (we observed this with Mistral-7B previously).
+- LR clamp at 2e-4 enforced in `make_fl_adapter` — if you bump it, gradients explode (we observed this with Mistral-7B previously). 5e-6 is far below this clamp so it's safe.

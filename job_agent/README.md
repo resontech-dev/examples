@@ -95,7 +95,7 @@ model.save_pretrained_gguf("./agent.gguf", tokenizer, quantization_method="q4_k_
 # Then in Ollama: ollama create my-agent -f Modelfile  (FROM ./agent.gguf)
 ```
 
-## Why Llama-3.1-8B (not Mistral-7B as before)
+## Why Llama-3.1-8B 
 
 | Model | Card-published benchmarks |
 |---|---|
@@ -105,8 +105,34 @@ model.save_pretrained_gguf("./agent.gguf", tokenizer, quantization_method="q4_k_
 
 Llama-3.1-8B-Instruct wins on documentation density. The fine-tuned model's published BFCL=76.1 is a meaningful starting point — your FL fine-tune should improve domain-specific tool-calling on top of that.
 
+## Original training recipe (canonical Unsloth Llama-3.1 LoRA)
+
+Source: Unsloth official notebooks (https://github.com/unslothai/unsloth) — Llama-3.1 (8B) Alpaca / Conversational examples
+
+| Param | Value | Source |
+|---|---|---|
+| Optimizer | **paged_adamw_8bit** (Unsloth default; `adamw_8bit` also OK) | notebook |
+| Learning rate | **2e-4** | notebook |
+| LR schedule | **linear** | notebook |
+| Warmup | warmup_steps=5 (or warmup_ratio=0.03) | notebook |
+| Batch size | **2** per-device × **grad_accum=4** = effective 8 | notebook |
+| Epochs | **1** (or `max_steps=60` for demos; production 1-3 epochs) | notebook |
+| Max seq length | **2048** | notebook |
+| Weight decay | **0.01** | notebook |
+| Grad clip | max_grad_norm=1.0 (TRL default) | notebook |
+| Mixed precision | **bf16** if supported, else fp16 (4-bit base via bnb_4bit) | notebook |
+| LoRA | **r=16, alpha=16, dropout=0.0**, bias="none", `use_gradient_checkpointing="unsloth"` | notebook |
+| LoRA target_modules | **q_proj, k_proj, v_proj, o_proj, gate_proj, up_proj, down_proj** (all 7) | notebook |
+| Loss | causal LM cross-entropy on **assistant tokens only** (TRL `train_on_responses_only`) | notebook |
+| Seed | 3407 | notebook |
+| Base model | trained on 15T+ tokens, H100-80GB, 1.46M GPU-hours (8B share); SFT + RLHF | https://huggingface.co/meta-llama/Llama-3.1-8B-Instruct |
+| Final published metrics | MMLU 69.4, IFEval 80.4, BFCL 76.1, API-Bank 82.6, GSM8K 84.5 | model card |
+
+**FL config matches**: `learning_rate: 2e-4`, `batch_size: 2`, `local_epochs: 1`, 5 rounds → effective 5 epochs (production-equivalent). LoRA `r=16, alpha=16` differs from our previous `alpha=32`; current `make_fl_adapter` uses `alpha=rank*2=32` — adjust to match Unsloth's recipe by editing `apply_lora` if you want strict match.
+
 ## Caveats
 
 - **24 GB GPU is the minimum**. With 16 GB you'd need to drop to a smaller variant (`unsloth/Llama-3.2-3B-Instruct-bnb-4bit`).
 - **Unsloth requires Linux + CUDA + GPU with compute capability ≥ 7.0** (V100, T4, A10G, A100, RTX 30/40-series, etc.)
 - The Meta gated model needs HF auth; the Unsloth quant doesn't — that's why we point at the Unsloth one for actual loading.
+- Unsloth's recipe uses `lora_alpha=rank` (not `rank*2`). Our current `apply_lora` defaults to `alpha=rank*2` for stability. To strictly match, override in `make_fl_adapter` call.

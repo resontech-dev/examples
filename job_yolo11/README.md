@@ -73,6 +73,28 @@ For a smoke test instead of full COCO, set `MAX_EXAMPLES = 4000` in `build_shard
 - **YOLO11m (51.5 mAP)** ← sweet spot for FL: trainable on 12 GB GPUs, strong starting point
 - YOLO11l/x (53.4 / 54.7 mAP) — diminishing returns, demands 24 GB GPUs
 
+## Original training recipe (for FL ↔ centralized comparison)
+
+From Ultralytics' [default cfg](https://docs.ultralytics.com/usage/cfg/) — the same defaults `model.train(data='coco.yaml')` uses:
+
+| Param | Value | Source |
+|---|---|---|
+| Optimizer | SGD (auto-selected for YOLO11m) | Ultralytics auto |
+| LR (lr0) | **0.01** | default |
+| LR final (lrf) | lr0 × 0.01 = 1e-4 | default |
+| Schedule | linear decay | default |
+| Warmup | 3.0 epochs (warmup_momentum=0.8, warmup_bias_lr=0.1) | default |
+| Batch size | **16** per-device (Ultralytics' COCO uses effective ~64 across 8 GPUs) | default |
+| Epochs | 100 (default); the released checkpoint used ~500 epochs with close-mosaic last 10 | default / repo README |
+| Momentum | 0.937 | default |
+| Weight decay | 0.0005 | default |
+| Loss weights | box=7.5, cls=0.5, dfl=1.5 | default |
+| Augmentations | hsv_h=0.015, hsv_s=0.7, hsv_v=0.4, scale=0.5, fliplr=0.5, mosaic=1.0 | hyp.scratch |
+| Mixed precision | amp=True (fp16) | default |
+| Final metric | **mAP@50-95 = 51.5** on COCO val2017 (20.1M params) | https://huggingface.co/Ultralytics/YOLO11 |
+
+**FL config matches**: `learning_rate: 0.01`, `batch_size: 16`. To approximate the 100-epoch centralized run with 5 FL rounds × 4 workers, use `local_epochs: 20` (= 100/5). For a faster comparison, drop to `local_epochs: 5` and `num_rounds: 5` for a 25-epoch effective.
+
 ## Caveats
 
 - COCO is **massive** (~25 GB). Initial dataset download will take time. Subsample with `MAX_EXAMPLES` for development.

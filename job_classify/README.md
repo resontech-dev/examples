@@ -63,6 +63,24 @@ python build_shards_hf.py   # downloads Food-101 (~5 GB), builds 4 shards
 
 To swap dataset: edit `HF_DATASET` in `build_shards_hf.py`. Any HF image-classification dataset with `image` + `label`/`fine_label` works.
 
+## Original training recipe (verbatim from `nateraw/food` HF card)
+
+| Param | Value | Source |
+|---|---|---|
+| Optimizer | **Adam** (β1=0.9, β2=0.999, ε=1e-8) | card |
+| Learning rate | **2e-4** | card |
+| LR schedule | linear | card |
+| Batch size | **128** train / 128 eval | card |
+| Epochs | **5** | card |
+| Image size | 224 × 224 | ViT-base/16 standard |
+| Mixed precision | Native AMP (fp16) | card |
+| Loss | cross-entropy | card |
+| Preprocessing | ViTImageProcessor defaults (resize 224, center crop, ImageNet normalize) | card |
+| Seed | 1337 | card |
+| Final metric | **acc 0.8913, val_loss 0.4501** on Food-101 val | https://huggingface.co/nateraw/food |
+
+**FL config matches**: `learning_rate: 2e-4`, `batch_size: 128`, `local_epochs: 1`, 5 rounds → effective 5 epochs ≈ centralized.
+
 ## Caveats
 
 - **Food-101 is hard**: visually similar classes (e.g. spaghetti carbonara vs. spaghetti bolognese, multiple soup types). nateraw needed 5 full epochs at batch=128 to hit 0.89; FL will probably hit 0.85 with the cheaper schedule.

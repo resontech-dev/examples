@@ -14,8 +14,8 @@
           "data_root": "/var/tmp/nvflare/data",
           "adapter_module": "model_def",
           "train_fn": "fl_train_model",
-          "local_epochs": 2,
-          "batch_size": 32,
+          "local_epochs": 1,
+          "batch_size": 2,
           "learning_rate": 0.0002
         }
       }

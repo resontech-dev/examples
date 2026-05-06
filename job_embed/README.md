@@ -95,6 +95,28 @@ Each organization has its own domain corpus (legal docs, medical records, custom
 
 Combined with `job_agent` (function-calling LLM), this is the textbook **distributed agentic RAG architecture**.
 
+## Original training recipe (from BAAI's [FlagEmbedding](https://github.com/FlagOpen/FlagEmbedding) fine-tuning examples)
+
+| Param | Value | Source |
+|---|---|---|
+| Optimizer | **AdamW** | FlagEmbedding default |
+| Learning rate | **2e-5** (recommended for `bge-base`; `bge-small` uses 3e-5, `bge-large` uses 1e-5) | FlagEmbedding README |
+| LR schedule | linear with warmup (HF Trainer default) | inferred |
+| Batch size | per-device 16-64 with `normalized=True` | example |
+| Gradient accumulation | 1 (default) | example |
+| Epochs | **5** | FlagEmbedding example default `num_train_epochs` |
+| Sequence length | query_max_len=64, passage_max_len=256 (v1.5 supports 512) | FlagEmbedding default |
+| Weight decay | 0.0 (HF default) | inferred |
+| Grad clip | 1.0 (HF default) | inferred |
+| Mixed precision | fp16 (`--fp16` flag) | example |
+| Loss | **InfoNCE / contrastive with in-batch + hard negatives**, **temperature ≈ 0.02** | BGE paper (v1.5 trained ~0.01) |
+| `train_group_size` | typically 8 (1 positive + 7 hard negatives) | example |
+| Query instruction | "Represent this sentence for searching relevant passages:" (English retrieval) | card |
+| Hard negative mining | FlagEmbedding `hn_mine.py` | utility |
+| Final metric | **MTEB English avg 63.55** | https://huggingface.co/BAAI/bge-base-en-v1.5 |
+
+**FL config matches**: `learning_rate: 2e-5`, `batch_size: 32`, `local_epochs: 1`, 5 rounds → effective 5 epochs.
+
 ## Caveats
 
 - `model.fit()` is the legacy path; the newer `SentenceTransformerTrainer` is more flexible but pickier about dataset format. We use `fit()` for simpler FL integration.

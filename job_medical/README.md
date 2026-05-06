@@ -73,6 +73,31 @@ For a production-grade extension:
 - Switch model to `monai.networks.nets.SwinUNETR` for segmentation tasks
 - Use 3D pipeline for CT/MRI volumes with `DecathlonDataset`
 
+## Original training recipe (from `Kuldeepmishra3/vit-large-skin-cancer-ham10000` HF card)
+
+The most-documented HAM10000 model on HF Hub (no canonical baseline exists with verifiable card metrics, this is the closest):
+
+| Param | Value | Source |
+|---|---|---|
+| Optimizer | **AdamW** (HF Trainer default) | card |
+| Learning rate | **2e-5** | card |
+| LR schedule | **cosine** | card |
+| Warmup steps | **300** | card |
+| Batch size | **16** per-device | card |
+| Epochs | **5** (best at epoch 4) | card |
+| Image size | 224 × 224 (ViT-large/16) | architecture |
+| Weight decay | 0.0 (HF default) | inferred |
+| Grad clip | 1.0 (HF default) | inferred |
+| Mixed precision | fp16 | card |
+| Augmentations | random H/V flip, rotation up to 30°, color jitter | card |
+| Loss | cross-entropy (7-class) | standard |
+| Final metric | **acc 92.74%**, weighted F1 92.60% on val | https://huggingface.co/Kuldeepmishra3/vit-large-skin-cancer-ham10000 |
+| Hardware | 1× Tesla T4 (Colab), ~37 min training | card |
+
+Note: this baseline uses ViT-large; our adapter uses MONAI DenseNet121 (similar parameter count, simpler kernel). Same hyperparameters apply; the head dimension differs.
+
+**FL config matches**: `learning_rate: 2e-5`, `batch_size: 16`, `local_epochs: 1`, 5 rounds → effective 5 epochs.
+
 ## Caveats
 
 - HAM10000 has heavy class imbalance — consider `WeightedRandomSampler` or focal loss in `monai_utils.py` for serious runs. The current adapter uses plain `CrossEntropyLoss`.

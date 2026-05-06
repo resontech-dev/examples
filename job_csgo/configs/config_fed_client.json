@@ -15,8 +15,8 @@
           "adapter_module": "model_def",
           "train_fn": "fl_train_model",
           "local_epochs": 2,
-          "batch_size": 32,
-          "learning_rate": 0.001
+          "batch_size": 16,
+          "learning_rate": 0.01
         }
       }
     }

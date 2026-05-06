@@ -102,8 +102,35 @@ img.save("output.png")
 - **Privacy in personalized art generation**: per-user LoRAs that share weight updates without sharing source images
 - **Distributed style libraries**: train shared style-LoRAs across many small datasets that individually wouldn't be enough to fine-tune SDXL
 
+## Original training recipe (verbatim from `diffusers/examples/text_to_image/train_text_to_image_lora_sdxl.py`)
+
+Source: https://github.com/huggingface/diffusers/blob/main/examples/text_to_image/train_text_to_image_lora_sdxl.py
+
+| Param | Value | Source |
+|---|---|---|
+| Optimizer | **AdamW** (β1=0.9, β2=0.999, ε=1e-8) | script default |
+| Learning rate | **1e-4** | script default |
+| LR schedule | **constant** | script default |
+| Warmup steps | **500** | script default |
+| Batch size | **16** per-device × grad_accum 1 (we clamp to 2 for FL memory) | script default |
+| Epochs | num_train_epochs=100; max_train_steps overrides | script default |
+| Resolution | **1024** (SDXL native) | script default |
+| Weight decay | **1e-2** | script default |
+| Grad clip | **max_grad_norm=1.0** | script default |
+| Mixed precision | None default; usually `--mixed_precision="fp16"` or `"bf16"` | flag |
+| LoRA | **rank=4** (default); UNet target_modules=["to_k","to_q","to_v","to_out.0"]; alpha=rank (PEFT default); dropout=0.0 | script default |
+| Loss | MSE on noise prediction (epsilon-prediction; `--prediction_type=v_prediction` available) | script default |
+| Optional Min-SNR weighting | `--snr_gamma` (None default; common: 5.0) | script flag |
+| noise_offset | 0 | default |
+| image augmentations | optional random crop + flip; resolution 1024 with lanczos resize | script default |
+| validation | validation_epochs=1, num_validation_images=4 | script default |
+| Hardware | typically 1× A100 40GB+ or 24GB consumer with bf16 + 8-bit Adam + grad_ckpt | inferred |
+
+**FL config matches**: `learning_rate: 1e-4`, `batch_size: 1` (FL clamp; centralized recipe uses 16), `local_epochs: 20`, 5 rounds → effective ~100 epochs (matches centralized default). LoRA `r=4` set in `model_def.py`.
+
 ## Caveats
 
 - **SDXL is the lightest VIABLE diffusion target for FL** — its predecessors (SD 1.5, SD 2.1) are easier hardware-wise but increasingly outdated; FLUX is too heavy.
 - LoRA-only doesn't capture text-encoder updates. For new domain vocabulary, consider Textual Inversion alongside LoRA.
 - `result.pt` is just the LoRA delta. To get a self-contained `.safetensors`, merge with the base UNet (see `pipe.fuse_lora()` in diffusers).
+- The diffusers script defaults to **batch_size=16** but FL workers can rarely afford that for SDXL — we clamp to 1 per device. To keep effective batch comparable, raise `gradient_accumulation_steps` inside `diffusion_utils.py` to 16.

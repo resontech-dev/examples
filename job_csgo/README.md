@@ -61,6 +61,26 @@ jobs/job_csgo/
 └── shards/          (4 zips)
 ```
 
+## Original training recipe (for FL ↔ centralized comparison)
+
+The card publishes only the *re-fine-tune* invocation, not the original recipe. Defaults below are from yolov5's `hyp.scratch.yaml` (used when the card's example command is run):
+
+| Param | Value | Source |
+|---|---|---|
+| Optimizer | SGD, momentum=0.937 | yolov5 default |
+| LR (lr0) | **0.01** | yolov5 default |
+| LR final (lrf) | 0.01 (= lr0 × 0.01) | yolov5 default |
+| Schedule | linear/cosine + warmup 3 epochs | yolov5 default |
+| Batch size | **16** | card example |
+| Epochs | 10 | card example |
+| Image size | 640 | card example |
+| Weight decay | 0.0005 | yolov5 default |
+| Augmentations | mosaic=1.0, hsv_h=0.015, hsv_s=0.7, hsv_v=0.4, fliplr=0.5 | yolov5 hyp.scratch |
+| Loss | CIoU box + BCE obj/cls | yolov5 default |
+| Final metric | mAP@0.5 = **0.908** on csgo val | https://huggingface.co/keremberke/yolov5n-csgo |
+
+**FL config matches**: `learning_rate: 0.01`, `batch_size: 16`, `local_epochs: 2`, 5 rounds → effective 10 epochs ≈ centralized.
+
 ## Caveats
 
 - yolov5 7.0.14 is incompatible with PyTorch 2.6+ default `weights_only=True` — handled by the `torch.load` shim in `yolo_utils.py`.
