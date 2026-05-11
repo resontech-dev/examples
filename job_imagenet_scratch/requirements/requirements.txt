@@ -1,0 +1,8 @@
+torch>=2.7.1
+torchvision
+timm
+nvflare
+huggingface_hub
+numpy
+pyyaml
+pillow
