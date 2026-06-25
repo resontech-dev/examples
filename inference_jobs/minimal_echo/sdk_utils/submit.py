@@ -1,10 +1,10 @@
 """
 Deploy the minimal echo predictor to ResonTech via the SDK.
 
-BYO mode (`from_files=JOB_ROOT`) — the SDK ships the job folder (the
-parent of this sdk_utils/ dir): its ``inference.yaml`` and
-``scripts/echo_serve.py`` as-is. No weights, no GPU — this just proves
-the predictor contract (auth + networking + routing) end-to-end.
+BYO mode — point the SDK at this job's ``inference.yaml`` (one file) and
+``scripts/`` (a directory, copied to storage recursively). No weights, no
+GPU — this just proves the predictor contract (auth + networking + routing)
+end-to-end.
 
 Run (from the job folder)
 -------------------------
@@ -60,7 +60,9 @@ def main() -> None:
     job = sdk.rt_submit_inference(
         name=os.getenv("JOB_NAME", "Minimal Echo"),
         inference=inference,
-        from_files=str(ROOT),         # ship the job folder as-is, skip generation
+        inference_yaml=str(ROOT / "inference.yaml"),   # REQUIRED — one file
+        scripts_dir=str(ROOT / "scripts"),             # REQUIRED — dir, copied recursively
+        # no model_file / sample_data_dir — echo needs no weights.
     )
 
     print()

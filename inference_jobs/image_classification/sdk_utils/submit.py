@@ -1,14 +1,13 @@
 """
 Deploy the image-classification predictor to ResonTech via the SDK.
 
-BYO mode (`from_files=JOB_ROOT`) — the SDK ships the job folder (the
-parent of this sdk_utils/ dir): its ``inference.yaml``,
-``scripts/classifier_serve.py``, and ``model/`` as-is.
+BYO mode — point the SDK at this job's ``inference.yaml`` (one file) and
+``scripts/`` (a directory, copied to storage recursively).
 
-If you drop a trained checkpoint at ``model/classifier.pt`` it ships with
-the bundle and ``load_weights()`` mounts it. If ``model/`` is empty (the
-default), the predictor falls back to ImageNet-pretrained ResNet50 so the
-deploy still answers requests — you'll just see ImageNet labels.
+To ship a trained checkpoint, drop it at ``model/classifier.pt`` and pass
+``model_file=`` (commented out below) so ``load_weights()`` mounts it. With
+no checkpoint (the default), the predictor falls back to ImageNet-pretrained
+ResNet50 so the deploy still answers requests — you'll just see ImageNet labels.
 
 Run (from the job folder)
 -------------------------
@@ -65,7 +64,10 @@ def main() -> None:
     job = sdk.rt_submit_inference(
         name=os.getenv("JOB_NAME", "Image Classification"),
         inference=inference,
-        from_files=str(ROOT),         # ship the job folder as-is, skip generation
+        inference_yaml=str(ROOT / "inference.yaml"),   # REQUIRED — one file
+        scripts_dir=str(ROOT / "scripts"),             # REQUIRED — dir, copied recursively
+        # model_file=str(ROOT / "model" / "classifier.pt"),  # uncomment if you ship a checkpoint
+        # sample_data_dir=str(ROOT / "sample_data"),          # uncomment for the dashboard playground
     )
 
     print()

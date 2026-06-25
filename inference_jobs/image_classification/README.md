@@ -19,6 +19,23 @@ so you can smoke-test the deploy before training.
 └── .env.example                # copy to .env, fill in credentials
 ```
 
+`sdk_utils/submit.py` ships these to storage with explicit, keyword-only paths —
+`inference.yaml` (one file) and `scripts/` (a directory, **copied recursively**):
+
+```python
+inference_yaml="inference.yaml",                 # REQUIRED — one file
+scripts_dir="scripts",                           # REQUIRED — one dir, copied recursively
+# model_file="model/classifier.pt",             # OPTIONAL — uncomment to ship a trained checkpoint
+# sample_data_dir="sample_data",                 # OPTIONAL — dashboard playground inputs
+```
+
+With no `model_file`, the deploy falls back to ImageNet-pretrained ResNet50.
+
+> **Migration from the old API.** `from_files=` / `scripts=` (the
+> folder-convention BYO API) are removed. Replace a single
+> `from_files="./bundle"` with the explicit paths above — the SDK no longer
+> constrains your local folder names; point it at any layout.
+
 ## Deploy
 
 You can deploy this job two equivalent ways — from the SDK, or by pasting the

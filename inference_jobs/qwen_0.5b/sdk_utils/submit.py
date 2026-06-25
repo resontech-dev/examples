@@ -1,11 +1,10 @@
 """
 Deploy the Qwen chat LLM job to ResonTech.
 
-BYO mode (`from_files=JOB_ROOT`) — the SDK ships the job folder (the
-parent of this sdk_utils/ dir): its ``inference.yaml`` and
-``scripts/llm_serve.py`` as-is. No model weights upload because the
-predictor pulls them from HuggingFace Hub on ``__init__`` (see
-``init_args.model_id`` in inference.yaml).
+BYO mode — point the SDK at this job's ``inference.yaml`` (one file) and
+``scripts/`` (a directory, copied to storage recursively). No ``model_file``
+because the predictor pulls weights from HuggingFace Hub on ``__init__``
+(see ``init_args.model_id`` in inference.yaml).
 
 Run (from the job folder)
 -------------------------
@@ -61,7 +60,9 @@ def main() -> None:
     job = sdk.rt_submit_inference(
         name=os.getenv("JOB_NAME", "Qwen 0.5B Chat"),
         inference=inference,
-        from_files=str(ROOT),         # ship the job folder as-is, skip generation
+        inference_yaml=str(ROOT / "inference.yaml"),   # REQUIRED — one file
+        scripts_dir=str(ROOT / "scripts"),             # REQUIRED — dir, copied recursively
+        # model_file / sample_data_dir not needed: weights pull from HF Hub.
     )
 
     print()

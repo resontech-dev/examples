@@ -14,12 +14,30 @@
 └── .env.example            # copy to .env, fill in credentials
 ```
 
-`from_files=` ships this whole tree to S3 as-is. `inference.yaml` points
-`module:` at your entry script and `class_name:` at the predictor class.
+`inference.yaml` points `module:` at your entry script and `class_name:` at
+the predictor class.
 
 You can deploy either from the SDK (`sdk_utils/submit.py`, below) or by pasting
 `scripts/llm_serve.py` + `inference.yaml` into the web wizard at
 <https://beta.reson.tech/dashboard/inference/submit> — same result.
+
+### Shipping these files with the SDK
+
+`rt_submit_inference` takes explicit, keyword-only paths — `inference.yaml`
+(one file) and `scripts/` (a directory, **copied to storage recursively**):
+
+```python
+inference_yaml="inference.yaml",   # REQUIRED — one file
+scripts_dir="scripts",             # REQUIRED — one dir, copied recursively
+# model_file="model/weights.pt",   # OPTIONAL — not used here (weights pull from HF Hub)
+# sample_data_dir="sample_data",   # OPTIONAL — dashboard playground inputs
+```
+
+> **Migration from the old API.** `from_files=` / `scripts=` (the
+> folder-convention BYO API, plus the flat-mode walker and exclusion tables)
+> are removed. Replace a single `from_files="./bundle"` with the four explicit
+> paths above — one extra line per file shipped, but the SDK no longer
+> constrains your local folder names; point it at any layout.
 
 ## 1. Submit
 
@@ -36,7 +54,8 @@ sdk.login()
 
 job = sdk.rt_submit_inference(
     name="Qwen 0.5B Chat",
-    from_files=".",                       # ship this folder as-is
+    inference_yaml="inference.yaml",      # REQUIRED — one file
+    scripts_dir="scripts",                # REQUIRED — one dir, copied recursively
     inference=InferenceConfig(
         visibility="PRIVATE",             # or "PUBLIC"
         auto_select_workers=True,

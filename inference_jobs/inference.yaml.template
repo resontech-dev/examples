@@ -32,11 +32,19 @@ model:
     chip_size: 512
 
 cluster:
+  # Replicas to run. Each is a full copy of the model (data_parallel) or one
+  # shard group (tensor_parallel). Scale up for throughput.
+  num_workers: 1
+
   # data_parallel  → N replicas, each with a full copy of the weights
   #                  (good for small/medium models, max throughput).
   # tensor_parallel → 1 replica, weights sharded across N GPUs
   #                  (only meaningful for very large LLMs with vLLM).
   mode: "data_parallel"
+
+  # Resources reserved per replica. Use gpus_per_worker: 0 for CPU-only jobs.
+  gpus_per_worker: 1
+  cpus_per_worker: 8
 
   # Per-replica backpressure cap. Requests beyond this queue (briefly)
   # then return 503. Keep low for slow models (LLMs: 1–4). Keep higher
@@ -47,14 +55,9 @@ cluster:
   #   auto: pick cuda > mps > cpu in code
   #   gpu:  bail if no GPU is available
   #   cpu:  force CPU even if a GPU is present
-  # The platform does NOT use this for Ray scheduling — that comes from
-  # worker telemetry.
+  # Resource *reservation* is driven by gpus_per_worker / cpus_per_worker
+  # above, not by this hint.
   device: "auto"
-
-  # NOTE: num_workers, cpus_per_worker, gpus_per_worker are intentionally
-  # absent. The platform fills those in from live worker telemetry at
-  # provision time. If you copy an older inference.yaml that contains them,
-  # they will be silently dropped.
 
 # Pip dependencies installed on top of the base image. Keep tight — every
 # entry slows boot. Don't redeclare what the base image already has
