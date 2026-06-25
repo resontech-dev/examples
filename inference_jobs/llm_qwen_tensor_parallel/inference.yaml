@@ -1,0 +1,48 @@
+# Qwen 7B served via vLLM with tensor parallelism (TP=2 on one node).
+# Weights are sharded across 2 GPUs in a single replica; they exchange
+# activations on every transformer layer. Best when one node has 2+ GPUs
+# but no single GPU is large enough to hold the model.
+
+# ─────────────────────────────────────────────────────────────────────
+# Engine discriminator. The platform's generate.py reads this and emits a
+# serve_config.yaml whose import_path points at this template's
+# `serve_module:app` — bypassing the templates/serve_app.py Predictor
+# wrapper used by templates 01–04.
+# ─────────────────────────────────────────────────────────────────────
+engine: vllm_openai
+
+# All vLLM/LLMConfig knobs live in serve_module.py. Edit there to change:
+#   - model_source           which HF repo to load
+#   - tensor_parallel_size    weights sharded across N GPUs (TP)
+#   - pipeline_parallel_size  layers staged across N GPUs (PP)
+#   - max_model_len           context window
+#   - max_num_seqs            concurrent sequences per replica
+#   - accelerator_type        gate placement to a specific GPU class
+#   - autoscaling.max_replicas data-parallel scale-out on top of TP/PP
+cluster:
+  num_workers: 1
+  device: "gpu"
+  gpus_per_worker: 1
+  cpus_per_worker: 8
+  # For vllm_openai engine, deployment-level knobs come from LLMConfig's
+  # deployment_config and placement_group_config inside Python. The
+  # fields below are advisory — used only by the platform for accounting.
+  mode: "tensor_parallel"
+  max_ongoing_requests: 32
+
+requirements:
+  # IMPORTANT: do NOT redeclare ray here. The platform's base_requirements.txt
+  # already pins ray; pip will throw ResolutionImpossible if you list ray
+  # twice with overlapping extras. For vLLM templates, ensure the platform's
+  # base_requirements.txt declares `ray[serve,llm]==<version>` (not just
+  # `ray[serve]`) so the `llm` extras are pulled in. The dispatcher's
+  # generate.py is the right place to switch base extras based on
+  # `engine: vllm_openai` in this file.
+  #
+  # ray[llm]==2.55.1 requires vllm>=0.18.0. Skip 0.18.0 specifically — its
+  # metadata declares mistral_common>=1.10.0 AND mistral-common[image]==1.11.3
+  # which pip's resolver treats as a conflict. 0.18.1+ ships the fix.
+  # If you must stay on 0.18.0, add: - "mistral-common[image]>=1.11.3"
+  - "vllm>=0.18.1"
+  - "mistral-common[image]>=1.11.3"
+  - "transformers>=4.45.0"

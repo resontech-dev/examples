@@ -1,0 +1,28 @@
+# Image classification — image bytes in, top-K labels out.
+# Built on torchvision ResNet50 as a placeholder. Swap the architecture
+# inside classifier_serve.py for whatever you trained.
+
+model:
+  # Drop your .pt checkpoint here. If absent, the predictor falls back
+  # to ImageNet-pretrained ResNet50 so you can smoke-test before training.
+  path: "model/classifier.pt"
+  module: "classifier_serve"
+  class_name: "ImageClassifier"
+  init_args:
+    num_classes: 1000               # 1000 = ImageNet defaults; override for your dataset
+    image_size: 224
+    top_k: 5
+    class_names: null               # null = use numeric class ids; provide a [name, ...] list otherwise
+
+cluster:
+  num_workers: 1
+  mode: "data_parallel"
+  gpus_per_worker: 1
+  cpus_per_worker: 8
+  max_ongoing_requests: 16
+  device: "auto"
+
+requirements:
+  - "torch==2.2.2"
+  - "torchvision==0.17.2"
+  - "Pillow>=10.0.0"

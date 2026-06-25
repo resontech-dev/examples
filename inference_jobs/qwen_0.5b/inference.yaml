@@ -1,0 +1,49 @@
+# Chat LLM via HuggingFace Transformers — JSON prompt in, generated text out.
+# Weights are pulled from HF Hub on first __init__ (no model.path needed).
+#
+# Memory budget:
+#   Each replica's __init__ allocates ~ (model_weights × bytes_per_param) + ~1.5 GB
+#   for tokenizer, kv-cache, and CUDA workspace. A 0.5B fp16 model needs
+#   ~1 GB + 1.5 GB ≈ 2.5 GB per replica. Multiply by num_workers when
+#   sizing your worker hosts.
+
+model:
+  module: "llm_serve"
+  class_name: "ChatLLM"
+  init_args:
+    # Any text-generation model on HF Hub. Pick by VRAM:
+    #   ~0.5 GB VRAM: HuggingFaceTB/SmolLM2-360M-Instruct
+    #   ~1.5 GB VRAM: Qwen/Qwen2.5-0.5B-Instruct       (default)
+    #   ~4 GB VRAM:   Qwen/Qwen2.5-1.5B-Instruct
+    #   ~16 GB VRAM:  meta-llama/Meta-Llama-3.1-8B-Instruct (gated; needs HF token)
+    model_id: "Qwen/Qwen2.5-0.5B-Instruct"
+
+    # auto = fp16 on GPU, fp32 on CPU. Override only if you know why.
+    dtype: "auto"
+
+    default_max_new_tokens: 256
+    default_temperature: 0.7
+    default_top_p: 0.9
+    max_input_tokens: 2048
+    chat_template: true
+    system_prompt: "You are a concise, helpful assistant."
+
+cluster:
+  num_workers: 1
+  mode: "data_parallel"
+  gpus_per_worker: 1
+  cpus_per_worker: 8
+
+  # generate() is sequential per replica; keep the queue tiny to avoid
+  # head-of-line blocking. Add more replicas for throughput, not queue depth.
+  max_ongoing_requests: 2
+  device: "auto"
+
+requirements:
+  - "torch"
+  - "transformers==4.40.0"
+  - "accelerate==0.29.3"
+  - "tokenizers>=0.15.0,<0.20"
+  - "sentencepiece>=0.2.0"
+  - "safetensors>=0.4.0"
+  - "huggingface_hub>=0.22,<0.25"
