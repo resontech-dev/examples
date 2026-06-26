@@ -10,6 +10,23 @@ You do **not** write a Dockerfile, a compose file, a Ray Serve config, an
 HTTP handler, or anything about networking. The platform generates all
 of that.
 
+## Templates to start from
+
+Two files live next to this README — copy them into your job directory
+and edit:
+
+| template | what to do with it |
+|---|---|
+| [`inference.yaml.template`](inference.yaml.template) | Rename to `inference.yaml`. Edit `model.module`, `model.class_name`, `model.init_args`, and `requirements`. Cluster fields `device` / `mode` / `gpus_per_worker` / `cpus_per_worker` are **optional** — the SDK injects defaults (`gpu` / `data_parallel` / `1` / `8`) on submit if you leave them out. CV + LLM init-args examples are inlined as commented-out alternatives. |
+| [`template_serve.py`](template_serve.py) | Rename to whatever you put in `model.module:` (e.g. `geo_serve.py`). It already has the two required methods (`__init__`, `predict`) wired up and includes optional `load_weights()` stub. Replace the stub bodies with your real model code. |
+
+Both templates work together — the YAML's `module:` / `class_name:` /
+`init_args:` match the Python file's class name and `__init__` signature
+out of the box. Change one, change the other.
+
+The full predictor contract (every optional hook the platform supports)
+is documented below.
+
 ## The predictor contract
 
 Your `<module>.py` exposes one class whose interface is:
