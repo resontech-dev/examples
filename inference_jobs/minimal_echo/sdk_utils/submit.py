@@ -40,14 +40,12 @@ def main() -> None:
         ResonTechConfig(
             base_url=os.getenv("RESON_BASE_URL", "https://dev.api.beta.reson.tech"),
             s3_endpoint=os.getenv("RESON_S3_ENDPOINT", "https://s3.dev.beta.reson.tech"),
-            email=_required("RESON_EMAIL"),
-            password=_required("RESON_PASSWORD"),
+            platform_api_key=_required("RESON_API_KEY"),
             s3_access_key_id=_required("RESON_S3_KEY"),
             s3_secret_access_key=_required("RESON_S3_SECRET"),
         )
     )
-    user = sdk.login()
-    print(f"[submit] logged in as {user.email}")
+    print("[submit] authed with platform api key")
 
     # BYO mode: the job's inference.yaml is authoritative (class_name,
     # init_args, cluster knobs). InferenceConfig only carries submit-time knobs.

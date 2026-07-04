@@ -40,8 +40,8 @@ files into the web UI. Pick one.
 ### A. From the SDK
 
 ```bash
-cp .env.example .env        # fill in RESON_EMAIL / PASSWORD / S3 keys
-python sdk_utils/submit.py  # deploys, then prints RESON_INFERENCE_URL + API key
+cp .env.example .env        # fill in RESON_API_KEY + S3 keys
+python sdk_utils/submit.py  # deploys, then prints RESON_INFERENCE_URL + predict api key
 ```
 
 Copy the printed `RESON_INFERENCE_URL` and `RESON_INFERENCE_API_KEY` into `.env`, then:

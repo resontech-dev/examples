@@ -47,10 +47,10 @@ from resontech import InferenceConfig, ResonTech, ResonTechConfig
 sdk = ResonTech(ResonTechConfig(
     base_url="https://api.beta.reson.tech",
     s3_endpoint="https://s3.beta.reson.tech",
-    email="...", password="...",
+    platform_api_key="rsk_live_...",   # or set RESON_API_KEY env var
     s3_access_key_id="...", s3_secret_access_key="...",
 ))
-sdk.login()
+# No login() — every call signs with platform_api_key.
 
 job = sdk.rt_submit_inference(
     name="Qwen 0.5B Chat",
@@ -63,13 +63,13 @@ job = sdk.rt_submit_inference(
     ),
 )
 job.wait_until_ready(timeout=1800)
-print(job.endpoint, job.api_key)
+print(job.endpoint, job.predict_api_key)
 ```
 
 Run (from this folder):
 ```bash
-cp .env.example .env        # fill in your credentials, then:
-python sdk_utils/submit.py  # prints RESON_INFERENCE_URL + API key when RUNNING
+cp .env.example .env        # fill in your platform API key + S3 keys, then:
+python sdk_utils/submit.py  # prints RESON_INFERENCE_URL + predict api key when RUNNING
 ```
 
 ## 2. Predict
@@ -79,7 +79,7 @@ from resontech import InferenceClient
 
 client = InferenceClient(
     url="<RESON_INFERENCE_URL from submit>",
-    api_key="<RESON_INFERENCE_API_KEY from submit>",
+    predict_api_key="<RESON_INFERENCE_API_KEY from submit>",
     timeout=600.0,                        # None = no client-side timeout
 )
 
