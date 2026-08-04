@@ -1,0 +1,40 @@
+# FLUX.1-schnell — image generation (predictor mode).
+#
+# Best-quality Apache-clean image generation (`img-flux-schnell`).
+# 4-step distilled model: ~1–2 s/image on a big card, ~$0.0002 compute vs
+# ~$0.04/image API pricing.
+#
+# ⚠️ LICENSE TRAP: FLUX.1-schnell is Apache-2.0, but FLUX.1-DEV IS
+# NON-COMMERCIAL. Never swap `-dev` into model_id for a customer deploy.
+
+model:
+  # No `path` — diffusers pulls the pipeline from HF Hub inside __init__
+  # (~24 GB bf16 across transformer + T5 + CLIP + VAE).
+  module: "flux_serve"
+  class_name: "FluxImageGen"
+  init_args:
+    model_id: "black-forest-labs/FLUX.1-schnell"
+    # auto = full-GPU when VRAM ≥ ~40 GB, else sequential CPU offload
+    # (fits ~16 GB VRAM at ~2× latency; needs big system RAM).
+    offload: "auto"
+    default_steps: 4          # schnell is 4-step distilled; >8 wastes compute
+    max_side: 1536            # reject absurd canvas sizes
+
+cluster:
+  num_workers: 1
+  mode: "data_parallel"
+  gpus_per_worker: 1
+  cpus_per_worker: 8
+  min_vram_gb_per_worker: 16  # with offload; 40+ GB runs fully resident
+  # Diffusion is sequential per replica — tiny queue, scale via replicas.
+  max_ongoing_requests: 2
+  device: "gpu"
+
+requirements:
+  - "torch"                        # bare — bound transitively
+  - "diffusers>=0.31.0"
+  - "transformers>=4.45,<5"
+  - "accelerate>=0.30.0"
+  - "sentencepiece"                # T5 tokenizer
+  - "protobuf"
+  - "Pillow>=10.0.0"

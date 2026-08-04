@@ -1,0 +1,35 @@
+# ⚠️ TEMPLATE — Qwen-Image (20B MMDiT) image generation (predictor mode).
+#
+# Best open text-rendering in images (posters, UI mockups, signage) —
+# `img-qwen-image`, Apache-2.0. NOT deployable on the consumer fleet:
+# the 20B MMDiT pipeline wants a 40–80 GB card (frontier tier). This
+# template exists so testing starts the day such a host lands; numbers
+# are planning estimates, UNVALIDATED.
+
+model:
+  # No `path` — diffusers pulls ~41 GB of pipeline weights in __init__.
+  module: "qwen_image_serve"
+  class_name: "QwenImageGen"
+  init_args:
+    model_id: "Qwen/Qwen-Image"
+    offload: "auto"           # sequential offload if VRAM < 60 GB (slow but boots)
+    default_steps: 50         # full diffusion — not a distilled model
+    max_side: 1664
+
+cluster:
+  num_workers: 1
+  mode: "data_parallel"
+  gpus_per_worker: 1
+  cpus_per_worker: 8
+  min_vram_gb_per_worker: 40  # frontier tier; 80 GB runs fully resident
+  max_ongoing_requests: 1     # 50-step diffusion is slow — strictly serial
+  device: "gpu"
+
+requirements:
+  - "torch"                        # bare — bound transitively
+  - "diffusers>=0.35.0"            # QwenImagePipeline support
+  - "transformers>=4.45,<5"
+  - "accelerate>=0.30.0"
+  - "sentencepiece"
+  - "protobuf"
+  - "Pillow>=10.0.0"

@@ -1,0 +1,30 @@
+# ⚠️ TEMPLATE — Qwen3-Coder-480B-A35B (AWQ) via vLLM, TP=4 over 4×80 GB.
+#
+# The frontier coding agent on-prem (`code-qwen3-coder-480b`). NOT
+# deployable on the current consumer fleet: it needs a single machine
+# with 4× 80 GB datacenter GPUs (H100/A100-80G class). This template
+# exists so the config is ready the day such a host joins — the numbers
+# below are planning estimates, UNVALIDATED on real hardware.
+#
+# Sequencing per plan16: test the day scale-up hardware lands.
+
+engine: vllm_openai
+
+model:
+  module: "serve_module"
+
+vllm:
+  tensor_parallel_size: 4
+  pipeline_parallel_size: 1
+
+cluster:
+  num_workers: 1
+  device: "gpu"
+  gpus_per_worker: 4
+  cpus_per_worker: 16
+  min_vram_gb_per_worker: 300  # 4 × (~65 GB weights-shard + KV + overhead)
+  # Advisory fields — dashboard/accounting only:
+  mode: "tensor_parallel"
+  max_ongoing_requests: 32
+
+# No `requirements:` — the prebuilt ray-llm image owns the stack.
