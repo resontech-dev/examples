@@ -1,0 +1,27 @@
+# Qwen2.5-7B + N customer LoRA adapters via vLLM — one 12 GB worker.
+#
+# The fine-tuned-business-model serving shape (`lora-qwen25-7b`, v1):
+# ONE base model in VRAM, 8–16 customer adapters loaded on demand from
+# S3, selected per request via model="qwen-7b:<adapter>". Software-margin
+# economics: 20 fine-tunes ≠ 20 GPUs.
+
+engine: vllm_openai
+
+model:
+  module: "serve_module"
+
+vllm:
+  tensor_parallel_size: 1
+  pipeline_parallel_size: 1
+
+cluster:
+  num_workers: 1
+  device: "gpu"
+  gpus_per_worker: 1
+  cpus_per_worker: 8
+  min_vram_gb_per_worker: 10  # 5.5 GB base + adapters (~0.1–0.3 GB each) + KV
+  # Advisory fields — dashboard/accounting only:
+  mode: "data_parallel"
+  max_ongoing_requests: 32
+
+# No `requirements:` — the prebuilt ray-llm image owns the stack.

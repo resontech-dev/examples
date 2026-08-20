@@ -1,0 +1,29 @@
+# GLM-4.5-Air 106B-A12B (AWQ) via vLLM — TENSOR PARALLEL over 4 GPUs.
+#
+# The premium agentic/tool-use tier: MoE with 12B active — big-model IQ
+# at small-model decode cost. AWQ ~60 GB of weights sharded TP=4 across
+# 4×24 GB cards in ONE worker (TP dies over Ethernet — all four GPUs
+# must share a host; the placement group enforces STRICT_PACK).
+
+engine: vllm_openai
+
+model:
+  module: "serve_module"
+
+# TP=4 → the scheduler must find a worker exposing 4 GPUs. Multi-GPU
+# check is per-GPU: each of the 4 GPUs needs ≥ min_vram ÷ 4 = 21 GB free.
+vllm:
+  tensor_parallel_size: 4
+  pipeline_parallel_size: 1
+
+cluster:
+  num_workers: 1
+  device: "gpu"
+  gpus_per_worker: 4
+  cpus_per_worker: 8
+  min_vram_gb_per_worker: 84  # 4 × (15 GB weights-shard + KV + overhead)
+  # Advisory fields — dashboard/accounting only:
+  mode: "tensor_parallel"
+  max_ongoing_requests: 32
+
+# No `requirements:` — the prebuilt ray-llm image owns the stack.

@@ -1,0 +1,33 @@
+# gpt-oss-20b RAG bundle — chat + embeddings + reranker on ONE worker.
+#
+# Three vLLM engines behind one OpenAI endpoint:
+#   "assistant" → gpt-oss-20b (chat)          /v1/chat/completions
+#   "embed"     → Qwen3-Embedding-0.6B        /v1/embeddings
+#   "rerank"    → Qwen3-Reranker-0.6B         /v1/score
+#
+# The critical knob is gpu_memory_utilization PER ENGINE: each engine
+# pre-allocates its fraction at boot, so the fractions must sum to ~0.85
+# (defaulting all three to 0.9 is an instant OOM). See serve_module.py.
+
+engine: vllm_openai
+
+model:
+  module: "serve_module"
+
+# All three engines are TP=1/PP=1 — one worker hosts everything.
+vllm:
+  tensor_parallel_size: 1
+  pipeline_parallel_size: 1
+
+cluster:
+  num_workers: 1
+  device: "gpu"
+  gpus_per_worker: 1
+  cpus_per_worker: 8
+  min_vram_gb_per_worker: 22  # 13 (chat) + 2×1.2 (embed/rerank) + KV + overhead
+  # Advisory fields — dashboard/accounting only:
+  mode: "data_parallel"
+  max_ongoing_requests: 32
+
+# No `requirements:` — the prebuilt ray-llm image owns the stack.
+# See ../README.md "Requirements policy".

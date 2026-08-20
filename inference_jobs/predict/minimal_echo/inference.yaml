@@ -1,0 +1,20 @@
+# Minimal echo predictor — no model file, no GPU, just proves the
+# platform contract works end-to-end. Use this as your first deploy
+# to validate auth, networking, and request routing before you start
+# wiring real weights.
+
+model:
+  module: "echo_serve"
+  class_name: "EchoPredictor"
+  init_args:
+    prefix: "echo: "
+
+cluster:
+  num_workers: 1
+  mode: "data_parallel"
+  gpus_per_worker: 1
+  cpus_per_worker: 8
+  max_ongoing_requests: 32
+  device: "cpu"
+
+requirements: []

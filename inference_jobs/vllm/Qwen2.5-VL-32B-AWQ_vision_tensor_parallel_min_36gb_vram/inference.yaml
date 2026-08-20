@@ -1,0 +1,28 @@
+# Qwen2.5-VL-32B (AWQ) via vLLM — TENSOR PARALLEL over 2 GPUs, one worker.
+#
+# The document-vision quality tier (`vision-qwen25-vl-32b`): hard
+# layouts, handwriting, dense tables. AWQ ~19 GB sharded TP=2 across
+# 2×24 GB cards in ONE machine (TP dies over Ethernet — STRICT_PACK).
+
+engine: vllm_openai
+
+model:
+  module: "serve_module"
+
+# TP=2 → the scheduler must find a worker exposing 2 GPUs; per-GPU
+# check: each needs ≥ min_vram ÷ 2 = 22 GB free.
+vllm:
+  tensor_parallel_size: 2
+  pipeline_parallel_size: 1
+
+cluster:
+  num_workers: 1
+  device: "gpu"
+  gpus_per_worker: 2
+  cpus_per_worker: 8
+  min_vram_gb_per_worker: 44  # 2 × (9.5 GB weights-shard + KV + overhead)
+  # Advisory fields — dashboard/accounting only:
+  mode: "tensor_parallel"
+  max_ongoing_requests: 16
+
+# No `requirements:` — the prebuilt ray-llm image owns the stack.

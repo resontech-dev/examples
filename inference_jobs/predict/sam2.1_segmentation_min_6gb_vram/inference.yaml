@@ -1,0 +1,35 @@
+# SAM 2.1 — promptable image segmentation (predictor mode).
+#
+# Point/box-prompted segmentation via facebook/sam2.1-hiera-large through
+# the transformers Sam2 integration. Image predictor only — video object
+# tracking (Sam2VideoModel) is the natural follow-up template.
+#
+# ⚠️ VERIFY on the pinned predictor image: the Sam2 classes need a
+# recent transformers (>=4.56). If the platform's base image pins older,
+# the requirements line below installs on top.
+
+model:
+  # No `path` — weights pulled from HF Hub inside __init__ (~3.5 GB).
+  module: "sam2_serve"
+  class_name: "Sam2Segmenter"
+  init_args:
+    model_id: "facebook/sam2.1-hiera-large"
+    # hiera-large is the quality pick; drop to sam2.1-hiera-small (~1 GB)
+    # for shared-worker deployments.
+    max_masks: 3            # top-K masks returned per prompt
+    dtype: "auto"           # fp16 on GPU, fp32 on CPU
+
+cluster:
+  num_workers: 1
+  mode: "data_parallel"
+  gpus_per_worker: 1
+  cpus_per_worker: 8
+  min_vram_gb_per_worker: 6   # ~3.5 GB weights fp16 + activations
+  max_ongoing_requests: 8
+  device: "auto"
+
+requirements:
+  - "torch"                        # bare — bound transitively by transformers
+  - "transformers>=4.56,<5"        # Sam2 classes landed in 4.56
+  - "Pillow>=10.0.0"
+  - "numpy"

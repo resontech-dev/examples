@@ -1,0 +1,38 @@
+# Orpheus-TTS 3B — expressive text-to-speech (predictor mode).
+#
+# Llama-based TTS (`tts-orpheus-3b`, Apache-2.0): the LM generates SNAC
+# audio codes, a small vocoder decodes them to 24 kHz speech. Quality
+# tier of the TTS lineup — emotive, streaming-capable voices.
+#
+# ⚠️ VALIDATE the token→audio decode path on a GPU before selling — see
+# the banner in scripts/orpheus_serve.py.
+
+model:
+  # No `path` — weights pulled from HF Hub inside __init__
+  # (~6.6 GB LM + ~80 MB SNAC vocoder).
+  module: "orpheus_serve"
+  class_name: "OrpheusTTS"
+  init_args:
+    model_id: "canopylabs/orpheus-3b-0.1-ft"
+    snac_id: "hubertsiuzdak/snac_24khz"
+    default_voice: "tara"     # tara/leah/jess/leo/dan/mia/zac/zoe
+    max_new_tokens: 2048      # ≈ 24 s of audio (7 tokens ≈ one 85 Hz frame)
+    dtype: "auto"
+
+cluster:
+  num_workers: 1
+  mode: "data_parallel"
+  gpus_per_worker: 1
+  cpus_per_worker: 8
+  min_vram_gb_per_worker: 10  # ~6.6 GB fp16 LM + SNAC + KV
+  # generate() is sequential per replica — keep the queue tiny; add
+  # replicas for throughput, not queue depth.
+  max_ongoing_requests: 2
+  device: "auto"
+
+requirements:
+  - "torch"                        # bare — bound transitively by transformers
+  - "transformers>=4.45,<5"
+  - "snac>=1.2.1"                  # the 24 kHz neural codec decoder
+  - "soundfile>=0.12.1"
+  - "numpy"
