@@ -1,0 +1,285 @@
+{
+ "generated_at": "2026-08-01",
+ "invoices": {
+  "DOC-0001": {
+   "vendor_name": "СТО «Мотор-Сервіс»",
+   "invoice_number": "РФ-0001",
+   "invoice_date": "2026-07-04",
+   "vehicle_plate": "AA1234BK",
+   "total_uah": 27500,
+   "positions_count": 2
+  },
+  "DOC-0002": {
+   "vendor_name": "ФОП Захарчук (сантехроботи)",
+   "invoice_number": "РФ-0002",
+   "invoice_date": "2026-07-04",
+   "vehicle_plate": "KA7781EX",
+   "total_uah": 420000,
+   "positions_count": 2
+  },
+  "DOC-0003": {
+   "vendor_name": "СТО «Автомайстер-Плюс»",
+   "invoice_number": "РФ-0003",
+   "invoice_date": "2026-07-24",
+   "vehicle_plate": "AA1234BK",
+   "total_uah": 27500,
+   "positions_count": 2
+  },
+  "DOC-0004": {
+   "vendor_name": "ТОВ «РемБуд-Сервіс»",
+   "invoice_number": "РФ-0004",
+   "invoice_date": "2026-07-19",
+   "vehicle_plate": "BC4412HT",
+   "total_uah": 31000,
+   "positions_count": 1
+  },
+  "DOC-0005": {
+   "vendor_name": "ТОВ «РемБуд-Сервіс»",
+   "invoice_number": "РФ-0005",
+   "invoice_date": "2026-07-28",
+   "vehicle_plate": null,
+   "total_uah": 58000,
+   "positions_count": 2
+  },
+  "DOC-0006": {
+   "vendor_name": "ТОВ «РемБуд-Сервіс»",
+   "invoice_number": "РФ-0006",
+   "invoice_date": "2026-06-22",
+   "vehicle_plate": "BC4412HT",
+   "total_uah": 14500,
+   "positions_count": 1
+  },
+  "DOC-0007": {
+   "vendor_name": "СТО «Автомайстер-Плюс»",
+   "invoice_number": "РФ-0007",
+   "invoice_date": "2026-06-30",
+   "vehicle_plate": "KA7781EX",
+   "total_uah": 22000,
+   "positions_count": 1
+  },
+  "DOC-0008": {
+   "vendor_name": "ТОВ «РемБуд-Сервіс»",
+   "invoice_number": "РФ-0008",
+   "invoice_date": "2026-06-29",
+   "vehicle_plate": "AA1234BK",
+   "total_uah": 22000,
+   "positions_count": 1
+  },
+  "DOC-0009": {
+   "vendor_name": "СТО «Драйв-Авто»",
+   "invoice_number": "РФ-0009",
+   "invoice_date": "2026-07-20",
+   "vehicle_plate": "AA1234BK",
+   "total_uah": 2400,
+   "positions_count": 1
+  },
+  "DOC-0010": {
+   "vendor_name": "ТОВ «РемБуд-Сервіс»",
+   "invoice_number": "РФ-0010",
+   "invoice_date": "2026-07-28",
+   "vehicle_plate": "AI9056OP",
+   "total_uah": 19000,
+   "positions_count": 1
+  },
+  "DOC-0011": {
+   "vendor_name": "СТО «Мотор-Сервіс»",
+   "invoice_number": "РФ-0011",
+   "invoice_date": "2026-07-23",
+   "vehicle_plate": "AA1234BK",
+   "total_uah": 260500,
+   "positions_count": 4
+  },
+  "DOC-0012": {
+   "vendor_name": "ТОВ «РемБуд-Сервіс»",
+   "invoice_number": "РФ-0012",
+   "invoice_date": "2026-07-02",
+   "vehicle_plate": "KA7781EX",
+   "total_uah": 1800,
+   "positions_count": 1
+  },
+  "DOC-0013": {
+   "vendor_name": "ТОВ «РемБуд-Сервіс»",
+   "invoice_number": "РФ-0013",
+   "invoice_date": "2026-07-16",
+   "vehicle_plate": "BC4412HT",
+   "total_uah": 17800,
+   "positions_count": 1
+  },
+  "DOC-0014": {
+   "vendor_name": "СТО «Мотор-Сервіс»",
+   "invoice_number": "РФ-0014",
+   "invoice_date": "2026-07-13",
+   "vehicle_plate": null,
+   "total_uah": 7000,
+   "positions_count": 1
+  },
+  "DOC-0015": {
+   "act_number": "АКТ-0015",
+   "act_date": "2026-07-16"
+  },
+  "DOC-0016": {
+   "act_number": "АКТ-0016",
+   "act_date": "2026-06-21"
+  },
+  "DOC-0017": {
+   "report_number": "ЄО-118-0442",
+   "report_date": "2026-07-03",
+   "vehicle_plate": "AA1234BK"
+  },
+  "DOC-0018": {
+   "vendor_name": "ТОВ «РемБуд-Сервіс»",
+   "invoice_number": "РФ-0018",
+   "invoice_date": "2026-07-11",
+   "vehicle_plate": "BC4412HT",
+   "total_uah": null,
+   "positions_count": 1
+  },
+  "DOC-0019": {
+   "vendor_name": "ТОВ «РемБуд-Сервіс»",
+   "invoice_number": "РФ-0019",
+   "invoice_date": "2026-06-22",
+   "vehicle_plate": null,
+   "total_uah": 6400,
+   "positions_count": 1
+  },
+  "DOC-0020": {
+   "act_number": "АКТ-0020",
+   "act_date": "2026-07-22"
+  }
+ },
+ "red_flags": [
+  {
+   "claim_id": "CLM-0021",
+   "flag_type": "repeat_client_60d"
+  },
+  {
+   "claim_id": "CLM-0022",
+   "flag_type": "repeat_client_60d"
+  },
+  {
+   "claim_id": "CLM-0030",
+   "flag_type": "amount_above_150pct_avg"
+  },
+  {
+   "claim_id": "CLM-0033",
+   "flag_type": "expired_policy"
+  },
+  {
+   "claim_id": "CLM-0005",
+   "flag_type": "shared_vendor"
+  },
+  {
+   "claim_id": "CLM-0011",
+   "flag_type": "shared_vendor"
+  },
+  {
+   "claim_id": "CLM-0040",
+   "flag_type": "review_without_documents"
+  }
+ ],
+ "citations": {
+  "POL-0001": {
+   "document_id": "DOC-0101",
+   "exclusions_section": "5",
+   "payout_docs_deadline": "6.2",
+   "tuning_excluded": "5.4",
+   "washing_excluded": "5.5",
+   "alcohol_excluded": "5.2"
+  },
+  "POL-0002": {
+   "document_id": "DOC-0102",
+   "exclusions_section": "5",
+   "payout_docs_deadline": "6.2",
+   "water_damage_covered": "4.3",
+   "natural_disaster_excluded": "5.3"
+  },
+  "POL-0003": {
+   "document_id": "DOC-0103",
+   "exclusions_section": "5",
+   "payout_docs_deadline": "6.2",
+   "water_damage_covered": "4.3",
+   "natural_disaster_excluded": "5.3"
+  },
+  "POL-0004": {
+   "document_id": "DOC-0104",
+   "exclusions_section": "5",
+   "payout_docs_deadline": "6.2",
+   "tuning_excluded": "5.4",
+   "washing_excluded": "5.5",
+   "alcohol_excluded": "5.2"
+  },
+  "POL-0005": {
+   "document_id": "DOC-0105",
+   "exclusions_section": "5",
+   "payout_docs_deadline": "6.2",
+   "tuning_excluded": "5.4",
+   "washing_excluded": "5.5",
+   "alcohol_excluded": "5.2"
+  },
+  "POL-0006": {
+   "document_id": "DOC-0106",
+   "exclusions_section": "5",
+   "payout_docs_deadline": "6.2",
+   "tuning_excluded": "5.4",
+   "washing_excluded": "5.5",
+   "alcohol_excluded": "5.2"
+  },
+  "POL-0007": {
+   "document_id": "DOC-0107",
+   "exclusions_section": "5",
+   "payout_docs_deadline": "6.2"
+  },
+  "POL-0008": {
+   "document_id": "DOC-0108",
+   "exclusions_section": "5",
+   "payout_docs_deadline": "6.2",
+   "water_damage_covered": "4.3",
+   "natural_disaster_excluded": "5.3"
+  },
+  "POL-0009": {
+   "document_id": "DOC-0109",
+   "exclusions_section": "5",
+   "payout_docs_deadline": "6.2"
+  },
+  "POL-0010": {
+   "document_id": "DOC-0110",
+   "exclusions_section": "5",
+   "payout_docs_deadline": "6.2"
+  }
+ },
+ "expected_links": {
+  "DOC-0004": [
+   "CLM-0021",
+   "CLM-0022"
+  ],
+  "DOC-0009": [
+   "CLM-0007"
+  ],
+  "DOC-0014": [
+   "CLM-0012"
+  ]
+ },
+ "missing_docs": {
+  "CLM-0004": [
+   "police_report"
+  ],
+  "CLM-0007": [
+   "damage_photo_act",
+   "police_report"
+  ]
+ },
+ "invoice_coverage": {
+  "DOC-0011": {
+   "non_covered_positions": [
+    "Тюнінг: спойлер та обвіс",
+    "Миття та полірування"
+   ],
+   "over_limit": true,
+   "cite": {
+    "policy": "POL-0001",
+    "tuning_section": "5.4",
+    "washing_section": "5.5"
+   }
+  }
+ }
+}

@@ -17,6 +17,7 @@ GPU fleet: `reson_docs/docs/inference/dc-hardware-requirements.md §2`.
 | `Qwen3-Coder-30B-A3B-Instruct-AWQ-4bit_pipeline_parallel_min_20gb_vram` | Qwen3-Coder-30B-A3B AWQ | PP=2 | 20 GB | 2x12gb |
 | `Devstral-Small-24B_coding_min_16gb_vram` | Devstral Small 24B AWQ | single | 16 GB | 24gb |
 | `Qwen3-Coder-480B-A35B_coding_template_min_260gb_vram` | Qwen3-Coder-480B-A35B AWQ | TP=4 **TEMPLATE** | 260 GB | frontier 4x80gb |
+| `Qwen3-8B-AWQ_construction_chat_min_10gb_vram` | Qwen3-8B AWQ | single + BIM agent demo | 10 GB | 12gb |
 | `gpt-oss-20b_chat_min_14gb_vram` | gpt-oss-20b MXFP4 | single | 14 GB | 24gb |
 | `gpt-oss-20b_rag_bundle_min_18gb_vram` | gpt-oss-20b + embed + rerank | 3 engines, 1 GPU | 18 GB | 24gb |
 | `Mistral-Small-24B_chat_min_16gb_vram` | Mistral Small 24B AWQ | single | 16 GB | 24gb |
@@ -26,6 +27,8 @@ GPU fleet: `reson_docs/docs/inference/dc-hardware-requirements.md §2`.
 | `Qwen2.5-7B_multi_lora_min_10gb_vram` | Qwen2.5-7B AWQ + N LoRA adapters | single, multi-LoRA | 10 GB | 12gb |
 | `Mistral-Small-24B_multi_lora_min_16gb_vram` | Mistral Small AWQ + N LoRA adapters | single, multi-LoRA | 16 GB | 24gb |
 | `Qwen2.5-VL-7B_vision_min_16gb_vram` | Qwen2.5-VL-7B fp16 | single, vision-in | 16 GB | 24gb |
+| `Qwen2.5-VL-7B-AWQ_banking_and_insurance_docs_min_8gb_vram` | Qwen2.5-VL-7B AWQ | single, vision-in — BFSI pilot Stack A | 8 GB | 12gb/16gb |
+| `Qwen3-8B-AWQ_banking_and_insurance_chat_embed_min_12gb_vram` | Qwen3-8B AWQ + embed 0.6B | 2 engines, 1 GPU — BFSI pilot Stack B | 12 GB | 12gb/16gb |
 | `Qwen2.5-VL-32B-AWQ_vision_tensor_parallel_min_36gb_vram` | Qwen2.5-VL-32B AWQ | TP=2 | 36 GB | 2x24gb |
 | `whisper-large-v3_asr_min_6gb_vram` | Whisper large-v3 | single, ASR | 6 GB | 12gb |
 | `Qwen3-8B-AWQ_guarded_rag_chat_min_22gb_vram` | Qwen3-8B AWQ + Qwen3Guard-8B + embed + rerank | 4 engines, 1 GPU | 22 GB | 24gb |

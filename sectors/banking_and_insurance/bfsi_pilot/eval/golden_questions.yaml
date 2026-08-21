@@ -1,0 +1,142 @@
+# 20 еталонних питань для інтеграційного прогону (run_eval.py).
+# types: fact | aggregate | citation | invoice_coverage | red_flags | letter
+#   expected_sql   — канонічні значення мають зустрітися у відповіді
+#   expect_ids     — ці ідентифікатори мають бути згадані
+#   citation       — має бути посилання (документ політики, пункт із префіксом)
+#   doc_types      — типи документів, які мусить перелічити чернетка
+# Всюди діє глобальна метрика: жодного галюцинованого CLM-/POL-/DOC- id.
+
+- id: q01
+  type: fact
+  question: "Який статус клейму CLM-0007 і чого бракує для рішення?"
+  expected_sql: "SELECT status FROM claims WHERE id='CLM-0007'"
+  expect_ids: ["CLM-0007"]
+  expect_contains_any: ["docs_pending"]
+
+- id: q02
+  type: fact
+  question: "По якому полісу заявлено CLM-0012 і яка в ньому франшиза?"
+  expected_sql: >
+    SELECT p.id, p.deductible_uah::int FROM claims c
+    JOIN policies p ON p.id=c.policy_id WHERE c.id='CLM-0012'
+  expect_ids: ["POL-0003"]
+
+- id: q03
+  type: fact
+  question: "Хто веде клейм CLM-0030 і яка заявлена сума?"
+  expected_sql: "SELECT assignee, amount_claimed_uah::int FROM claims WHERE id='CLM-0030'"
+  expect_ids: ["CLM-0030"]
+
+- id: q04
+  type: aggregate
+  question: "Скільки всього клеймів у статусі review?"
+  expected_sql: "SELECT count(*) FROM claims WHERE status='review'"
+
+- id: q05
+  type: aggregate
+  question: "Скільки відкритих клеймів (fnol, docs_pending, review) старші за 30 днів?"
+  expected_sql: >
+    SELECT count(*) FROM claims WHERE status IN ('fnol','docs_pending','review')
+    AND fnol_date < DATE '2026-08-01' - 30
+  note: "TODAY у seed заморожено на 2026-08-01"
+
+- id: q06
+  type: aggregate
+  question: "Скільки полісів KASKO у портфелі і який середній ліміт по них?"
+  expected_sql: >
+    SELECT count(*), round(avg(limit_uah))::int FROM policies WHERE product='KASKO'
+
+- id: q07
+  type: aggregate
+  question: "Скільки документів не вдалося обробити (status='failed')?"
+  expected_sql: "SELECT count(*) FROM documents WHERE status='failed'"
+
+- id: q08
+  type: fact
+  question: "Які документи вже є по клейму CLM-0019? Наведи їхні id і типи."
+  expected_sql: >
+    SELECT id FROM documents WHERE entity_type='claim' AND entity_id='CLM-0019' ORDER BY id
+  expect_ids: ["DOC-0008", "DOC-0011"]
+
+- id: q09
+  type: citation
+  question: "CLM-0012 — залиття квартири: чи покривається це полісом POL-0003? Процитуй пункти договору."
+  citation:
+    policy: "POL-0003"
+    expected_key: "water_damage_covered"     # з ground_truth.citations
+  expect_contains_any: ["покрив", "так"]
+
+- id: q10
+  type: citation
+  question: "Чи покриває поліс POL-0003 пошкодження від стихійного лиха? Дай пункт."
+  citation:
+    policy: "POL-0003"
+    expected_key: "natural_disaster_excluded"
+  expect_contains_any: ["виключ", "не покрив", "ні"]
+
+- id: q11
+  type: citation
+  question: "Що каже договір POL-0001 про керування у стані сп'яніння? Наведи пункт."
+  citation:
+    policy: "POL-0001"
+    expected_key: "alcohol_excluded"
+
+- id: q12
+  type: invoice_coverage
+  question: "У клеймі CLM-0019 рахунок DOC-0011: які позиції НЕ покриваються полісом? Обґрунтуй пунктами."
+  coverage_doc: "DOC-0011"                   # з ground_truth.invoice_coverage
+  expect_ids: ["DOC-0011"]
+  expect_contains_any: ["тюнінг", "Тюнінг"]
+
+- id: q13
+  type: fact
+  question: "Яка сума рахунку DOC-0002 і чи перевищує вона ліміт поліса?"
+  expected_sql: >
+    SELECT (extracted->>'total_uah')::numeric::int FROM documents WHERE id='DOC-0002'
+  expect_ids: ["DOC-0002"]
+
+- id: q14
+  type: red_flags
+  question: "Покажи підозрілі клейми (антифрод-скринінг) з поясненням."
+  min_flag_claims: 4          # ≥4 з 5 сценаріїв
+  expect_ids_any: ["CLM-0021", "CLM-0022", "CLM-0030", "CLM-0033", "CLM-0005", "CLM-0011", "CLM-0040"]
+
+- id: q15
+  type: red_flags
+  question: "Чи є клейми по прострочених полісах? Які саме?"
+  min_flag_claims: 1
+  expect_ids_any: ["CLM-0033"]
+
+- id: q16
+  type: letter
+  question: "Підготуй чернетку листа клієнту по CLM-0004 із запитом відсутніх документів."
+  letter_claim: "CLM-0004"                   # з ground_truth.missing_docs
+  expect_ids: ["CLM-0004"]
+
+- id: q17
+  type: letter
+  question: "Чернетка листа по CLM-0007: яких документів бракує і до якого строку їх подати?"
+  letter_claim: "CLM-0007"
+  expect_ids: ["CLM-0007"]
+
+- id: q18
+  type: fact
+  question: "Скільки клеймів у клієнта поліса POL-0005 і які їхні статуси?"
+  expected_sql: >
+    SELECT count(*) FROM claims c JOIN policies p ON p.id=c.policy_id
+    WHERE p.client_id = (SELECT client_id FROM policies WHERE id='POL-0005')
+  expect_ids: ["CLM-0021", "CLM-0022"]
+
+- id: q19
+  type: aggregate
+  question: "Розподіл відкритих клеймів по фахівцях (assignee) — скільки в кого?"
+  expected_sql: >
+    SELECT assignee, count(*) FROM claims
+    WHERE status IN ('fnol','docs_pending','review') GROUP BY assignee ORDER BY assignee
+
+- id: q20
+  type: fact
+  question: "Який вендор у рахунку DOC-0003 і в яких ще клеймах він зустрічається?"
+  expected_sql: "SELECT extracted->>'vendor_name' FROM documents WHERE id='DOC-0003'"
+  expect_ids: ["DOC-0003"]
+  expect_ids_any: ["CLM-0011", "DOC-0007"]

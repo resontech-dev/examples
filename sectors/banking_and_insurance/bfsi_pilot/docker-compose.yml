@@ -1,0 +1,44 @@
+# BFSI pilot — local state layer: Postgres 16 + pgvector, MinIO.
+# Migrations in db/ run automatically on FIRST boot (docker-entrypoint-initdb.d).
+# To re-migrate from scratch: docker compose down -v && docker compose up -d
+
+services:
+  db:
+    image: pgvector/pgvector:pg16
+    container_name: bfsi-db
+    environment:
+      POSTGRES_USER: bfsi
+      POSTGRES_PASSWORD: bfsi
+      POSTGRES_DB: bfsi
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./db:/docker-entrypoint-initdb.d:ro
+      - bfsi_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U bfsi -d bfsi"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  minio:
+    image: minio/minio:latest
+    container_name: bfsi-minio
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    ports:
+      - "9000:9000"   # S3 API
+      - "9001:9001"   # web console
+    volumes:
+      - bfsi_minio:/data
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+volumes:
+  bfsi_pgdata:
+  bfsi_minio:

@@ -1,0 +1,867 @@
+{
+ "project": "Sample Duplex (synthetic \u2014 mimics buildingSMART Duplex Apartment)",
+ "schema": "IFC4",
+ "storeys": [
+  "Level 1",
+  "Level 2"
+ ],
+ "elements": [
+  {
+   "guid": "DjfcRNL2EDLbdDZ1c5jAU2",
+   "class": "IfcWall",
+   "name": "Wall-C101",
+   "storey": "Level 1",
+   "material": [
+    "Concrete C25/30"
+   ],
+   "psets": {
+    "Pset_WallCommon": {
+     "IsExternal": true,
+     "LoadBearing": true
+    },
+    "BaseQuantities": {
+     "NetVolume": 4.19,
+     "NetSideArea": 16.76
+    }
+   }
+  },
+  {
+   "guid": "TbrNLwMtshF6PwKluYIFdl",
+   "class": "IfcWall",
+   "name": "Wall-C102",
+   "storey": "Level 1",
+   "material": [
+    "Concrete C25/30"
+   ],
+   "psets": {
+    "Pset_WallCommon": {
+     "IsExternal": true,
+     "LoadBearing": true
+    },
+    "BaseQuantities": {
+     "NetVolume": 3.35,
+     "NetSideArea": 13.4
+    }
+   }
+  },
+  {
+   "guid": "dMwj6uUvtaiJVfU7wicpHd",
+   "class": "IfcWall",
+   "name": "Wall-C103",
+   "storey": "Level 1",
+   "material": [
+    "Concrete C25/30"
+   ],
+   "psets": {
+    "Pset_WallCommon": {
+     "IsExternal": true,
+     "LoadBearing": true
+    },
+    "BaseQuantities": {
+     "NetVolume": 5.16,
+     "NetSideArea": 20.64
+    }
+   }
+  },
+  {
+   "guid": "oziIbob$y6ShRfh2zucR$L",
+   "class": "IfcWall",
+   "name": "Wall-C104",
+   "storey": "Level 1",
+   "material": [
+    "Concrete C25/30"
+   ],
+   "psets": {
+    "Pset_WallCommon": {
+     "IsExternal": false,
+     "LoadBearing": true
+    },
+    "BaseQuantities": {
+     "NetVolume": 4.7,
+     "NetSideArea": 18.8
+    }
+   }
+  },
+  {
+   "guid": "OTU2Ixw7gBOirOl3U6AhWN",
+   "class": "IfcWall",
+   "name": "Wall-C105",
+   "storey": "Level 1",
+   "material": [
+    "Concrete C25/30"
+   ],
+   "psets": {
+    "Pset_WallCommon": {
+     "IsExternal": false,
+     "LoadBearing": true
+    },
+    "BaseQuantities": {
+     "NetVolume": 4.52,
+     "NetSideArea": 18.08
+    }
+   }
+  },
+  {
+   "guid": "mZTvUAp_COuneHeKK_IQQ8",
+   "class": "IfcWall",
+   "name": "Wall-C106",
+   "storey": "Level 1",
+   "material": [
+    "Concrete C25/30"
+   ],
+   "psets": {
+    "Pset_WallCommon": {
+     "IsExternal": false,
+     "LoadBearing": true
+    },
+    "BaseQuantities": {
+     "NetVolume": 4.84,
+     "NetSideArea": 19.36
+    }
+   }
+  },
+  {
+   "guid": "Vh2bZnzv45PfcIrCdcAJHd",
+   "class": "IfcWall",
+   "name": "Wall-B101",
+   "storey": "Level 1",
+   "material": [
+    "Brick masonry"
+   ],
+   "psets": {
+    "Pset_WallCommon": {
+     "IsExternal": false,
+     "LoadBearing": false
+    },
+    "BaseQuantities": {
+     "NetVolume": 3.3,
+     "NetSideArea": 27.5
+    }
+   }
+  },
+  {
+   "guid": "EqJej_bQ8f80YMM3t207GM",
+   "class": "IfcWall",
+   "name": "Wall-B102",
+   "storey": "Level 1",
+   "material": [
+    "Brick masonry"
+   ],
+   "psets": {
+    "Pset_WallCommon": {
+     "IsExternal": false,
+     "LoadBearing": false
+    },
+    "BaseQuantities": {
+     "NetVolume": 1.72,
+     "NetSideArea": 14.33
+    }
+   }
+  },
+  {
+   "guid": "rNfYY5R2Xj7fJ4MGBLeV0_",
+   "class": "IfcWall",
+   "name": "Wall-B103",
+   "storey": "Level 1",
+   "material": [
+    "Brick masonry"
+   ],
+   "psets": {
+    "Pset_WallCommon": {
+     "IsExternal": false,
+     "LoadBearing": false
+    },
+    "BaseQuantities": {
+     "NetVolume": 1.71,
+     "NetSideArea": 14.25
+    }
+   }
+  },
+  {
+   "guid": "zHVwAxh6k2_TYlbHHoHG9U",
+   "class": "IfcWall",
+   "name": "Wall-B104",
+   "storey": "Level 1",
+   "material": [
+    "Brick masonry"
+   ],
+   "psets": {
+    "Pset_WallCommon": {
+     "IsExternal": false,
+     "LoadBearing": false
+    },
+    "BaseQuantities": {
+     "NetVolume": 2.47,
+     "NetSideArea": 20.58
+    }
+   }
+  },
+  {
+   "guid": "KXIIezPfFK1ohaoehyQm6o",
+   "class": "IfcWall",
+   "name": "Wall-C201",
+   "storey": "Level 2",
+   "material": [
+    "Concrete C25/30"
+   ],
+   "psets": {
+    "Pset_WallCommon": {
+     "IsExternal": true,
+     "LoadBearing": true
+    },
+    "BaseQuantities": {
+     "NetVolume": 2.56,
+     "NetSideArea": 10.24
+    }
+   }
+  },
+  {
+   "guid": "JB6MJbhQsIfvkU4mBmNRhO",
+   "class": "IfcWall",
+   "name": "Wall-C202",
+   "storey": "Level 2",
+   "material": [
+    "Concrete C25/30"
+   ],
+   "psets": {
+    "Pset_WallCommon": {
+     "IsExternal": true,
+     "LoadBearing": true
+    },
+    "BaseQuantities": {
+     "NetVolume": 5.0,
+     "NetSideArea": 20.0
+    }
+   }
+  },
+  {
+   "guid": "Tikarah_gGL2jFAqQhU42B",
+   "class": "IfcWall",
+   "name": "Wall-C203",
+   "storey": "Level 2",
+   "material": [
+    "Concrete C25/30"
+   ],
+   "psets": {
+    "Pset_WallCommon": {
+     "IsExternal": true,
+     "LoadBearing": true
+    },
+    "BaseQuantities": {
+     "NetVolume": 4.89,
+     "NetSideArea": 19.56
+    }
+   }
+  },
+  {
+   "guid": "TEvS3QFnuFtafNt0TeUW0D",
+   "class": "IfcWall",
+   "name": "Wall-C204",
+   "storey": "Level 2",
+   "material": [
+    "Concrete C25/30"
+   ],
+   "psets": {
+    "Pset_WallCommon": {
+     "IsExternal": false,
+     "LoadBearing": true
+    },
+    "BaseQuantities": {
+     "NetVolume": 2.71,
+     "NetSideArea": 10.84
+    }
+   }
+  },
+  {
+   "guid": "q0fiUNwE8cZ6sndcDYzqjI",
+   "class": "IfcWall",
+   "name": "Wall-B201",
+   "storey": "Level 2",
+   "material": [
+    "Brick masonry"
+   ],
+   "psets": {
+    "Pset_WallCommon": {
+     "IsExternal": false,
+     "LoadBearing": false
+    },
+    "BaseQuantities": {
+     "NetVolume": 1.92,
+     "NetSideArea": 16.0
+    }
+   }
+  },
+  {
+   "guid": "jszqDOhWhEN3so3OxYgF3A",
+   "class": "IfcWall",
+   "name": "Wall-B202",
+   "storey": "Level 2",
+   "material": [
+    "Brick masonry"
+   ],
+   "psets": {
+    "Pset_WallCommon": {
+     "IsExternal": false,
+     "LoadBearing": false
+    },
+    "BaseQuantities": {
+     "NetVolume": 3.34,
+     "NetSideArea": 27.83
+    }
+   }
+  },
+  {
+   "guid": "Zu3IqoPmn0pzlQY1wWmzAm",
+   "class": "IfcWall",
+   "name": "Wall-B203",
+   "storey": "Level 2",
+   "material": [
+    "Brick masonry"
+   ],
+   "psets": {
+    "Pset_WallCommon": {
+     "IsExternal": false,
+     "LoadBearing": false
+    },
+    "BaseQuantities": {
+     "NetVolume": 2.54,
+     "NetSideArea": 21.17
+    }
+   }
+  },
+  {
+   "guid": "3p744b8VKkqLencZSDFf8J",
+   "class": "IfcWall",
+   "name": "Wall-B204",
+   "storey": "Level 2",
+   "material": [
+    "Brick masonry"
+   ],
+   "psets": {
+    "Pset_WallCommon": {
+     "IsExternal": false,
+     "LoadBearing": false
+    },
+    "BaseQuantities": {
+     "NetVolume": 2.12,
+     "NetSideArea": 17.67
+    }
+   }
+  },
+  {
+   "guid": "61Yx$zfSAN2cW7GfP6R7o4",
+   "class": "IfcDoor",
+   "name": "Door-101",
+   "storey": "Level 1",
+   "material": [
+    "Wood, oak veneer"
+   ],
+   "psets": {
+    "Pset_DoorCommon": {
+     "IsExternal": true,
+     "FireRating": "EI30"
+    },
+    "BaseQuantities": {
+     "Width": 0.9,
+     "Height": 2.1
+    }
+   }
+  },
+  {
+   "guid": "25U85hfj_ej4JkeiqoKRTd",
+   "class": "IfcDoor",
+   "name": "Door-102",
+   "storey": "Level 1",
+   "material": [
+    "Wood, oak veneer"
+   ],
+   "psets": {
+    "Pset_DoorCommon": {
+     "IsExternal": false,
+     "FireRating": ""
+    },
+    "BaseQuantities": {
+     "Width": 0.8,
+     "Height": 2.1
+    }
+   }
+  },
+  {
+   "guid": "xTbI10q71Ha1xCw9Atmx1c",
+   "class": "IfcDoor",
+   "name": "Door-103",
+   "storey": "Level 1",
+   "material": [
+    "Wood, oak veneer"
+   ],
+   "psets": {
+    "Pset_DoorCommon": {
+     "IsExternal": false,
+     "FireRating": ""
+    },
+    "BaseQuantities": {
+     "Width": 0.9,
+     "Height": 2.1
+    }
+   }
+  },
+  {
+   "guid": "_ci3_DxrzV7QDyDK2R7XGh",
+   "class": "IfcDoor",
+   "name": "Door-104",
+   "storey": "Level 1",
+   "material": [
+    "Wood, oak veneer"
+   ],
+   "psets": {
+    "Pset_DoorCommon": {
+     "IsExternal": false,
+     "FireRating": "EI30"
+    },
+    "BaseQuantities": {
+     "Width": 0.8,
+     "Height": 2.1
+    }
+   }
+  },
+  {
+   "guid": "wpb6prwj1gK8CGscIFDfZC",
+   "class": "IfcDoor",
+   "name": "Door-105",
+   "storey": "Level 1",
+   "material": [
+    "Wood, oak veneer"
+   ],
+   "psets": {
+    "Pset_DoorCommon": {
+     "IsExternal": false,
+     "FireRating": ""
+    },
+    "BaseQuantities": {
+     "Width": 0.9,
+     "Height": 2.1
+    }
+   }
+  },
+  {
+   "guid": "TeQ8Ob7gvVOUnNDnwyZJfN",
+   "class": "IfcDoor",
+   "name": "Door-201",
+   "storey": "Level 2",
+   "material": [
+    "Wood, oak veneer"
+   ],
+   "psets": {
+    "Pset_DoorCommon": {
+     "IsExternal": false,
+     "FireRating": "EI30"
+    },
+    "BaseQuantities": {
+     "Width": 0.9,
+     "Height": 2.1
+    }
+   }
+  },
+  {
+   "guid": "mPFs2vIrB1_N3u6T3Wi973",
+   "class": "IfcDoor",
+   "name": "Door-202",
+   "storey": "Level 2",
+   "material": [
+    "Wood, oak veneer"
+   ],
+   "psets": {
+    "Pset_DoorCommon": {
+     "IsExternal": false,
+     "FireRating": ""
+    },
+    "BaseQuantities": {
+     "Width": 0.8,
+     "Height": 2.1
+    }
+   }
+  },
+  {
+   "guid": "ipfLj5f7wrD$pX_bthrjjB",
+   "class": "IfcDoor",
+   "name": "Door-203",
+   "storey": "Level 2",
+   "material": [
+    "Wood, oak veneer"
+   ],
+   "psets": {
+    "Pset_DoorCommon": {
+     "IsExternal": false,
+     "FireRating": ""
+    },
+    "BaseQuantities": {
+     "Width": 0.9,
+     "Height": 2.1
+    }
+   }
+  },
+  {
+   "guid": "YKe0_e8_5CLlczfnv8s2qt",
+   "class": "IfcDoor",
+   "name": "Door-204",
+   "storey": "Level 2",
+   "material": [
+    "Wood, oak veneer"
+   ],
+   "psets": {
+    "Pset_DoorCommon": {
+     "IsExternal": false,
+     "FireRating": "EI30"
+    },
+    "BaseQuantities": {
+     "Width": 0.8,
+     "Height": 2.1
+    }
+   }
+  },
+  {
+   "guid": "6ingdPYoPXYb9jkMYlduWm",
+   "class": "IfcDoor",
+   "name": "Door-205",
+   "storey": "Level 2",
+   "material": [
+    "Wood, oak veneer"
+   ],
+   "psets": {
+    "Pset_DoorCommon": {
+     "IsExternal": false,
+     "FireRating": ""
+    },
+    "BaseQuantities": {
+     "Width": 0.9,
+     "Height": 2.1
+    }
+   }
+  },
+  {
+   "guid": "BQjFGlQ_NBk894rXGg9OIz",
+   "class": "IfcDoor",
+   "name": "Door-206",
+   "storey": "Level 2",
+   "material": [
+    "Wood, oak veneer"
+   ],
+   "psets": {
+    "Pset_DoorCommon": {
+     "IsExternal": false,
+     "FireRating": ""
+    },
+    "BaseQuantities": {
+     "Width": 0.8,
+     "Height": 2.1
+    }
+   }
+  },
+  {
+   "guid": "_JGTTmKfP1cw54m2nHMabh",
+   "class": "IfcWindow",
+   "name": "Window-101",
+   "storey": "Level 1",
+   "material": [
+    "Aluminium frame, double glazing"
+   ],
+   "psets": {
+    "Pset_WindowCommon": {
+     "IsExternal": true
+    },
+    "BaseQuantities": {
+     "Width": 1.2,
+     "Height": 1.4,
+     "Area": 1.68
+    }
+   }
+  },
+  {
+   "guid": "KUeWJUA058lEdkk6JdhZ2O",
+   "class": "IfcWindow",
+   "name": "Window-102",
+   "storey": "Level 1",
+   "material": [
+    "Aluminium frame, double glazing"
+   ],
+   "psets": {
+    "Pset_WindowCommon": {
+     "IsExternal": true
+    },
+    "BaseQuantities": {
+     "Width": 1.2,
+     "Height": 1.4,
+     "Area": 1.68
+    }
+   }
+  },
+  {
+   "guid": "cTiSJHVnk4P7mzi$4KF3pg",
+   "class": "IfcWindow",
+   "name": "Window-103",
+   "storey": "Level 1",
+   "material": [
+    "Aluminium frame, double glazing"
+   ],
+   "psets": {
+    "Pset_WindowCommon": {
+     "IsExternal": true
+    },
+    "BaseQuantities": {
+     "Width": 1.2,
+     "Height": 1.4,
+     "Area": 1.68
+    }
+   }
+  },
+  {
+   "guid": "DLdCiFW84jX3_L8s0qpNUq",
+   "class": "IfcWindow",
+   "name": "Window-104",
+   "storey": "Level 1",
+   "material": [
+    "Aluminium frame, double glazing"
+   ],
+   "psets": {
+    "Pset_WindowCommon": {
+     "IsExternal": true
+    },
+    "BaseQuantities": {
+     "Width": 1.2,
+     "Height": 1.4,
+     "Area": 1.68
+    }
+   }
+  },
+  {
+   "guid": "0$kzE6LogpOzA70GYu$4Ga",
+   "class": "IfcWindow",
+   "name": "Window-201",
+   "storey": "Level 2",
+   "material": [
+    "Aluminium frame, double glazing"
+   ],
+   "psets": {
+    "Pset_WindowCommon": {
+     "IsExternal": true
+    },
+    "BaseQuantities": {
+     "Width": 1.2,
+     "Height": 1.4,
+     "Area": 1.68
+    }
+   }
+  },
+  {
+   "guid": "iQk4_PDeUnB0LcO7PT$li1",
+   "class": "IfcWindow",
+   "name": "Window-202",
+   "storey": "Level 2",
+   "material": [
+    "Aluminium frame, double glazing"
+   ],
+   "psets": {
+    "Pset_WindowCommon": {
+     "IsExternal": true
+    },
+    "BaseQuantities": {
+     "Width": 1.2,
+     "Height": 1.4,
+     "Area": 1.68
+    }
+   }
+  },
+  {
+   "guid": "98f6SxYRIj1riAkm_T59sq",
+   "class": "IfcWindow",
+   "name": "Window-203",
+   "storey": "Level 2",
+   "material": [
+    "Aluminium frame, double glazing"
+   ],
+   "psets": {
+    "Pset_WindowCommon": {
+     "IsExternal": true
+    },
+    "BaseQuantities": {
+     "Width": 1.2,
+     "Height": 1.4,
+     "Area": 1.68
+    }
+   }
+  },
+  {
+   "guid": "w6pYexd0Fo8wxT$EQqM4M6",
+   "class": "IfcWindow",
+   "name": "Window-204",
+   "storey": "Level 2",
+   "material": [
+    "Aluminium frame, double glazing"
+   ],
+   "psets": {
+    "Pset_WindowCommon": {
+     "IsExternal": true
+    },
+    "BaseQuantities": {
+     "Width": 1.2,
+     "Height": 1.4,
+     "Area": 1.68
+    }
+   }
+  },
+  {
+   "guid": "BS0TJ8hryKqwo_EIekdL3M",
+   "class": "IfcWindow",
+   "name": "Window-205",
+   "storey": "Level 2",
+   "material": [
+    "Aluminium frame, double glazing"
+   ],
+   "psets": {
+    "Pset_WindowCommon": {
+     "IsExternal": true
+    },
+    "BaseQuantities": {
+     "Width": 1.2,
+     "Height": 1.4,
+     "Area": 1.68
+    }
+   }
+  },
+  {
+   "guid": "M4VmDFpHltv3Sf0XVWKwe$",
+   "class": "IfcWindow",
+   "name": "Window-206",
+   "storey": "Level 2",
+   "material": [
+    "Aluminium frame, double glazing"
+   ],
+   "psets": {
+    "Pset_WindowCommon": {
+     "IsExternal": true
+    },
+    "BaseQuantities": {
+     "Width": 1.2,
+     "Height": 1.4,
+     "Area": 1.68
+    }
+   }
+  },
+  {
+   "guid": "Sd7g6gB7kUJ4sm2g6mZx9N",
+   "class": "IfcSlab",
+   "name": "Slab-1",
+   "storey": "Level 1",
+   "material": [
+    "Concrete C30/37"
+   ],
+   "psets": {
+    "Pset_SlabCommon": {
+     "LoadBearing": true
+    },
+    "BaseQuantities": {
+     "NetVolume": 31.5,
+     "NetArea": 157.5
+    }
+   }
+  },
+  {
+   "guid": "ewtllCyjBG$kdtcYgRMFn4",
+   "class": "IfcSlab",
+   "name": "Slab-2",
+   "storey": "Level 2",
+   "material": [
+    "Concrete C30/37"
+   ],
+   "psets": {
+    "Pset_SlabCommon": {
+     "LoadBearing": true
+    },
+    "BaseQuantities": {
+     "NetVolume": 29.8,
+     "NetArea": 149.0
+    }
+   }
+  },
+  {
+   "guid": "EuQLlp1WZQuiVg9lrO7JSc",
+   "class": "IfcStair",
+   "name": "Stair-Main",
+   "storey": "Level 1",
+   "material": [
+    "Concrete C25/30"
+   ],
+   "psets": {
+    "Pset_StairCommon": {
+     "NumberOfRiser": 16,
+     "LoadBearing": true
+    },
+    "BaseQuantities": {
+     "NetVolume": 2.1
+    }
+   }
+  },
+  {
+   "guid": "yuLyBhP6vhwvNd8DpcI7m0",
+   "class": "IfcDuctSegment",
+   "name": "Duct-201",
+   "storey": "Level 2",
+   "material": [
+    "Galvanized steel"
+   ],
+   "psets": {
+    "Pset_DuctSegmentCommon": {
+     "NominalDiameter": 200
+    }
+   }
+  },
+  {
+   "guid": "ORFEm$OMeRx6v1T1M_0jEv",
+   "class": "IfcDuctSegment",
+   "name": "Duct-202",
+   "storey": "Level 2",
+   "material": [
+    "Galvanized steel"
+   ],
+   "psets": {
+    "Pset_DuctSegmentCommon": {
+     "NominalDiameter": 200
+    }
+   }
+  },
+  {
+   "guid": "b44euMvtHyjYP6LbCGqfQa",
+   "class": "IfcDuctSegment",
+   "name": "Duct-203",
+   "storey": "Level 2",
+   "material": [
+    "Galvanized steel"
+   ],
+   "psets": {
+    "Pset_DuctSegmentCommon": {
+     "NominalDiameter": 200
+    }
+   }
+  }
+ ],
+ "clashes": [
+  {
+   "a_guid": "yuLyBhP6vhwvNd8DpcI7m0",
+   "a_name": "Duct-201",
+   "a_class": "IfcDuctSegment",
+   "b_guid": "KXIIezPfFK1ohaoehyQm6o",
+   "b_name": "Wall-C201",
+   "b_class": "IfcWall",
+   "note": "duct penetrates load-bearing concrete wall without a sleeve"
+  },
+  {
+   "a_guid": "b44euMvtHyjYP6LbCGqfQa",
+   "a_name": "Duct-203",
+   "a_class": "IfcDuctSegment",
+   "b_guid": "ewtllCyjBG$kdtcYgRMFn4",
+   "b_name": "Slab-2",
+   "b_class": "IfcSlab",
+   "note": "duct clashes with structural slab, offset 40 mm"
+  }
+ ]
+}
