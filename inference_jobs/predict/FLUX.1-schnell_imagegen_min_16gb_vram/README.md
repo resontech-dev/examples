@@ -36,6 +36,7 @@ run fully resident (`offload: "off"` territory, fastest).
 ## Deploy & test
 
 ```bash
+pip install -U "resontech>=0.2.1" openai python-dotenv   # Python 3.11+
 cp .env.example .env
 python submit.py            # first boot pulls ~24 GB of pipeline weights
 python predict.py "product shot of a ceramic mug on slate, softbox lighting"

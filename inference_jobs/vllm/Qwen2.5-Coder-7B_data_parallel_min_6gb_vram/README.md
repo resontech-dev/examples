@@ -36,6 +36,7 @@ card — RTX 5070 / 4070 / 3060-12G, T4 16 GB, L4. On 16–24 GB cards raise
 ## Deploy
 
 ```bash
+pip install -U "resontech>=0.2.1" openai python-dotenv   # Python 3.11+
 cp .env.example .env        # RESON_API_KEY (rsk_…) + S3 keys
 python submit.py            # prints RESON_INFERENCE_URL + RESON_INFERENCE_API_KEY
 python predict.py "Write a binary search in Python."

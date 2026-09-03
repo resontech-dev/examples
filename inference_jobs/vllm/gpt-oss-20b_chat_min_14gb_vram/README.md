@@ -22,6 +22,7 @@ A10G (24 GB — as configured here, 64k context); RTX 4080 / 5080 / 5070 Ti
 ## Deploy
 
 ```bash
+pip install -U "resontech>=0.2.1" openai python-dotenv   # Python 3.11+
 cp .env.example .env        # RESON_API_KEY (rsk_…) + S3 keys
 python submit.py            # prints RESON_INFERENCE_URL + RESON_INFERENCE_API_KEY
 python predict.py "Draft a polite payment reminder for a 30-day overdue invoice."

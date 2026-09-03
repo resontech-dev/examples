@@ -33,6 +33,7 @@ defined by the Qwen3Guard model card — `predict.py` parses leniently.
 ## Deploy & test
 
 ```bash
+pip install -U "resontech>=0.2.1" openai python-dotenv   # Python 3.11+
 cp .env.example .env
 python submit.py
 python predict.py "When are production deployments frozen?"

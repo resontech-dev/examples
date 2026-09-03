@@ -44,6 +44,7 @@ files into the web UI. Pick one.
 ### A. From the SDK
 
 ```bash
+pip install -U "resontech>=0.2.1" openai python-dotenv   # Python 3.11+
 cp .env.example .env        # fill in RESON_API_KEY + S3 keys
 python sdk_utils/submit.py  # deploys, then prints RESON_INFERENCE_URL + predict api key
 ```

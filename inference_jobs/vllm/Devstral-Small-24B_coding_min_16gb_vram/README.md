@@ -20,6 +20,7 @@ context); 2× 12 GB cards → PP=2 (copy the shape from the sibling
 ## Deploy
 
 ```bash
+pip install -U "resontech>=0.2.1" openai python-dotenv   # Python 3.11+
 cp .env.example .env
 python submit.py
 python predict.py "Write a Python function that merges overlapping intervals, with a doctest."

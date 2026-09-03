@@ -66,7 +66,7 @@ def main() -> None:
     print()
     print(f"[submit] Save these two values for predict.py:")
     print(f"    RESON_INFERENCE_URL = {job.endpoint}")
-    print(f"    RESON_INFERENCE_API_KEY = {job.api_key}")
+    print(f"    RESON_INFERENCE_API_KEY = {job.predict_api_key}")
     print()
 
     # First boot can take a while — the replica downloads Qwen2.5-0.5B

@@ -27,6 +27,7 @@ along a chat worker at a small `gpu_memory_utilization`).
 ## Deploy & test
 
 ```bash
+pip install -U "resontech>=0.2.1" openai python-dotenv   # Python 3.11+
 cp .env.example .env
 python submit.py
 python predict.py                    # transcribes sample_data/hello_reson.wav

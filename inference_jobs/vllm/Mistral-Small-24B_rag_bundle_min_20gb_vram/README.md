@@ -25,6 +25,7 @@ pre-allocates at boot. Shipped split: chat 0.62 / embed 0.11 / rerank 0.11.
 ## Deploy & test
 
 ```bash
+pip install -U "resontech>=0.2.1" openai python-dotenv   # Python 3.11+
 cp .env.example .env
 python submit.py
 python predict.py "Can I work remotely during probation?"

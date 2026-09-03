@@ -19,6 +19,7 @@ context); 2×24 GB one node → official bf16 checkpoint with TP=2
 ## Deploy
 
 ```bash
+pip install -U "resontech>=0.2.1" openai python-dotenv   # Python 3.11+
 cp .env.example .env
 python submit.py
 python predict.py "Summarize the key obligations of a data processor under GDPR in 5 bullets."

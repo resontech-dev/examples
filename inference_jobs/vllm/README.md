@@ -121,10 +121,18 @@ then uncomment. A wrong parser name fails at engine boot, not at submit.
 
 ```bash
 cd <job-folder>
+pip install -U "resontech>=0.2.1" openai python-dotenv   # Python 3.11+
 cp .env.example .env        # RESON_API_KEY (rsk_… from /profile → Developer) + S3 keys
 python submit.py            # uploads yaml + scripts/, prints endpoint + predict key
 python predict.py           # job-specific smoke test
 ```
+
+The SDK ships on PyPI (`resontech`, latest = what you want). The `>=0.2.1`
+floor matters: 0.1.x is still on the index with an incompatible API
+(`from_files`, email auth) — the floor upgrades stale environments instead
+of failing on them. `requires-python >= 3.11`: on an older Python, pip says
+"No matching distribution found", which reads like the package doesn't
+exist — it does, switch interpreters.
 
 Or paste `scripts/serve_module.py` + `inference.yaml` into the web wizard:
 <https://beta.reson.tech/dashboard/inference/submit>.

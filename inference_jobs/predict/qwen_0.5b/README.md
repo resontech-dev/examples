@@ -68,6 +68,7 @@ print(job.endpoint, job.predict_api_key)
 
 Run (from this folder):
 ```bash
+pip install -U "resontech>=0.2.1" openai python-dotenv   # Python 3.11+
 cp .env.example .env        # fill in your platform API key + S3 keys, then:
 python sdk_utils/submit.py  # prints RESON_INFERENCE_URL + predict api key when RUNNING
 ```

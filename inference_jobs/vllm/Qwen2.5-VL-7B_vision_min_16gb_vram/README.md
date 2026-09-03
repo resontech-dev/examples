@@ -20,6 +20,7 @@ Suggested GPUs: RTX 3090 / 4090 / L4 / A10G (24 GB — as configured);
 ## Deploy & test
 
 ```bash
+pip install -U "resontech>=0.2.1" openai python-dotenv   # Python 3.11+
 cp .env.example .env
 python submit.py
 python predict.py                                  # sample invoice → JSON

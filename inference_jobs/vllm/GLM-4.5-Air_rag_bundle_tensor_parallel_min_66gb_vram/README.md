@@ -27,6 +27,7 @@ under ~0.85 per GPU.
 ## Deploy & test
 
 ```bash
+pip install -U "resontech>=0.2.1" openai python-dotenv   # Python 3.11+
 cp .env.example .env
 python submit.py            # ~60 GB first-boot download — mirror to S3 for production
 python predict.py "Where is customer data stored?"

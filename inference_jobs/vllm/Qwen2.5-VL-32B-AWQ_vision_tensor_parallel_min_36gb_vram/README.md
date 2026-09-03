@@ -21,6 +21,7 @@ and lower latency; A100-80G fits the fp16 checkpoint outright.
 ## Deploy & test
 
 ```bash
+pip install -U "resontech>=0.2.1" openai python-dotenv   # Python 3.11+
 cp .env.example .env
 python submit.py
 python predict.py                                  # sample invoice → JSON

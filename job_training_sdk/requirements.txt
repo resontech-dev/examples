@@ -1,7 +1,0 @@
-# Installed on every worker by the platform (in addition to the SDK's
-# defaults). Keep this lean — heavy deps slow down job startup.
-torch>=2.0
-torchvision>=0.15
-resontech>=0.2
-nvflare
-python-dotenv>=1.0

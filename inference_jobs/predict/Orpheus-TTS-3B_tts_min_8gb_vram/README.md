@@ -30,6 +30,7 @@ not queue depth (`max_ongoing_requests: 2` on purpose).
 ## Deploy & test
 
 ```bash
+pip install -U "resontech>=0.2.1" openai python-dotenv   # Python 3.11+
 cp .env.example .env
 python submit.py
 python predict.py "Welcome to Reson. <sigh> Deploying models used to be hard."

@@ -32,6 +32,7 @@ footprint for shared deployments.
 ## Deploy & test
 
 ```bash
+pip install -U "resontech>=0.2.1" openai python-dotenv   # Python 3.11+
 cp .env.example .env        # RESON_API_KEY (rsk_…) + S3 keys
 python submit.py
 python predict.py                       # segments the circle in shapes.png

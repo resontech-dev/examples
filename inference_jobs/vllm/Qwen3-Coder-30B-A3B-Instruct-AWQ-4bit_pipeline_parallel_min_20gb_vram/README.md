@@ -79,6 +79,7 @@ divide the model's attention-head count (stick to 1, 2, 4, 8).
 ## Use it
 
 ```bash
+pip install -U "resontech>=0.2.1" openai python-dotenv   # Python 3.11+
 # Deploy through the platform (from this folder):
 #   inference.yaml declares: PP=2, 2 workers, ≥11 GB free VRAM each
 cp .env.example .env        # RESON_API_KEY (rsk_…) + S3 keys

@@ -22,6 +22,7 @@ enforces.
 ## Deploy
 
 ```bash
+pip install -U "resontech>=0.2.1" openai python-dotenv   # Python 3.11+
 cp .env.example .env
 python submit.py            # first boot downloads ~60 GB — mirror to S3 for production
 python predict.py "Plan the steps to migrate a monolith's billing module to a service."

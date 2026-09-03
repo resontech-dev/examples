@@ -26,6 +26,7 @@ Consumer 24 GB cards: no — use the FLUX.1-schnell sibling instead.
 ## Deploy & test (once hardware exists)
 
 ```bash
+pip install -U "resontech>=0.2.1" openai python-dotenv   # Python 3.11+
 cp .env.example .env
 python submit.py
 python predict.py 'poster: "GRAND OPENING — Saturday 10:00", art-deco style'

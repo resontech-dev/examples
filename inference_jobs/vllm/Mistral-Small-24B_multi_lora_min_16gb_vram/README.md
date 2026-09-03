@@ -34,6 +34,7 @@ re-upload but quality shifts; standardize the training base.
 ## Deploy & test
 
 ```bash
+pip install -U "resontech>=0.2.1" openai python-dotenv   # Python 3.11+
 cp .env.example .env
 python submit.py
 python predict.py                           # base model

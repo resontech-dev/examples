@@ -27,6 +27,7 @@ instant OOM. Shipped split: chat 0.60 / embed 0.12 / rerank 0.12.
 ## Deploy & test
 
 ```bash
+pip install -U "resontech>=0.2.1" openai python-dotenv   # Python 3.11+
 cp .env.example .env
 python submit.py
 python predict.py "How many vacation days do employees get?"
