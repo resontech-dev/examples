@@ -48,7 +48,9 @@ def main() -> None:
     # submit-time knobs.
     inference = InferenceConfig(
         visibility=os.getenv("VISIBILITY", "PRIVATE"),
-        auto_select_workers=True,
+        # Ordered GPU preference (>= 20 GB VRAM per card); first entry is filled first.
+        gpu_models=["rtx_4090", "rtx_3090", "rtx_a5000"],
+        max_price_per_gpu_hour=float(os.getenv("MAX_PRICE_PER_GPU_HOUR", "2.50")),
         only_mine_workers=True,
     )
 
