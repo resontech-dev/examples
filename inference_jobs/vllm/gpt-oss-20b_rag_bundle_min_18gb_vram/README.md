@@ -16,13 +16,16 @@ Shared vLLM contract & defaults: [../README.md](../README.md).
 
 Suggested GPUs: RTX 3090 / 4090 / L4 / A10G (24 GB — as configured);
 RTX 5090 (32 GB) buys the chat engine a real KV pool — raise its
-`gpu_memory_utilization` to 0.70 and `max_model_len` to 65536.
+`gpu_memory_utilization` to 0.70, `CHAT_KV_BYTES` to ~6 GiB and
+`max_model_len` to 65536.
 
 ## The one rule that keeps this alive
 
-**`gpu_memory_utilization` fractions must sum to ~0.85.** Each vLLM engine
-pre-allocates its share at boot; three engines at the 0.9 default is an
-instant OOM. Shipped split: chat 0.60 / embed 0.12 / rerank 0.12.
+**Fractions must sum to ~0.85, and each engine needs a fixed KV cache.** The
+fraction reserves the engine's share of the card in Ray (`card_share`) and
+checks free VRAM at boot. `kv_cache_memory_bytes` sets the cache, because vLLM's
+automatic sizing counts other engines' VRAM as its own when they start together.
+Shipped split: chat 0.60 / embed 0.12 / rerank 0.12, about 20 GB in use.
 
 ## Deploy & test
 
@@ -50,6 +53,6 @@ Or paste `scripts/serve_module.py` + `inference.yaml` into
 | where (`serve_module.py`) | for what |
 |---|---|
 | chat `model_source` | swap the chat model, keep the sidecars (see Mistral/GLM siblings) |
-| the three `gpu_memory_utilization` values | rebalance chat context vs sidecars — keep the sum ≤ 0.85 |
+| `card_share(...)` + the matching `gpu_memory_utilization`, `CHAT_KV_BYTES`, `SIDECAR_KV_BYTES` | rebalance chat context vs sidecars — keep the sum ≤ 0.85 and the KV large enough for one `max_model_len` request |
 | chat `max_model_len` | 16384 shipped (tight KV at 0.60); more needs a bigger card |
 | rerank `hf_overrides` | required as-is for Qwen3-Reranker — vLLM's documented seq-cls conversion |

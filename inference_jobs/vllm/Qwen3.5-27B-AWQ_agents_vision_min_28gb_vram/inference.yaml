@@ -1,0 +1,30 @@
+# Qwen3.5-27B (AWQ 4-bit) via vLLM — premium text + vision assistant.
+#
+# Top rung of the small-over-big ladder: harder drafting, long documents,
+# fewer edits; images on the same model id. ~21 GiB of weights → one
+# 32 GB card (RTX 5090 / RTX PRO 4500) as configured, or 2×24 GB with
+# TP=2 (both edits below + serve_module.py).
+#   "assistant" → Qwen3.5-27B AWQ   /v1/chat/completions (text, images, tool calling)
+#
+# ⚠️ Community AWQ checkpoint (no official 4-bit) — see serve_module.py.
+
+engine: vllm_openai
+
+model:
+  module: "serve_module"
+
+vllm:
+  tensor_parallel_size: 1     # 2 for 2×24 GB (and gpus_per_worker: 2, engine_kwargs too)
+  pipeline_parallel_size: 1
+
+cluster:
+  num_workers: 1
+  device: "gpu"
+  gpus_per_worker: 1          # 2 for the TP=2 shape — both GPUs in ONE worker
+  cpus_per_worker: 8
+  min_vram_gb_per_worker: 28  # ~21 GiB AWQ weights + activations + KV; 32 GB as configured
+  # Advisory fields — dashboard/accounting only:
+  mode: "data_parallel"
+  max_ongoing_requests: 16
+
+# No `requirements:` — the prebuilt ray-llm image owns the stack.

@@ -21,7 +21,7 @@ llm_config = LLMConfig(
         # Official fp16 checkpoint, ~16.6 GB. fp16 (not AWQ) on purpose:
         # document OCR quality degrades visibly under 4-bit for small
         # text — the AWQ variant is the 32B sibling's game.
-        model_source="Qwen/Qwen2.5-VL-7B-Instruct",
+        model_source="Qwen/Qwen2.5-VL-7B-Instruct-AWQ",
     ),
 
     accelerator_type=None,                       # consumer cards have no Ray label
@@ -39,7 +39,7 @@ llm_config = LLMConfig(
         # KV budget on 24 GB: 21.6 − 16.6 weights − ~1 vision buffers
         # ≈ 4 GB ≈ 140k tokens at fp8. A document page costs ~1–2.5k
         # vision tokens, so 32k context handles multi-page batches.
-        max_model_len=32768,
+        max_model_len=16384,
         max_num_seqs=8,
         kv_cache_dtype="fp8",
         enable_prefix_caching=True,              # same extraction prompt every request

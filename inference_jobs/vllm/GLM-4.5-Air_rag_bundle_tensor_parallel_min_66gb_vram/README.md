@@ -18,11 +18,13 @@ A100-80G / H100 fits the whole bundle at TP=1 with simpler placement.
 
 ## Memory model (read before editing)
 
-The chat engine claims its `gpu_memory_utilization` fraction on **all 4
-GPUs**; each 0.6B sidecar is TP=1 and lands on **one** of them — and
-placement does not guarantee the two sidecars spread. Budget for both on
-one GPU: shipped worst case 0.70 + 0.06 + 0.06 = 0.82. Keep any edit
-under ~0.85 per GPU.
+The chat engine claims its share on **all 4 GPUs**; each 0.6B sidecar is TP=1
+and lands on **one** of them — and placement does not guarantee the two sidecars
+spread. Budget for both on one GPU: the shipped worst case is 0.70 + 0.06 + 0.06
+= 0.82 in shares, about 21.6 GB of real use on a 24 GB card. Keep any edit under
+~0.85 per GPU. KV caches are fixed (`CHAT_KV_BYTES` per GPU, `SIDECAR_KV_BYTES`)
+because vLLM's automatic sizing counts other engines' VRAM as its own when they
+start together. `embed` and `rerank` take at most 2048 tokens.
 
 ## Deploy & test
 
@@ -41,6 +43,6 @@ Or paste `scripts/serve_module.py` + `inference.yaml` into
 | where (`serve_module.py`) | for what |
 |---|---|
 | chat `model_source` | ⚠️ community AWQ — **vet before selling** |
-| chat `gpu_memory_utilization` | 0.70 shipped; raise only if sidecars move off-box |
+| chat `card_share(0.70, gpus=4)` + the matching `gpu_memory_utilization`, `CHAT_KV_BYTES` | 0.70 shipped; raise only if sidecars move off-box |
 | `tool_call_parser="glm45"` | commented — VERIFY on the pinned image, then enable |
 | rerank `hf_overrides` | required as-is for Qwen3-Reranker |

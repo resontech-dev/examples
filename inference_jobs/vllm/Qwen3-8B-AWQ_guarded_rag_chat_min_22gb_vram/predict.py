@@ -180,6 +180,8 @@ def main() -> None:
         ],
         max_tokens=int(os.getenv("MAX_TOKENS", "384")),
         temperature=0.2,
+        # Qwen3 thinks unless told not to, and the thought would use up max_tokens.
+        extra_body={"chat_template_kwargs": {"enable_thinking": False}},
     )
     answer = resp.choices[0].message.content or ""
 

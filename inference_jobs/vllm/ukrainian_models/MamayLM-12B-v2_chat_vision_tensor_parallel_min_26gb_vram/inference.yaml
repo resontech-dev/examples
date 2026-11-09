@@ -1,0 +1,33 @@
+# MamayLM 12B v2.0 (Gemma 3, Ukrainian-adapted, official bf16) via vLLM —
+# TENSOR PARALLEL over 2 GPUs in ONE worker.
+#
+# The official, documented checkpoint (June 2026, text + images), ~24 GB in
+# bf16: too big for one 16 GB card, so the weights are sharded across two
+# (12 GB each) with room for 16k context. A single 24 GB card runs it at
+# TP=1 (set both tensor_parallel_size values to 1 and gpus_per_worker: 1).
+#   "assistant" → INSAIT-Institute/MamayLM-Gemma-3-12B-IT-v2.0   /v1/chat/completions (text + image)
+#
+# License: Gemma Terms of Use.
+
+engine: vllm_openai
+
+model:
+  module: "serve_module"
+
+# TP=2 → the scheduler must find a worker exposing 2 GPUs (one container
+# started with both cards visible); per-GPU check: ≥ min_vram ÷ 2 = 13 GB.
+vllm:
+  tensor_parallel_size: 2
+  pipeline_parallel_size: 1
+
+cluster:
+  num_workers: 1
+  device: "gpu"
+  gpus_per_worker: 2
+  cpus_per_worker: 8
+  min_vram_gb_per_worker: 26  # 2 × (12 GB weight shard + KV + overhead)
+  # Advisory fields — dashboard/accounting only:
+  mode: "tensor_parallel"
+  max_ongoing_requests: 16
+
+# No `requirements:` — the prebuilt ray-llm image owns the stack.

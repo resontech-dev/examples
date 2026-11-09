@@ -30,6 +30,10 @@ The guard is a generative classifier: post the content as a chat message
 to model `"guard"`, parse the Safe/Unsafe verdict. Exact output format is
 defined by the Qwen3Guard model card — `predict.py` parses leniently.
 
+`assistant` thinks unless the request turns it off, so send
+`chat_template_kwargs: {enable_thinking: false}` in the body (`extra_body` in
+openai-python), as `predict.py` does.
+
 ## Deploy & test
 
 ```bash
@@ -44,8 +48,13 @@ Or paste `scripts/serve_module.py` + `inference.yaml` into
 
 ## Memory rule
 
-Four engines pre-allocate at boot — fractions must sum to ~0.85. Shipped:
-chat 0.32 / guard 0.40 / embed 0.06 / rerank 0.06 = 0.84. The guard is
+**Fractions must sum to ~0.85, and each engine needs a fixed KV cache.** The
+fraction reserves the engine's share of the card in Ray (`card_share`) and
+checks free VRAM at boot. `kv_cache_memory_bytes` sets the cache, because vLLM's
+automatic sizing counts other engines' VRAM as its own when they start together.
+Shipped: chat 0.32 / guard 0.40 / embed 0.06 / rerank 0.06 = 0.84, about 22 GB
+in use. `embed` and `rerank` take at most 2048 tokens here: 8k wouldn't fit next
+to the guard. The guard is
 fp16→fp8-quantized at load (`quantization="fp8"`; Marlin path on Ampere);
 swap in a vetted AWQ checkpoint if one appears and drop that kwarg.
 
@@ -53,7 +62,7 @@ swap in a vetted AWQ checkpoint if one appears and drop that kwarg.
 
 | where (`serve_module.py`) | for what |
 |---|---|
-| the four `gpu_memory_utilization` values | rebalance — keep the sum ≤ 0.85 |
+| `card_share(...)` + the matching `gpu_memory_utilization`, the `*_KV_BYTES` constants | rebalance — keep the sum ≤ 0.85 and the KV large enough for one `max_model_len` request |
 | chat `hf_overrides` (commented YaRN) | 131k context — only with a bigger card / fewer engines |
 | guard threshold behavior (client-side) | strictness lives in how you act on verdicts |
 | chat `model_source` | any small chat model; the guard stays |

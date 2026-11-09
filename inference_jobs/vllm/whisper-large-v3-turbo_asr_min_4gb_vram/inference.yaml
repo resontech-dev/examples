@@ -1,0 +1,31 @@
+# Whisper large-v3-turbo via vLLM — speech-to-text, smallest rung.
+#
+# Same encoder as large-v3, decoder cut from 32 to 4 layers: 5–8× faster
+# decode, ~1.6 GB fp16, slight quality cost on less common languages.
+# Ukrainian: compare WER with ../whisper-large-v3_asr_min_6gb_vram on an
+# hour of your own recordings before choosing.
+#
+# ⚠️ VALIDATE-BEFORE-LISTING (same caveat as the large-v3 job): confirm
+# the pinned ray-llm image exposes /v1/audio/transcriptions end to end.
+# Plan B is a predictor-mode job wrapping faster-whisper.
+
+engine: vllm_openai
+
+model:
+  module: "serve_module"
+
+vllm:
+  tensor_parallel_size: 1
+  pipeline_parallel_size: 1
+
+cluster:
+  num_workers: 1
+  device: "gpu"
+  gpus_per_worker: 1
+  cpus_per_worker: 8
+  min_vram_gb_per_worker: 4   # ~1.6 GB fp16 weights + audio buffers + overhead
+  # Advisory fields — dashboard/accounting only:
+  mode: "data_parallel"
+  max_ongoing_requests: 16
+
+# No `requirements:` — the prebuilt ray-llm image owns the stack.

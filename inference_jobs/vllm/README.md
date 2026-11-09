@@ -29,6 +29,26 @@ GPU fleet: `reson_docs/docs/inference/dc-hardware-requirements.md §2`.
 | `Qwen2.5-VL-32B-AWQ_vision_tensor_parallel_min_36gb_vram` | Qwen2.5-VL-32B AWQ | TP=2 | 36 GB | 2x24gb |
 | `whisper-large-v3_asr_min_6gb_vram` | Whisper large-v3 | single, ASR | 6 GB | 12gb |
 | `Qwen3-8B-AWQ_guarded_rag_chat_min_22gb_vram` | Qwen3-8B AWQ + Qwen3Guard-8B + embed + rerank | 4 engines, 1 GPU | 22 GB | 24gb |
+| `Qwen3-8B-AWQ_agents_bundle_min_12gb_vram` | Qwen3-8B AWQ + embed + rerank (+ Qwen3Guard-0.6B) | 3–4 engines, 1 GPU | 12 GB | 16gb |
+| `Qwen3.5-9B-AWQ_assistant_vision_min_14gb_vram` | Qwen3.5-9B AWQ (text + vision, hybrid attention) | single | 14 GB | 16gb |
+| `Qwen3.5-27B-AWQ_agents_vision_min_28gb_vram` | Qwen3.5-27B AWQ (text + vision) | single (TP=2 variant) | 28 GB | 32gb / 2x24gb |
+| `whisper-large-v3-turbo_asr_min_4gb_vram` | Whisper large-v3-turbo | single, ASR | 4 GB | 12gb (shares) |
+| [`ukrainian_models/`](ukrainian_models/README.md) | MamayLM 12B/27B, Lapa 12B (Gemma 3, Ukrainian) | single int4 / TP=2 | 10–40 GB | own index |
+
+## Small-over-big ladder
+
+The jobs behind `reson_docs/docs/inference/using-small-over-big-models/`,
+smallest first. Every text job exposes one model id `assistant`, so a client
+moves between rungs by changing the endpoint, not the code.
+
+| Task | Rung 1 (16 GB card) | Rung 2 | Premium |
+|---|---|---|---|
+| Text + RAG | `Qwen3-8B-AWQ_agents_bundle_min_12gb_vram` | `Qwen3.5-9B-AWQ_assistant_vision_min_14gb_vram` · `gpt-oss-20b_chat_min_14gb_vram` (EN) · `Mistral-Small-24B_rag_bundle_min_20gb_vram` (IT, 24 GB) | `Qwen3.5-27B-AWQ_agents_vision_min_28gb_vram` |
+| Documents / photos | `Qwen2.5-VL-7B_vision_min_16gb_vram` (AWQ, measured) | `Qwen3.5-9B-AWQ_assistant_vision_min_14gb_vram` (same model as text) | `Qwen2.5-VL-32B-AWQ_vision_tensor_parallel_min_36gb_vram` · `Qwen3.5-27B-AWQ_…` |
+| Speech-to-text | `whisper-large-v3-turbo_asr_min_4gb_vram` | `whisper-large-v3_asr_min_6gb_vram` | + LoRA (`examples/training/nvflare/job_speech`) |
+| Text-to-speech | `../predict/Piper-TTS_tts_cpu_min_0gb_vram` (uk / en / it, CPU) | `../predict/Orpheus-TTS-3B_tts_min_8gb_vram` (EN) | — |
+| Ukrainian-tuned chat | `ukrainian_models/MamayLM-12B-W4A16_chat_min_10gb_vram` · `ukrainian_models/Lapa-12B-w4g128_chat_min_10gb_vram` | `ukrainian_models/MamayLM-12B-v2_chat_vision_tensor_parallel_min_26gb_vram` (2×16 GB) | `ukrainian_models/MamayLM-27B-v2-FP8_chat_vision_tensor_parallel_min_40gb_vram` (2×24 GB) |
+| Fine-tuned adapters | `Qwen2.5-7B_multi_lora_min_10gb_vram` (shape; the agents bundle has the same block commented out) | `Mistral-Small-24B_multi_lora_min_16gb_vram` | — |
 
 ## How vLLM jobs differ from `../predict/` jobs
 
@@ -41,8 +61,8 @@ cluster speaks the OpenAI protocol natively:
 | `POST /v1/chat/completions` | chat (streaming, tool calls, vision content parts) |
 | `POST /v1/completions` | classic completions |
 | `GET  /v1/models` | lists every `model_id` the cluster serves |
-| `POST /v1/embeddings` | for `task="embed"` engines (RAG bundles) |
-| `POST /v1/score` | for `task="score"` engines (rerankers) |
+| `POST /v1/embeddings` | for `runner="pooling", convert="embed"` engines (RAG bundles) |
+| `POST /v1/score` | for `runner="pooling", convert="classify"` engines (rerankers) |
 | `POST /v1/audio/transcriptions` | for the Whisper job (validate on the pinned stack) |
 
 Any OpenAI-compatible client (openai-python, curl, LangChain, Aider, Cline,
@@ -102,6 +122,7 @@ Set in `engine_kwargs` — the parser is **per model family**:
 |---|---|---|
 | Qwen chat / coder | `enable_auto_tool_choice=True, tool_call_parser="hermes"` | stable — on by default in our Qwen jobs |
 | Mistral Small / Devstral | `enable_auto_tool_choice=True, tool_call_parser="mistral"` | stable — on by default in our Mistral jobs |
+| Qwen3.5 (hybrid) | `enable_auto_tool_choice=True, tool_call_parser="qwen3_coder"` + `reasoning_parser="qwen3"` | official recipe; community reports `qwen3_xml` holds up better on long agentic runs — verify on your scenarios |
 | Llama family | `tool_call_parser="llama3_json"` | not used here (license) |
 | gpt-oss | harmony format — vLLM handles it natively | ⚠️ VERIFY whether the pinned image wants a parser flag at all |
 | GLM-4.5 | `tool_call_parser="glm45"` | ⚠️ VERIFY — dedicated parser exists only in newer vLLM builds |

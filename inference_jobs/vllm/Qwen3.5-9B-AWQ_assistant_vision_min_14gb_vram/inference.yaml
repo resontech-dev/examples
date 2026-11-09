@@ -1,0 +1,29 @@
+# Qwen3.5-9B (AWQ 4-bit) via vLLM — text + vision in ONE model on a 16 GB card.
+#
+# Rung 2 of the small-over-big ladder: the same model id serves text tasks
+# AND vision (invoices, scans, photos as image content parts). Hybrid attention (Gated DeltaNet + full attention every
+# 4th layer) → KV per token is ~5× cheaper than Qwen3-8B, 262k native window.
+#   "assistant" → Qwen3.5-9B AWQ   /v1/chat/completions (text, images, tool calling)
+#
+# ⚠️ Community AWQ checkpoint (no official 4-bit) — see serve_module.py.
+
+engine: vllm_openai
+
+model:
+  module: "serve_module"
+
+vllm:
+  tensor_parallel_size: 1
+  pipeline_parallel_size: 1
+
+cluster:
+  num_workers: 1
+  device: "gpu"
+  gpus_per_worker: 1
+  cpus_per_worker: 8
+  min_vram_gb_per_worker: 14  # ~12 GiB AWQ weights (vision tower + linear-attention layers stay bf16) + KV
+  # Advisory fields — dashboard/accounting only:
+  mode: "data_parallel"
+  max_ongoing_requests: 16
+
+# No `requirements:` — the prebuilt ray-llm image owns the stack.

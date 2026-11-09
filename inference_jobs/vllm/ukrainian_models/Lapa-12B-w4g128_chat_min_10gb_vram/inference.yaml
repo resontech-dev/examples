@@ -1,0 +1,31 @@
+# Lapa LLM 12B (Gemma 3, Ukrainian tokenizer) 4-bit via vLLM — one 16 GB card.
+#
+# Lapa (lang-uk) = Gemma 3 12B continued-pretrained on Ukrainian with
+# 80k of 250k vocabulary tokens replaced by Ukrainian ones: ~1.5× fewer
+# tokens per Ukrainian text than Gemma/MamayLM → faster and cheaper per
+# document. Community 4-bit (auto-round, group 128), ~8 GB.
+#   "assistant" → Yehor/lapa-v0.1.2-it-w4g128   /v1/chat/completions
+#
+# ⚠️ Community checkpoint — VERIFY (serve_module.py lists the official bf16
+# fallback). License: Gemma Terms of Use.
+
+engine: vllm_openai
+
+model:
+  module: "serve_module"
+
+vllm:
+  tensor_parallel_size: 1
+  pipeline_parallel_size: 1
+
+cluster:
+  num_workers: 1
+  device: "gpu"
+  gpus_per_worker: 1
+  cpus_per_worker: 8
+  min_vram_gb_per_worker: 10  # ~8 GB 4-bit weights + KV; 16 GB as configured
+  # Advisory fields — dashboard/accounting only:
+  mode: "data_parallel"
+  max_ongoing_requests: 16
+
+# No `requirements:` — the prebuilt ray-llm image owns the stack.
