@@ -1,0 +1,38 @@
+# Qwen3.5-122B-A10B (GPTQ-Int4) via vLLM: level-2 text + vision assistant
+# on one 96 GB card.
+#
+# 122B mixture-of-experts, 10B active per token, hybrid attention (36
+# DeltaNet + 12 attention layers), native 262k window, images and tool
+# calls on the same model id. ~79 GB of Int4 weights: one 96 GB card
+# (RTX PRO 6000) or one H200 as configured (TP=1); 2x80 GB with TP=2 and
+# the official FP8 checkpoint (~125 GB) on 2x H200 are documented in the
+# README. The level-2 switch option next to gpt-oss-120b on the same
+# hardware.
+#   "assistant" -> Qwen3.5-122B-A10B GPTQ-Int4   /v1/chat/completions (text, images, tool calling)
+#
+# VERIFY before the first submit (details in serve_module.py):
+#   * the official GPTQ-Int4 repo name,
+#   * the `moe_wna16` Int4 MoE kernel on the pinned vLLM 0.18.0 (the
+#     35B-A3B sibling job is the cheap test for the same question).
+# Nothing in this folder has booted yet; every number is an estimate.
+
+engine: vllm_openai
+
+model:
+  module: "serve_module"
+
+vllm:
+  tensor_parallel_size: 1     # 2 for 2x80 GB (and gpus_per_worker: 2, engine_kwargs too)
+  pipeline_parallel_size: 1
+
+cluster:
+  num_workers: 1
+  device: "gpu"
+  gpus_per_worker: 1          # 2 for the TP=2 shape: both GPUs in ONE worker
+  cpus_per_worker: 16
+  min_vram_gb_per_worker: 84  # ~79 GB Int4 weights + activations + KV; 96 GB or H200 as configured
+  # Advisory fields, dashboard/accounting only:
+  mode: "data_parallel"
+  max_ongoing_requests: 32
+
+# No `requirements:` block: the prebuilt ray-llm image owns the stack.

@@ -1,0 +1,38 @@
+# gpt-oss-120b RAG bundle: chat + embeddings + reranker on ONE big card.
+#
+# Three vLLM engines behind one OpenAI endpoint:
+#   "assistant" → gpt-oss-120b (chat, MXFP4 ~65 GB)   /v1/chat/completions
+#   "embed"     → Qwen3-Embedding-0.6B               /v1/embeddings
+#   "rerank"    → Qwen3-Reranker-0.6B                /v1/score
+#
+# Configured for one 96 GB card (RTX PRO 6000) or an H200. An 80 GB card
+# cannot host this bundle: 65 GB of weights leave no KV next to the
+# sidecars; run ../gpt-oss-120b_chat_min_66gb_vram alone there and the
+# sidecars on another card. Estimates only, nothing has booted yet.
+#
+# The critical knob is gpu_memory_utilization PER ENGINE: each engine
+# pre-allocates its fraction at boot, so the fractions must sum to ~0.86
+# (defaulting all three to 0.9 is an instant OOM). See serve_module.py.
+
+engine: vllm_openai
+
+model:
+  module: "serve_module"
+
+# All three engines are TP=1/PP=1 — one worker hosts everything.
+vllm:
+  tensor_parallel_size: 1
+  pipeline_parallel_size: 1
+
+cluster:
+  num_workers: 1
+  device: "gpu"
+  gpus_per_worker: 1
+  cpus_per_worker: 16
+  min_vram_gb_per_worker: 70  # 65 (chat) + 2×1.2 (embed/rerank) + KV + overhead; a 96 GB card in practice
+  # Advisory fields — dashboard/accounting only:
+  mode: "data_parallel"
+  max_ongoing_requests: 64
+
+# No `requirements:` — the prebuilt ray-llm image owns the stack.
+# See ../README.md "Requirements policy".

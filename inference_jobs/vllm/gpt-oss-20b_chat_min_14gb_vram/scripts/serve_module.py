@@ -25,7 +25,7 @@ llm_config = LLMConfig(
 
     deployment_config=dict(
         autoscaling_config=dict(min_replicas=1, max_replicas=1),
-        max_ongoing_requests=32,         # ~2× max_num_seqs — batcher never starves
+        max_ongoing_requests=8,         # ~2× max_num_seqs — batcher never starves
         max_queued_requests=64,          # fast 503 beats a silent queue
         graceful_shutdown_timeout_s=120,
     ),
@@ -38,12 +38,12 @@ llm_config = LLMConfig(
         # fp8) → ~320k cached tokens. 64k context × several seqs is
         # comfortable; the model's native window is 128k — raise
         # max_model_len to 131072 on this card if your clients need it.
-        max_model_len=65536,
-        max_num_seqs=16,
+        max_model_len=16384,
+        max_num_seqs=4,
         kv_cache_dtype="fp8",            # halves KV — default in every template
         enable_prefix_caching=True,      # chat clients resend history every turn
         enable_chunked_prefill=True,
-        gpu_memory_utilization=0.90,     # drop to 0.85 if the card drives a display
+        gpu_memory_utilization=0.92,     # drop to 0.85 if the card drives a display
         dtype="auto",
 
         # ── Tool calling — VERIFY before enabling ──

@@ -1,0 +1,29 @@
+# BLOCKED on the pinned image: needs vLLM >= 0.19 (ray-llm image re-pin, reson_docs spec item J). Written ahead; nothing has booted.
+# This size: vLLM >= 0.19.1 per the vLLM recipe.
+#
+# Gemma 4 31B (QAT W4A16) via vLLM: text + image, tool calling, thinking, on one 32 GB card.
+#
+#   "assistant" -> google/gemma-4-31B-it-qat-w4a16-ct   /v1/chat/completions
+#
+# 23.3 GB checkpoint. License: Apache-2.0.
+
+engine: vllm_openai
+
+model:
+  module: "serve_module"
+
+vllm:
+  tensor_parallel_size: 1
+  pipeline_parallel_size: 1
+
+cluster:
+  num_workers: 1
+  device: "gpu"
+  gpus_per_worker: 1
+  cpus_per_worker: 8
+  min_vram_gb_per_worker: 28  # 23.3 GB weights + activations + KV for one 16k chat
+  # Advisory fields: dashboard/accounting only.
+  mode: "data_parallel"
+  max_ongoing_requests: 16
+
+# No `requirements:`: the prebuilt ray-llm image owns the stack.

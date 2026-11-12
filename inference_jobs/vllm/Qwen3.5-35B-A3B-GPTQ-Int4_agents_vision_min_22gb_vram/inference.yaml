@@ -1,0 +1,35 @@
+# Qwen3.5-35B-A3B (GPTQ-Int4) via vLLM: fast MoE text + vision assistant.
+#
+# 35B mixture-of-experts, 3B active per token: the same text + vision +
+# tools contract as the dense 27B job, decoding roughly 3x faster per card
+# because only the active parameters are read per token. ~20 GB of Int4
+# weights. Configured for one 24 GB card with a thin KV pool; 32 GB
+# recommended; the 2x16 GB TP=2 shape for our RTX 5070 Ti bench is three
+# edits (below + serve_module.py).
+#   "assistant" -> Qwen3.5-35B-A3B GPTQ-Int4   /v1/chat/completions (text, images, tool calling)
+#
+# VERIFY before the first submit (details in serve_module.py):
+#   * the official GPTQ-Int4 repo name,
+#   * the `moe_wna16` Int4 MoE kernel on the pinned vLLM 0.18.0.
+# Nothing in this folder has booted yet; every number is an estimate.
+
+engine: vllm_openai
+
+model:
+  module: "serve_module"
+
+vllm:
+  tensor_parallel_size: 1     # 2 for 2x16 GB (and gpus_per_worker: 2, engine_kwargs too)
+  pipeline_parallel_size: 1
+
+cluster:
+  num_workers: 1
+  device: "gpu"
+  gpus_per_worker: 1          # 2 for the TP=2 shape: both GPUs in ONE worker
+  cpus_per_worker: 8
+  min_vram_gb_per_worker: 22  # ~20 GB Int4 weights + activations + thin KV; a 24 GB card is the floor
+  # Advisory fields, dashboard/accounting only:
+  mode: "data_parallel"
+  max_ongoing_requests: 16
+
+# No `requirements:` block: the prebuilt ray-llm image owns the stack.

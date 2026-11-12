@@ -1,0 +1,37 @@
+# Qwen3-ASR-1.7B via vLLM: speech-to-text, the rung between Whisper turbo
+# and Whisper large-v3 in the speech ladder.
+#
+# 1.7B audio-language model (Qwen3 decoder + audio encoder), ~4 GB bf16.
+# Language identification plus transcription for 30 languages and 22
+# Chinese dialects; singing voice and songs with background music.
+# Ukrainian is NOT in the list (Polish, Italian, German, Russian are), so
+# the Whisper jobs stay the Ukrainian route.
+#
+# VALIDATE-BEFORE-LISTING (same caveat as the Whisper jobs): the
+# /v1/audio/transcriptions route through the Ray Serve LLM router is
+# unproven on the pinned image. Plan B is already in predict.py: the
+# chat-completions route with an `audio_url` content part, which is the
+# primary route in the vLLM recipe and the model card.
+
+engine: vllm_openai
+
+model:
+  module: "serve_module"
+
+vllm:
+  tensor_parallel_size: 1
+  pipeline_parallel_size: 1
+
+cluster:
+  num_workers: 1
+  device: "gpu"
+  gpus_per_worker: 1
+  cpus_per_worker: 8
+  min_vram_gb_per_worker: 6   # ~4 GB bf16 weights + audio encoder buffers + KV + overhead
+  # Advisory fields, dashboard/accounting only:
+  mode: "data_parallel"
+  max_ongoing_requests: 16
+
+# No `requirements:`: the prebuilt ray-llm image owns the stack.
+# vLLM's `[audio]` extra (librosa, soundfile) is expected to be in the
+# image because the Whisper jobs need it too. VERIFY on first boot.

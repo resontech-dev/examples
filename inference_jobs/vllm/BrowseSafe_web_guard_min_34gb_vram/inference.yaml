@@ -1,0 +1,35 @@
+# BrowseSafe via vLLM: prompt-injection detector for fetched web pages.
+#
+# Perplexity's classifier (December 2025, MIT), fine-tuned from
+# Qwen3-30B-A3B-Instruct-2507: give it the raw HTML of a page, it answers
+# a single token "yes" / "no": does the page carry instructions aimed at
+# the agent? 30B MoE, 3B active, bf16 ~61 GB. Shipped with on-the-fly fp8
+# weight quantization (~31 GB) for ONE 48 GB card; variants for 2×24 GB
+# (TP=2) and 80 GB bf16 in serve_module.py.
+#
+# Only for setups where web search / page fetch is enabled: README.
+
+engine: vllm_openai
+
+model:
+  module: "serve_module"    # python module exporting `app`: feeds import_path
+
+# Scheduling declaration: MUST equal engine_kwargs values of the same
+# name in serve_module.py (the SDK cross-checks at submit).
+vllm:
+  tensor_parallel_size: 1     # 2 for the 2×24 GB shape (and gpus_per_worker: 2, engine_kwargs too)
+  pipeline_parallel_size: 1
+
+cluster:
+  num_workers: 1
+  device: "gpu"               # vllm_openai requires gpu
+  gpus_per_worker: 1          # 2 for TP=2: both GPUs in ONE worker
+  cpus_per_worker: 8
+  min_vram_gb_per_worker: 34  # ~31 GB fp8 weights + activations + KV; 48 GB as configured
+  # Advisory fields: dashboard/accounting only, never forwarded to vLLM:
+  mode: "data_parallel"
+  max_ongoing_requests: 16
+
+# No `requirements:` block on purpose. vLLM jobs run on the platform's
+# prebuilt ray-llm image (ray[serve,llm]==2.55.1 + vllm==0.18.0).
+# See ../README.md "Requirements policy".

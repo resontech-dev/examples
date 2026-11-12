@@ -33,7 +33,29 @@ GPU fleet: `reson_docs/docs/inference/dc-hardware-requirements.md §2`.
 | `Qwen3.5-9B-AWQ_assistant_vision_min_14gb_vram` | Qwen3.5-9B AWQ (text + vision, hybrid attention) | single | 14 GB | 16gb |
 | `Qwen3.5-27B-AWQ_agents_vision_min_28gb_vram` | Qwen3.5-27B AWQ (text + vision) | single (TP=2 variant) | 28 GB | 32gb / 2x24gb |
 | `whisper-large-v3-turbo_asr_min_4gb_vram` | Whisper large-v3-turbo | single, ASR | 4 GB | 12gb (shares) |
+| `Qwen3.5-35B-A3B-GPTQ-Int4_agents_vision_min_22gb_vram` | Qwen3.5-35B-A3B GPTQ-Int4 (text + vision, 3B active) **written, not booted** | single (TP=2 variant) | 22 GB | 24gb / 32gb / 2x16gb |
+| `Qwen3.5-122B-A10B-GPTQ-Int4_agents_vision_min_84gb_vram` | Qwen3.5-122B-A10B GPTQ-Int4 (text + vision) **written, not booted** | single on 96 GB (TP=2 variant) | 84 GB | 96gb / 2x80gb |
+| `Qwen3.5-397B-A17B-FP8_multimodal_template_min_400gb_vram` | Qwen3.5-397B-A17B FP8 | TP=8 **TEMPLATE** | 400 GB | 8x80gb / 8xh200 |
+| `gpt-oss-120b_chat_min_66gb_vram` | gpt-oss-120b MXFP4 **written, not booted** | single (TP=2 / TP=4 variants) | 66 GB | 80gb / 96gb / 4x24gb |
+| `gpt-oss-120b_rag_bundle_min_70gb_vram` | gpt-oss-120b + embed + rerank **written, not booted** | 3 engines, 1 GPU | 70 GB | 96gb / h200 |
+| `gpt-oss-safeguard-20b_policy_guard_min_14gb_vram` | gpt-oss-safeguard-20b MXFP4 (policy classifier) **written, not booted** | single | 14 GB | 16gb / 24gb |
+| `Nemotron-3.5-Content-Safety_guard_vision_min_10gb_vram` | Nemotron 3.5 Content Safety 4B (text + image guard) **written, not booted** | single | 10 GB | 12gb / 16gb (shares) |
+| `BrowseSafe_web_guard_min_34gb_vram` | BrowseSafe 30B-A3B fp8-on-load (HTML injection detector) **written, not booted** | single on 48 GB (TP=2 variant) | 34 GB | 48gb / 2x24gb / 80gb |
+| `Qwen3-ASR-1.7B_asr_min_6gb_vram` | Qwen3-ASR-1.7B (EN / IT / PL / DE, no UK) **written, not booted** | single, ASR | 6 GB | 12gb (shares) |
+| `Qwen3-Embedding-4B_rag_sidecars_premium_min_11gb_vram` | Qwen3-Embedding-4B + Qwen3-Reranker-4B, fp8-on-load **written, not booted** | 2 pooling engines, 1 GPU | 11 GB | 12gb / 16gb |
+| `Gemma-3-12B-W4A16_chat_vision_min_14gb_vram` | Gemma 3 12B W4A16 (Red Hat AI), text + vision, Gemma ToU **written, not booted** | single | 14 GB | 16gb |
+| `Gemma-3-27B-W4A16_chat_vision_min_26gb_vram` | Gemma 3 27B W4A16 (Red Hat AI), text + vision, Gemma ToU **written, not booted** | single | 26 GB | 32gb |
+| `Gemma-4-12B-QAT-W4A16_chat_vision_audio_min_14gb_vram` | Gemma 4 12B QAT W4A16 (Google), text + vision + audio, Apache-2.0 **blocked: vLLM ≥ 0.23** | single | 14 GB | 16gb |
+| `Gemma-4-26B-A4B-QAT-AWQ_chat_vision_min_22gb_vram` | Gemma 4 26B-A4B MoE, community AWQ of Google QAT, Apache-2.0 **blocked: vLLM ≥ 0.25** | single | 22 GB | 24gb |
+| `Gemma-4-31B-QAT-W4A16_chat_vision_min_28gb_vram` | Gemma 4 31B QAT W4A16 (Google), text + vision, Apache-2.0 **blocked: vLLM ≥ 0.19.1** | single | 28 GB | 32gb |
 | [`ukrainian_models/`](ukrainian_models/README.md) | MamayLM 12B/27B, Lapa 12B (Gemma 3, Ukrainian) | single int4 / TP=2 | 10–40 GB | own index |
+
+Rows marked **blocked: vLLM ≥ X** do not boot on the pinned image (vLLM 0.18.0); they wait for
+the ray-llm image re-pin (`reson_docs/docs/specs/hardware-aware-placement.md`, item J).
+Rows marked **written, not booted** were added 2026-11-12 from the model registry
+(`reson_docs/docs/inference/models/`): the folders follow this contract and compile, but no
+replica has started on hardware yet. Each README carries its VERIFY list; drop the marker here
+after the first successful boot and benchmark.
 
 ## Small-over-big ladder
 
@@ -45,10 +67,12 @@ moves between rungs by changing the endpoint, not the code.
 |---|---|---|---|
 | Text + RAG | `Qwen3-8B-AWQ_agents_bundle_min_12gb_vram` | `Qwen3.5-9B-AWQ_assistant_vision_min_14gb_vram` · `gpt-oss-20b_chat_min_14gb_vram` (EN) · `Mistral-Small-24B_rag_bundle_min_20gb_vram` (IT, 24 GB) | `Qwen3.5-27B-AWQ_agents_vision_min_28gb_vram` |
 | Documents / photos | `Qwen2.5-VL-7B_vision_min_16gb_vram` (AWQ, measured) | `Qwen3.5-9B-AWQ_assistant_vision_min_14gb_vram` (same model as text) | `Qwen2.5-VL-32B-AWQ_vision_tensor_parallel_min_36gb_vram` · `Qwen3.5-27B-AWQ_…` |
-| Speech-to-text | `whisper-large-v3-turbo_asr_min_4gb_vram` | `whisper-large-v3_asr_min_6gb_vram` | + LoRA (`examples/training/nvflare/job_speech`) |
+| Speech-to-text | `whisper-large-v3-turbo_asr_min_4gb_vram` | `whisper-large-v3_asr_min_6gb_vram` · `Qwen3-ASR-1.7B_asr_min_6gb_vram` (EN / IT / PL / DE only, not booted) | + LoRA (`examples/training/nvflare/job_speech`) |
 | Text-to-speech | `../predict/Piper-TTS_tts_cpu_min_0gb_vram` (uk / en / it, CPU) | `../predict/Orpheus-TTS-3B_tts_min_8gb_vram` (EN) | — |
 | Ukrainian-tuned chat | `ukrainian_models/MamayLM-12B-W4A16_chat_min_10gb_vram` · `ukrainian_models/Lapa-12B-w4g128_chat_min_10gb_vram` | `ukrainian_models/MamayLM-12B-v2_chat_vision_tensor_parallel_min_26gb_vram` (2×16 GB) | `ukrainian_models/MamayLM-27B-v2-FP8_chat_vision_tensor_parallel_min_40gb_vram` (2×24 GB) |
 | Fine-tuned adapters | `Qwen2.5-7B_multi_lora_min_10gb_vram` (shape; the agents bundle has the same block commented out) | `Mistral-Small-24B_multi_lora_min_16gb_vram` | — |
+| Guardrails | `Qwen3-8B-AWQ_agents_bundle_min_12gb_vram` (`WITH_GUARD`, Qwen3Guard-0.6B) | `Qwen3-8B-AWQ_guarded_rag_chat_min_22gb_vram` (Qwen3Guard-8B) · `Nemotron-3.5-Content-Safety_guard_vision_min_10gb_vram` (images, written policy; not booted) | `gpt-oss-safeguard-20b_policy_guard_min_14gb_vram` (policy audit) · `BrowseSafe_web_guard_min_34gb_vram` (fetched pages); not booted |
+| Premium RAG sidecars | `Qwen3-Embedding-4B_rag_sidecars_premium_min_11gb_vram` (fp8-on-load, not booted) | 8B siblings on 24 GB (README of the same job) | — |
 
 ## How vLLM jobs differ from `../predict/` jobs
 

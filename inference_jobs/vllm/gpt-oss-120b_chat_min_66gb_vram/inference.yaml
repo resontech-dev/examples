@@ -1,0 +1,44 @@
+# gpt-oss-120b via vLLM: premium general assistant, one big card.
+#
+# 117B MoE, 5.1B active, ships pre-quantized in MXFP4 (~65 GB weights).
+# OpenAI's larger open model: GPQA 80, strong tool use, 128k native
+# context, Apache-2.0. Configured TP=1 for ONE card of 80 GB or more
+# (H100 / A100-80G / H200 / RTX PRO 6000 96 GB). Multi-card shapes are
+# listed below; every number here is an estimate, nothing has booted yet.
+# Phase-0 model for the Nick pilot (reson_docs clients/Nick).
+#
+# Shapes (yaml + serve_module.py must agree):
+#   TP=1  1× 80 GB+          as shipped
+#   TP=2  2× 48 GB (L40S, RTX PRO 5000) or 2× 80 GB
+#         → vllm.tensor_parallel_size: 2, cluster.gpus_per_worker: 2,
+#           tensor_parallel_size=2 + the placement_group_config block
+#   TP=4  4× 24 GB (the llms-catalog `chat-gptoss-120b` 4x24gb tier,
+#         ~16 GB weights per card)
+#         → the same three edits with 4
+
+engine: vllm_openai
+
+model:
+  module: "serve_module"    # python module exporting `app` — feeds import_path
+
+# Scheduling declaration — MUST equal engine_kwargs values of the same
+# name in serve_module.py (the SDK cross-checks at submit and refuses
+# to upload on mismatch).
+vllm:
+  tensor_parallel_size: 1     # 2 or 4 for the multi-card shapes above
+  pipeline_parallel_size: 1
+
+cluster:
+  num_workers: 1
+  device: "gpu"               # vllm_openai requires gpu
+  gpus_per_worker: 1          # = tensor_parallel_size, all cards in ONE worker
+  cpus_per_worker: 16
+  min_vram_gb_per_worker: 66  # 65 GB weights + KV + overhead; in practice an 80 GB card
+  # Advisory fields — dashboard/accounting only, never forwarded to vLLM:
+  mode: "data_parallel"
+  max_ongoing_requests: 32
+
+# No `requirements:` block on purpose. vLLM jobs run on the platform's
+# prebuilt ray-llm image (ray[serve,llm]==2.55.1 + vllm==0.18.0 + torch
+# cu128) — never re-declare ray / vllm / torch / transformers here.
+# See ../README.md "Requirements policy".
