@@ -5,7 +5,7 @@ answer to Claude/GPT coding API tiers. This is a READY-TO-TEST template,
 not a deployable job on today's fleet:
 
     * needs ONE machine with 4× 80 GB GPUs (H100 / A100-80G class)
-    * every number below is napkin math (llmconfig §4), unvalidated
+    * every number below is napkin math, unvalidated
     * first boot downloads ~260 GB — pre-mirror to S3/Garage, always
 
 When frontier hosts join the fleet: vet the checkpoint, run

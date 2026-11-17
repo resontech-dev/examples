@@ -1,6 +1,6 @@
 """Mistral Small 24B + N customer LoRA adapters — multi-LoRA on 24 GB.
 
-The EU-friendly mid-size LoRA base (`lora-mistral-small-24b`): regulated
+The EU-friendly mid-size LoRA base: regulated
 buyers get their own fine-tuned tone/format model without the data ever
 leaving their deployment. One AWQ base, adapters on demand:
 

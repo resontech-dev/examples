@@ -143,7 +143,7 @@ rerank = LLMConfig(
 # the way the vLLM scoring docs show for mxbai-rerank-base-v2. VERIFY before
 # selling: a vLLM forum thread reports scores that differ from the mxbai
 # library and a different order on large payloads; compare on BEIR
-# (reson_inference_benchmarks/quality) first. Needs ~1.6 GB more: lower the
+# first. Needs ~1.6 GB more: lower the
 # two shares above to 0.36 each on a 16 GB card, or use a 24 GB card.
 #
 # rerank_mxbai = LLMConfig(

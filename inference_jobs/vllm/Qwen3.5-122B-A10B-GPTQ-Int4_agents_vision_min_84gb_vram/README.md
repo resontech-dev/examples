@@ -2,7 +2,7 @@
 
 The level-2 model on one card: a 122B mixture-of-experts with 10B active
 parameters, scoring at the Claude Sonnet 4.6 level on GPQA Diamond and
-HLE (levels: `reson_docs/docs/inference/models/README.md`). Text, images
+HLE. Text, images
 and tool calls on one model id `assistant`, native 262k window,
 Apache-2.0. It is the **switch option next to gpt-oss-120b**: the same
 96 GB card or H200 serves either model, so a client who starts on
@@ -36,7 +36,7 @@ Estimated capacity, KV about 25 KB/token (12 attention layers of 48):
 | H200 141 GB | ~49 GB | ~1.9M | ~60 | 100-150 tok/s |
 | 2x H100 80 GB, TP=2 | ~60 GB pooled | ~2.4M | ~75 | 80-120 tok/s |
 
-Measure with `llmbench.py` before quoting any of it.
+Measure on your own workload before quoting any of it.
 
 ## VERIFY before the first submit
 

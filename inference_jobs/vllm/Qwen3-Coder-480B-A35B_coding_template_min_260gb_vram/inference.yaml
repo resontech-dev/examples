@@ -1,12 +1,10 @@
 # ⚠️ TEMPLATE — Qwen3-Coder-480B-A35B (AWQ) via vLLM, TP=4 over 4×80 GB.
 #
-# The frontier coding agent on-prem (`code-qwen3-coder-480b`). NOT
+# The frontier coding agent on-prem. NOT
 # deployable on the current consumer fleet: it needs a single machine
 # with 4× 80 GB datacenter GPUs (H100/A100-80G class). This template
 # exists so the config is ready the day such a host joins — the numbers
 # below are planning estimates, UNVALIDATED on real hardware.
-#
-# Sequencing per plan16: test the day scale-up hardware lands.
 
 engine: vllm_openai
 

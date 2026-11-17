@@ -1,6 +1,6 @@
 # Orpheus-TTS 3B — expressive text-to-speech (predictor mode).
 #
-# Llama-based TTS (`tts-orpheus-3b`, Apache-2.0): the LM generates SNAC
+# Llama-based TTS (Apache-2.0): the LM generates SNAC
 # audio codes, a small vocoder decodes them to 24 kHz speech. Quality
 # tier of the TTS lineup — emotive, streaming-capable voices.
 #

@@ -1,6 +1,6 @@
 # Qwen2.5-VL-7B (fp16) via vLLM — document vision on one 24 GB worker.
 #
-# The practical doc-understanding workhorse (`vision-qwen25-vl-7b`, v1):
+# The practical doc-understanding workhorse:
 # invoices, scans, receipts, screenshots, dashboards → structured JSON.
 # Vision-language requests ride the standard OpenAI chat route with
 # image content parts — no separate API.

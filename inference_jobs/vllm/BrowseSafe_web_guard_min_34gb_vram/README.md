@@ -12,7 +12,7 @@ check: do not add it to the bill. For user text and documents use
 Qwen3Guard, Nemotron 3.5 Content Safety or gpt-oss-safeguard instead.
 
 Shared vLLM contract & defaults: [../README.md](../README.md).
-Guard models compared: `reson_docs/docs/inference/models/safety.md`.
+Other guard models: the Guardrails row in [../README.md](../README.md#small-over-big-ladder).
 
 ## Where it sits
 

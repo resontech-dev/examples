@@ -1,6 +1,6 @@
 """Qwen2.5-VL-7B (fp16) via vLLM — document-vision endpoint.
 
-The doc-understanding workhorse (`vision-qwen25-vl-7b`, priority v1):
+The doc-understanding workhorse:
 invoices, scans, receipts, screenshots → structured JSON, tens of
 thousands of pages/day flat-rate on one 24 GB card.
 

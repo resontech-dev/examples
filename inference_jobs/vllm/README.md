@@ -5,9 +5,7 @@ Every folder here deploys an **OpenAI-compatible endpoint** via
 the minimum **total** VRAM the job's model(s) need (heaviest quantization,
 short context). Per-job READMEs carry the full resource table.
 
-Full knob reference: `reson_docs/docs/inference/vllm/llmconfig.md`.
-Model/tier catalog: `reson_docs/docs/inference/models-catalog.md`.
-GPU fleet: `reson_docs/docs/inference/dc-hardware-requirements.md §2`.
+Full knob reference: [../docs/openai_compatible_llm_flow.md](../docs/openai_compatible_llm_flow.md).
 
 ## Job index
 
@@ -51,16 +49,14 @@ GPU fleet: `reson_docs/docs/inference/dc-hardware-requirements.md §2`.
 | [`ukrainian_models/`](ukrainian_models/README.md) | MamayLM 12B/27B, Lapa 12B (Gemma 3, Ukrainian) | single int4 / TP=2 | 10–40 GB | own index |
 
 Rows marked **blocked: vLLM ≥ X** do not boot on the pinned image (vLLM 0.18.0); they wait for
-the ray-llm image re-pin (`reson_docs/docs/specs/hardware-aware-placement.md`, item J).
-Rows marked **written, not booted** were added 2026-11-12 from the model registry
-(`reson_docs/docs/inference/models/`): the folders follow this contract and compile, but no
+the ray-llm image re-pin.
+Rows marked **written, not booted** were added 2026-11-12: the folders follow this contract and compile, but no
 replica has started on hardware yet. Each README carries its VERIFY list; drop the marker here
 after the first successful boot and benchmark.
 
 ## Small-over-big ladder
 
-The jobs behind `reson_docs/docs/inference/using-small-over-big-models/`,
-smallest first. Every text job exposes one model id `assistant`, so a client
+Which job to start from per task, smallest first. Every text job exposes one model id `assistant`, so a client
 moves between rungs by changing the endpoint, not the code.
 
 | Task | Rung 1 (16 GB card) | Rung 2 | Premium |

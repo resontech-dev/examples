@@ -1,4 +1,4 @@
-# BLOCKED on the pinned image: needs vLLM >= 0.19 (ray-llm image re-pin, reson_docs spec item J). Written ahead; nothing has booted.
+# BLOCKED on the pinned image: needs vLLM >= 0.19 (waits for the ray-llm image re-pin). Written ahead; nothing has booted.
 # This size: vLLM >= 0.19.1 per the vLLM recipe.
 #
 # Gemma 4 31B (QAT W4A16) via vLLM: text + image, tool calling, thinking, on one 32 GB card.

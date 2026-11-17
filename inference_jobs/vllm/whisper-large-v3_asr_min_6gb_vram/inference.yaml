@@ -1,7 +1,6 @@
 # Whisper large-v3 via vLLM — speech-to-text on one 12 GB worker.
 #
-# ⚠️ VALIDATE-BEFORE-LISTING: the catalog flags this entry "validate on
-# our pinned vLLM before listing" (llms-catalog §3.8). Whisper is an
+# ⚠️ VALIDATE-BEFORE-LISTING on the pinned vLLM image. Whisper is an
 # encoder-decoder model served through the OpenAI transcription route —
 # confirm the pinned ray-llm image exposes /v1/audio/transcriptions
 # before selling this template. The predictor-mode fallback (faster-

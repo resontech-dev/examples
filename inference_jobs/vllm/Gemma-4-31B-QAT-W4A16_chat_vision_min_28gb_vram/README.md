@@ -1,6 +1,6 @@
 # Gemma 4 31B (QAT W4A16): text + image on one 32 GB card (vLLM)
 
-> **BLOCKED on the pinned image: needs vLLM >= 0.19 (ray-llm image re-pin, reson_docs spec item J). Written ahead; nothing has booted.**
+> **BLOCKED on the pinned image: needs vLLM >= 0.19 (waits for the ray-llm image re-pin). Written ahead; nothing has booted.**
 > This size needs vLLM >= 0.19.1 per the vLLM recipe (the first Gemma 4 release in vLLM was 0.19.0).
 
 Google's Gemma 4 31B (2026), Apache-2.0: the largest dense Gemma 4. Text and
@@ -84,7 +84,7 @@ python predict.py --tools                           # tool-calling round trip
 
 ## VERIFY before listing
 
-1. Image re-pin to vLLM >= 0.19.1 (spec item J).
+1. Image re-pin to vLLM >= 0.19.1.
 2. The vendored `tool_chat_template_gemma4.jinja` reaches the replica and matches the image's vLLM version.
 3. KV numbers above are estimates; read the KV pool size from the boot log, then raise `max_model_len` if it allows.
 4. Speculative decoding (commented) only after a clean baseline benchmark.

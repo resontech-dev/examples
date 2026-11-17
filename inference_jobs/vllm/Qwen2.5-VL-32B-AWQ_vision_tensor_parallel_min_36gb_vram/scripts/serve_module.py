@@ -1,6 +1,6 @@
 """Qwen2.5-VL-32B (AWQ) via vLLM — TP=2 document-vision quality tier.
 
-The quality tier for hard documents (`vision-qwen25-vl-32b`): degraded
+The quality tier for hard documents: degraded
 scans, handwriting, dense tables — where the 7B starts guessing. AWQ
 ~19 GB sharded across 2×24 GB GPUs in ONE machine.
 

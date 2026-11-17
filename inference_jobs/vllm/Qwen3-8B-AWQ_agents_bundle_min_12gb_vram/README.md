@@ -4,8 +4,8 @@ The **minimum complete stack for an in-house assistant**: one chat model for
 every text task (classification, Q&A, drafting, answer checks), embeddings +
 reranker for RAG, and an optional 0.6B guard — three or four vLLM engines
 behind one OpenAI endpoint on a single RTX 5070 Ti-class card. Apache-2.0
-end to end. Rung 1 of the small-over-big ladder
-(`reson_docs/docs/inference/using-small-over-big-models/`).
+end to end. Rung 1 of the
+[small-over-big ladder](../README.md#small-over-big-ladder).
 
 Shared vLLM contract & defaults: [../README.md](../README.md).
 
@@ -30,7 +30,7 @@ card gets ~32k context and room for the guard with `CHAT_KV_GIB` ≈ 8.
   in openai-python). With thinking on, the answer still arrives in `content`
   and the thought in `reasoning`, but every call takes 2–5× longer and the
   thought counts towards `max_tokens`. A server-wide default isn't possible on
-  this stack (`reson_docs/docs/inference/vllm/known_issues.md`).
+  this stack (see the comment in `scripts/serve_module.py`).
 - One model id `assistant` for every text task: vary `temperature` per call
   (0 for classification and checks, 0.2–0.3 for replies and drafts).
 
@@ -63,7 +63,7 @@ together. Shipped for 16 GB:
 Expected load on a 5070 Ti, from the Qwen2.5-Coder-7B-AWQ benchmark (same
 size and quant, 3.2k-token prompts): ~1.4 req/s ceiling, plan at 1 req/s,
 8 users under 5 s to first token, ~12.5M tokens/hour. Measure this bundle
-the same way (`reson_inference_benchmarks`, `llmbench.py`) before quoting.
+the same way before quoting.
 
 ## What to change
 
@@ -71,7 +71,7 @@ the same way (`reson_inference_benchmarks`, `llmbench.py`) before quoting.
 |---|---|
 | `WITH_GUARD` | add Qwen3Guard-Gen-0.6B as model `guard` |
 | `FRACTIONS`, `CHAT_MAX_LEN`, `CHAT_MAX_SEQS`, `CHAT_KV_GIB`, `SIDECAR_KV_GIB` | rebalance — keep the sum ≤ 0.85 and the KV large enough for one `max_model_len` request |
-| `kv_cache_dtype`, `enable_prefix_caching` | first two things to switch off if output is garbage (llmconfig.md → "Garbled output") |
+| `kv_cache_dtype`, `enable_prefix_caching` | first two things to switch off if output is garbage |
 | commented `enable_lora` + `lora_config` | step 2: serve fine-tuned adapters as `assistant:<name>` |
 | `model_source` of `assistant` | `Qwen/Qwen2.5-7B-Instruct-AWQ`, `Qwen/Qwen3-4B-AWQ` — same shape, same parser |
 

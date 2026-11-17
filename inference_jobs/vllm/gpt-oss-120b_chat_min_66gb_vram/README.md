@@ -3,9 +3,7 @@
 OpenAI's open-weights 117B MoE (5.1B active), shipped natively in MXFP4
 (~65 GB). One level above the 20b on every card number (GPQA ~80 vs ~72,
 SWE-bench Verified ~62 vs ~61, HLE ~15 vs ~11), same harmony format,
-effort knob and 128k context, Apache-2.0. The llms-catalog premium
-general tier (`chat-gptoss-120b`) and the **phase-0 model for the Nick
-pilot** (`reson_docs/docs/clients/Nick`).
+effort knob and 128k context, Apache-2.0. The premium general-assistant tier.
 
 **Status: written, not booted.** Every number below is an estimate from the
 checkpoint size, the KV-cache rule and card bandwidth. Measure on the first

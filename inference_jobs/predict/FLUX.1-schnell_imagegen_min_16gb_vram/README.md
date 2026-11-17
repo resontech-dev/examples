@@ -1,6 +1,6 @@
 # FLUX.1-schnell — image generation (predictor mode)
 
-Best-quality **Apache-clean** image generation (`img-flux-schnell`):
+Best-quality **Apache-clean** image generation:
 product shots, marketing visuals, game assets at ~$0.0002 compute/image
 vs ~$0.04/image API pricing. 4-step distilled — ~1–2 s/image fully
 resident, ~2× that with CPU offload.

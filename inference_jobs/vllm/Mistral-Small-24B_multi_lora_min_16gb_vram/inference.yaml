@@ -1,6 +1,6 @@
 # Mistral Small 24B + N customer LoRA adapters via vLLM — one 24 GB worker.
 #
-# The EU-friendly mid-size LoRA base (`lora-mistral-small-24b`): one AWQ
+# The EU-friendly mid-size LoRA base: one AWQ
 # base in VRAM, customer adapters resolved on demand from S3, selected
 # per request via model="mistral-24b:<adapter>".
 

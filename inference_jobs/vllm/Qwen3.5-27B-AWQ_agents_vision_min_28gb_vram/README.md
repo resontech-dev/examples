@@ -1,7 +1,7 @@
 # Qwen3.5-27B (AWQ) — premium text + vision assistant (vLLM)
 
-Top rung of the small-over-big ladder
-(`reson_docs/docs/inference/using-small-over-big-models/`, text and media):
+Top rung of the [small-over-big ladder](../README.md#small-over-big-ladder)
+(text and media):
 harder drafting, long documents, fewer edits,
 images on the same model id. Apache-2.0. Before buying this card, try the
 9B with a LoRA adapter on the same scenarios — the share of answers
@@ -28,8 +28,8 @@ the 9B.
 ## ⚠️ Checkpoint — verify before selling
 
 Shipped: `QuantTrio/Qwen3.5-27B-AWQ` (community, data-free AWQ, ~21 GiB).
-No official 4-bit exists; alternatives are in `serve_module.py`. Run the
-`how-to-benchmark.md` readiness checks on your own scenarios first.
+No official 4-bit exists; alternatives are in `serve_module.py`. Run
+readiness checks on your own scenarios first.
 
 ## Client notes
 
@@ -64,5 +64,4 @@ Or paste `scripts/serve_module.py` + `inference.yaml` into
 
 ## Fine-tuning note
 
-bf16 LoRA on 27B ≈ 56 GB: 2×32 GB or 1×80 GB — see
-`reson_docs/docs/training/train_Qwen3.5-27B_plan.md`.
+bf16 LoRA on 27B ≈ 56 GB: 2×32 GB or 1×80 GB.

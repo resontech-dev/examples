@@ -75,8 +75,7 @@ llm_config = LLMConfig(
         # Hybrid-thinking model: thinks unless the request sends
         # chat_template_kwargs={"enable_thinking": False}, as predict.py does.
         # Don't set `default_chat_template_kwargs` here: Ray 2.55.1 turns it into a
-        # Namespace and every chat request then fails with a TypeError
-        # (reson_docs inference/vllm/known_issues.md).
+        # Namespace and every chat request then fails with a TypeError.
         reasoning_parser="qwen3",
 
         # Deliberately NOT set on this hybrid model (add one at a time,

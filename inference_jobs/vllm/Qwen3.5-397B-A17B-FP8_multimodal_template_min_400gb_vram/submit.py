@@ -52,7 +52,7 @@ def main() -> None:
     inference = InferenceConfig(
         visibility=os.getenv("VISIBILITY", "PRIVATE"),
         # Ordered GPU preference (8 cards of >= 75 GB free each, NVLinked);
-        # first entry is filled first. Plan §7: h200 target, h100_80gb fallback.
+        # first entry is filled first: h200 target, h100_80gb fallback.
         gpu_models=["h200", "h100_80gb", "b200"],
         max_price_per_gpu_hour=float(os.getenv("MAX_PRICE_PER_GPU_HOUR", "30.00")),
         only_mine_workers=True,
@@ -71,7 +71,7 @@ def main() -> None:
     print(f"    RESON_INFERENCE_API_KEY = {job.predict_api_key}")
     print()
 
-    print("[submit] TEMPLATE: requires an 8-GPU NVLinked worker; pre-stage the ~400 GB checkpoint on the node first (plan §6)")
+    print("[submit] TEMPLATE: requires an 8-GPU NVLinked worker; pre-stage the ~400 GB checkpoint on the node first")
     print("[submit] waiting for deployment to become RUNNING…")
     job.wait_until_ready(timeout=7200, poll=15)
     print(f"[submit] ✅ {job.id} is RUNNING")

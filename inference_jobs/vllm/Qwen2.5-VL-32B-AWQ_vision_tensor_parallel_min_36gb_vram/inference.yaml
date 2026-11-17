@@ -1,6 +1,6 @@
 # Qwen2.5-VL-32B (AWQ) via vLLM — TENSOR PARALLEL over 2 GPUs, one worker.
 #
-# The document-vision quality tier (`vision-qwen25-vl-32b`): hard
+# The document-vision quality tier: hard
 # layouts, handwriting, dense tables. AWQ ~19 GB sharded TP=2 across
 # 2×24 GB cards in ONE machine (TP dies over Ethernet — STRICT_PACK).
 

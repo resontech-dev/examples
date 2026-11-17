@@ -1,6 +1,6 @@
 """GLM-4.5-Air 106B-A12B (AWQ) via vLLM — TP=4 premium chat.
 
-The catalog's premium agentic tier (`chat-glm45-air`, MIT license):
+The premium agentic tier (MIT license):
 106B MoE with 12B active parameters — agentic benchmarks in genuine
 Sonnet-4 territory, decode cost of a 12B. AWQ ~60 GB sharded across
 4×24 GB GPUs in ONE worker (TP needs PCIe/NVLink; it dies over any

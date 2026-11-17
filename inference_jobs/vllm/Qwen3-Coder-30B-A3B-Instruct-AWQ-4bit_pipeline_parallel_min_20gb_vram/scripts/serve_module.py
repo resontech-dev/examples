@@ -1,7 +1,6 @@
 """Qwen3-Coder-30B-A3B via vLLM, pipeline-parallel across 2 workers.
 
-Stage-0 shape from reson_docs/docs/inference/vllm/plan16-jul-2026.md:
-one replica of a 30B MoE coder split into 2 pipeline stages, each stage
+One replica of a 30B MoE coder split into 2 pipeline stages, each stage
 on its own single-GPU worker (2× RTX 5070, 12 GB each). ~9 GB
 weights-stage per GPU + KV.
 
@@ -77,7 +76,7 @@ llm_config = LLMConfig(
         tool_call_parser="hermes",
 
         # No engine-level `api_key` on purpose. The platform edge (nginx + the
-        # per-job predict key) is the auth boundary — see llmconfig.md §3.3 — and
+        # per-job predict key) is the auth boundary, and
         # the platform does NOT inject API_KEY into replicas. vLLM's
         # FrontendArgs.api_key is also version-flaky (0.18.1 wants list[str], not a
         # string), so passing it crashes engine startup. Leave auth to the edge.

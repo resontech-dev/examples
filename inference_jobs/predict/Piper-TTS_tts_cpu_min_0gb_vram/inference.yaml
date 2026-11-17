@@ -2,8 +2,7 @@
 #
 # Text-to-speech at the lowest cost: ONNX voices, espeak-ng
 # embedded in the wheel (no apt packages), MIT. Quality is "working", not
-# studio — but it is the only Apache/MIT-clean Ukrainian TTS today
-# (reson_docs → using-small-over-big-models/voice.md).
+# studio — but it is the only Apache/MIT-clean Ukrainian TTS today.
 
 model:
   # No `path` — voices are pulled from HF `rhasspy/piper-voices` in __init__

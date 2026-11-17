@@ -1,8 +1,7 @@
 # gpt-oss-20b — business chat (vLLM)
 
 OpenAI's open-weights 21B MoE (3.6B active), shipped natively in MXFP4
-(~13 GB). The catalog's **default business assistant** (`chat-gptoss-20b`,
-priority v1): o-mini-class reasoning with an adjustable effort knob and
+(~13 GB). A solid **default business assistant**: o-mini-class reasoning with an adjustable effort knob and
 128k context, with full data residency. Apache-2.0.
 
 Shared vLLM contract & defaults: [../README.md](../README.md).
@@ -13,7 +12,7 @@ Shared vLLM contract & defaults: [../README.md](../README.md).
 |---|---|---|---|---|
 | 14 → 16 GB | 4 | 32 GB | ~39 GB (image 15 + 1.3×13 GB checkpoint) | 24gb / 2x12gb |
 
-Suggested GPUs (`dc-hardware-requirements.md §2`): RTX 3090 / 4090 / L4 /
+Suggested GPUs: RTX 3090 / 4090 / L4 /
 A10G (24 GB — as configured here, 64k context); RTX 4080 / 5080 / 5070 Ti
 (16 GB — fits at reduced `max_model_len` ≈ 8–16k and `gpu_memory_utilization=0.92`);
 2× 12 GB cards → PP=2 (copy the yaml/`engine_kwargs` shape from the sibling

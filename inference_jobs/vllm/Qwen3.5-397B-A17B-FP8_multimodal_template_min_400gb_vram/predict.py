@@ -2,10 +2,9 @@
 Smoke-test the Qwen3.5-397B-A17B multimodal endpoint (TEMPLATE): text, image
 and tool-calling round trips against one model id, `qwen3.5-397b`.
 
-These are the three request types the plan's step 1 and step 5 require
-(reson_docs/docs/inference/run_qwen_3.5-397B-A17B_plan.md §4 and §7): a
-chat, an `image_url` question and a tool call with a function schema. Add
-`stream=True` when timing TTFT for the benchmark (§8).
+These are the three request types a first deploy must pass: a chat, an
+`image_url` question and a tool call with a function schema. Add
+`stream=True` when timing TTFT for the benchmark.
 
 Run
 ---

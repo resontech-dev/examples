@@ -1,6 +1,6 @@
 """Whisper large-v3 via vLLM — speech-to-text endpoint.
 
-⚠️ VALIDATE BEFORE LISTING (llms-catalog §3.8): Whisper rides vLLM's
+⚠️ VALIDATE BEFORE LISTING: Whisper rides vLLM's
 transcription support and the OpenAI audio route:
 
     POST /v1/audio/transcriptions   (multipart file + model)

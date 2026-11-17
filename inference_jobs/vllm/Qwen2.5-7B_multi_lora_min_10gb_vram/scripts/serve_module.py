@@ -1,6 +1,6 @@
 """Qwen2.5-7B + N customer LoRA adapters — multi-LoRA serving on 12 GB.
 
-The north-star product's serving half (`lora-qwen25-7b`): one AWQ base
+Fine-tuned business models on one GPU: one AWQ base
 model in VRAM, up to 16 customer adapters (tone, vocabulary, format
 compliance) resolved on demand from S3 and selected per request:
 

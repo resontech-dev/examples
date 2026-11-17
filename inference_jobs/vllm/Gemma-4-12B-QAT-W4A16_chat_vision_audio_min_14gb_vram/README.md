@@ -1,6 +1,6 @@
 # Gemma 4 12B (QAT W4A16): text + image + audio on one 16 GB card (vLLM)
 
-> **BLOCKED on the pinned image: needs vLLM >= 0.19 (ray-llm image re-pin, reson_docs spec item J). Written ahead; nothing has booted.**
+> **BLOCKED on the pinned image: needs vLLM >= 0.19 (waits for the ray-llm image re-pin). Written ahead; nothing has booted.**
 > This size needs vLLM >= 0.23.0 per the vLLM recipe (the encoder-free 12B Unified class; the recipe names the `vllm/vllm-openai:gemma4-unified` image).
 
 Google's Gemma 4 12B Unified (2026), Apache-2.0: an encoder-free model that
@@ -88,7 +88,7 @@ python predict.py --tools                           # tool-calling round trip
 
 ## VERIFY before listing
 
-1. Image re-pin to vLLM >= 0.23.0 (spec item J); the 12B Unified class is the newest of the three.
+1. Image re-pin to vLLM >= 0.23.0; the 12B Unified class is the newest of the three.
 2. The vendored `tool_chat_template_gemma4.jinja` reaches the replica and matches the image's vLLM version.
 3. `vllm[audio]` extras present in the image; `python predict.py --audio` returns a transcript.
 4. Ray accepts `default_chat_template_kwargs` on the new image before anyone sets a thinking default.

@@ -1,7 +1,7 @@
 # Qwen3.5-9B (AWQ) — text + vision assistant on one 16 GB card (vLLM)
 
-Rung 2 of the small-over-big ladder
-(`reson_docs/docs/inference/using-small-over-big-models/`, text and media):
+Rung 2 of the [small-over-big ladder](../README.md#small-over-big-ladder)
+(text and media):
 **one model id for text tasks and image input**. Hybrid attention makes long dialogs and multi-page
 requests cheap in KV; 262k native window; tool calling and optional thinking.
 Apache-2.0.
@@ -24,8 +24,8 @@ only). On 24 GB (4090 / 3090) add the embed + rerank sidecars from
 No official 4-bit Qwen3.5-9B exists. Shipped: `QuantTrio/Qwen3.5-9B-AWQ`
 (community, data-free AWQ, ~12 GiB, vLLM ≥ 0.16). Alternatives are listed in
 `serve_module.py`; the safe fallback on 16 GB is the official bf16
-`Qwen/Qwen3.5-4B` (~8 GB, weaker). The first run must be the
-`how-to-benchmark.md` readiness checks on your own scenarios, not a demo.
+`Qwen/Qwen3.5-4B` (~8 GB, weaker). The first run must be
+readiness checks on your own scenarios, not a demo.
 
 ## Client notes
 
@@ -34,8 +34,8 @@ No official 4-bit Qwen3.5-9B exists. Shipped: `QuantTrio/Qwen3.5-9B-AWQ`
   per request as configured (`limit_mm_per_prompt`).
 - The model thinks unless the request sends `chat_template_kwargs:
   {enable_thinking: false}` (`extra_body` in openai-python), as `predict.py`
-  does. A server-wide default isn't possible on this stack
-  (`reson_docs/docs/inference/vllm/known_issues.md`). Same auth as every job here: the key as both
+  does. A server-wide default isn't possible on this stack.
+  Same auth as every job here: the key as both
   `Authorization: Bearer` and `X-API-Key`.
 - One model id `assistant` for text and images: vary `temperature` per
   call (0 for extraction and classification, 0.2–0.3 for replies).
@@ -68,5 +68,4 @@ Or paste `scripts/serve_module.py` + `inference.yaml` into
 
 Qwen3.5 LoRA on the platform is bf16-only (no QLoRA in Unsloth yet) → a
 24 GB card for training; the adapter then serves on this AWQ base via the
-multi-LoRA block shown in the Qwen3-8B bundle. Status:
-`reson_docs/docs/training/fine-tune-smaller-models/README.md`.
+multi-LoRA block shown in the Qwen3-8B bundle.

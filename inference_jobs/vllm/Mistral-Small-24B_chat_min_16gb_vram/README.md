@@ -1,6 +1,6 @@
 # Mistral Small 24B (AWQ) — business chat (vLLM)
 
-Dense 24B, the popular EU-deployment pick (`chat-mistral-small-24b`):
+Dense 24B, the popular EU-deployment pick:
 fast, low-refusal business assistant with first-class function calling.
 Apache-2.0. One 24 GB worker, AWQ 4-bit.
 

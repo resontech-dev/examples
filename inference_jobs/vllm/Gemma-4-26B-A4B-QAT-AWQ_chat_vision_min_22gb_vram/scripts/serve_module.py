@@ -1,6 +1,6 @@
 """Gemma 4 26B A4B (QAT, AWQ INT4) via vLLM: text + image, tool calling, thinking. One 24 GB card.
 
-BLOCKED on the pinned image: needs vLLM >= 0.19 (ray-llm image re-pin, reson_docs spec item J). Written ahead; nothing has booted.
+BLOCKED on the pinned image: needs vLLM >= 0.19 (waits for the ray-llm image re-pin). Written ahead; nothing has booted.
 This size: vLLM >= 0.25.0 per the vLLM recipe (Gemma 4 MoE; the RTX 5090 config there runs Red Hat's FP8 build).
 
 Google's Gemma 4 26B A4B (2026), Apache-2.0: a Mixture-of-Experts model with

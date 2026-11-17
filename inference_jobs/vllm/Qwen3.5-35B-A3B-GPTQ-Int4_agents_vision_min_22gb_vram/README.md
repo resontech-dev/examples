@@ -29,7 +29,7 @@ weights per card).
 
 Throughput, estimate only: on a 5090 roughly 3x the 27B's decode rate,
 400-600 generated tok/s aggregate at 3k-token prompts, 15-20 users under
-5 s to first token. Measure with `llmbench.py` before quoting.
+5 s to first token. Measure on your own workload before quoting.
 
 ## VERIFY before the first submit
 

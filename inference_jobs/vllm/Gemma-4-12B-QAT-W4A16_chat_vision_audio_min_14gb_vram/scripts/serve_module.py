@@ -1,6 +1,6 @@
 """Gemma 4 12B (QAT W4A16) via vLLM: text + image + audio, tool calling, thinking. One 16 GB card.
 
-BLOCKED on the pinned image: needs vLLM >= 0.19 (ray-llm image re-pin, reson_docs spec item J). Written ahead; nothing has booted.
+BLOCKED on the pinned image: needs vLLM >= 0.19 (waits for the ray-llm image re-pin). Written ahead; nothing has booted.
 This size: vLLM >= 0.23.0 per the vLLM recipe (the encoder-free 12B Unified class; the recipe names the `vllm/vllm-openai:gemma4-unified` image).
 
 Google's Gemma 4 12B Unified (2026), Apache-2.0: an encoder-free model that

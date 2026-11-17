@@ -1,7 +1,6 @@
 # Qwen2.5-VL-32B (AWQ) — document vision quality tier, TP=2 (vLLM)
 
-The quality tier for **hard documents** (`vision-qwen25-vl-32b`,
-Apache-2.0): degraded scans, handwriting, dense tables — the cases where
+The quality tier for **hard documents** (Apache-2.0): degraded scans, handwriting, dense tables — the cases where
 the 7B sibling starts guessing. AWQ ~19 GB sharded **TP=2 across 2×24 GB
 GPUs in one machine**. Same OpenAI vision protocol and same `vision`
 model alias as the 7B — clients upgrade by pointing at this endpoint.

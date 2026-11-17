@@ -3,8 +3,7 @@
 117B MoE with 5.1B active parameters, shipped natively in MXFP4 (~65 GB).
 OpenAI-lineage assistant one level above the 20b: GPQA ~80, HLE ~15,
 SWE-bench Verified ~62 (card numbers), the same harmony format, effort
-knob and 128k window. Apache-2.0. The llms-catalog premium general tier
-(`chat-gptoss-120b`).
+knob and 128k window. Apache-2.0. The premium general-assistant tier.
 
 Configured TP=1 for ONE card of 80 GB or more. Every number below is an
 estimate from the memory-bandwidth rule and the card; the job has not

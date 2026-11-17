@@ -3,8 +3,7 @@
 122B mixture-of-experts with 10B active parameters per token, 48 layers
 (36 DeltaNet + 12 full attention), native 262k window (1M with YaRN),
 images and tool calls on one model id. Benchmarks put it at the Claude
-Sonnet 4.6 level on GPQA Diamond and HLE (level 2 in
-reson_docs/docs/inference/models/README.md). It is the switch option next
+Sonnet 4.6 level on GPQA Diamond and HLE. It is the switch option next
 to gpt-oss-120b on the same 96 GB / H200 hardware: same card, higher
 level, with vision. Int4 weights ~79 GB.
 
@@ -80,8 +79,7 @@ llm_config = LLMConfig(
         # Thinking: on unless the request sends
         # chat_template_kwargs={"enable_thinking": False}, as predict.py does.
         # Don't set `default_chat_template_kwargs` here: Ray 2.55.1 turns it
-        # into a Namespace and every chat request then fails with a TypeError
-        # (reson_docs inference/vllm/known_issues.md).
+        # into a Namespace and every chat request then fails with a TypeError.
         reasoning_parser="qwen3",
 
         # Speculative decoding with the model's own MTP head: the model card

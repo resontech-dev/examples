@@ -1,6 +1,6 @@
 """Devstral Small 24B (AWQ) via vLLM — agentic coding endpoint.
 
-Mistral's agentic SWE specialist (`code-devstral-24b`): OpenHands /
+Mistral's agentic SWE specialist: OpenHands /
 SWE-bench lineage, punches above its size on issue-fixing loops, a bit
 weaker on raw completion than the Qwen coders. Dense 24B, AWQ ≈ 13 GB
 on one 24 GB card.

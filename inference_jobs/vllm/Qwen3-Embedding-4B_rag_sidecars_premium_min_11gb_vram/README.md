@@ -14,8 +14,7 @@ Shared vLLM contract & defaults: [../README.md](../README.md).
 
 ## Why 4B over 0.6B
 
-Published numbers (Qwen3 Embedding report, MTEB; conditions in
-`reson_docs/docs/benchmarks/inference/public_benchmarks_refference.md`).
+Published numbers (Qwen3 Embedding report, MTEB).
 Ours are measured only for the 0.6B pair so far.
 
 | | 0.6B pair (in the bundles) | 4B pair (this job) |
@@ -59,7 +58,7 @@ use on a 16 GB card.
   `serve_module.py` with the `Qwen2ForSequenceClassification` override from
   the vLLM scoring docs. A vLLM forum thread reports scores that differ
   from the mxbai library and a different order on large payloads: compare
-  on BEIR (`reson_inference_benchmarks/quality`) before selling it.
+  on BEIR before selling it.
 
 ## Deploy & test
 

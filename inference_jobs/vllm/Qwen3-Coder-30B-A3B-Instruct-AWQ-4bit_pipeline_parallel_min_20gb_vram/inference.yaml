@@ -1,7 +1,6 @@
 # Qwen3-Coder-30B-A3B via vLLM — PIPELINE PARALLEL across 2 workers.
 #
-# Stage-0 shape (see reson_docs/docs/inference/vllm/plan16-jul-2026.md):
-# one replica split into 2 pipeline stages, one stage per single-GPU
+# One replica split into 2 pipeline stages, one stage per single-GPU
 # worker. Each 12 GB card holds ~9 GB of weights-stage + KV. Tokens flow
 # stage 0 → stage 1 with one network hop per token, which is why PP
 # works across ordinary workers where tensor parallelism cannot.
@@ -41,4 +40,4 @@ cluster:
 # Never re-declare ray / vllm / torch / transformers / numpy here — the
 # image owns them, and a customer `ray` line is rejected at submit.
 # List ONLY genuinely extra packages (rare for vLLM jobs).
-# See reson_docs/docs/inference/vllm/llmconfig.md §1 check 4.
+# See ../README.md "Requirements policy".

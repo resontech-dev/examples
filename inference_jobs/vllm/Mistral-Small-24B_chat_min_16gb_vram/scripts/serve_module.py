@@ -1,6 +1,6 @@
 """Mistral Small 24B (AWQ) via vLLM — single-worker business chat.
 
-Dense 24B, the popular EU-deployment pick (`chat-mistral-small-24b`):
+Dense 24B, the popular EU-deployment pick:
 fast, low-refusal business assistant with strong native function
 calling. AWQ 4-bit ≈ 13 GB weights on one 24 GB card.
 

@@ -1,7 +1,6 @@
 # Mistral Small 24B + N customer LoRA adapters (vLLM multi-LoRA)
 
-The **EU-friendly mid-size LoRA base** (`lora-mistral-small-24b`,
-Apache-2.0): regulated buyers get their own fine-tuned model — their tone,
+The **EU-friendly mid-size LoRA base** (Apache-2.0): regulated buyers get their own fine-tuned model — their tone,
 vocabulary, format compliance — served as adapters on one shared AWQ base.
 Same serving shape as the Qwen2.5-7B sibling, bigger brain, fewer adapters
 per card.
@@ -16,7 +15,7 @@ Shared vLLM contract & defaults: [../README.md](../README.md).
 
 Suggested GPUs: RTX 3090 / 4090 / L4 / A10G (24 GB — as configured, ~8
 cached adapters); 2×24 GB TP=2 → the 32B coder base for per-repo code
-adapters (`lora-qwen25-coder-32b` shape).
+adapters.
 
 ## How adapter selection works
 

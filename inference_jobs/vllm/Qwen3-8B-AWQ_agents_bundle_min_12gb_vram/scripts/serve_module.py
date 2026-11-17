@@ -113,8 +113,7 @@ assistant = LLMConfig(
         kv_cache_memory_bytes=CHAT_KV_BYTES,
         # Qwen3-8B KV ≈ 74 KB/token at fp8. The Qwen2.5-Coder-7B-AWQ
         # benchmark on a 5070 Ti ran fp8 KV + prefix caching cleanly; if
-        # this checkpoint returns garbage, switch both off first
-        # (reson_docs llmconfig.md → "Garbled output from quantized models").
+        # this checkpoint returns garbage, switch both off first.
         kv_cache_dtype="fp8",
         enable_prefix_caching=True,              # agents resend one long system prompt every call
         enable_chunked_prefill=True,
@@ -129,8 +128,7 @@ assistant = LLMConfig(
         # expect a <think> block. The reasoning parser moves it into the
         # `reasoning` field. Callers turn thinking off per request. Don't set
         # `default_chat_template_kwargs` here: Ray 2.55.1 turns it into a
-        # Namespace and every chat request then fails with a TypeError
-        # (reson_docs inference/vllm/known_issues.md).
+        # Namespace and every chat request then fails with a TypeError.
         reasoning_parser="qwen3",
 
         # ── Step 2: fine-tuned adapters ──

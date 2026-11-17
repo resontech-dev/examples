@@ -1,7 +1,6 @@
 # Whisper large-v3 — speech-to-text (vLLM) ⚠️ validate before listing
 
-Meeting/call transcription on-prem (`asr-whisper-large-v3`, MIT, priority
-v1): one 12 GB worker runs 10–30 parallel streams; breakeven vs the
+Meeting/call transcription on-prem (MIT): one 12 GB worker runs 10–30 parallel streams; breakeven vs the
 OpenAI Whisper API (~$0.36/audio-hour) at a few hundred audio-hours/month
 — and recordings never leave the customer.
 

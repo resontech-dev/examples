@@ -1,7 +1,6 @@
 # Qwen2.5-7B + N customer LoRA adapters (vLLM multi-LoRA)
 
-The fine-tuned-business-model serving shape (`lora-qwen25-7b`, priority
-v1, Apache-2.0): **one base model in VRAM, 8–16 customer adapters** loaded
+The fine-tuned-business-model serving shape (Apache-2.0): **one base model in VRAM, 8–16 customer adapters** loaded
 on demand from S3 and selected per request via the `model` field. This is
 the economics feature — 20 customer fine-tunes ≠ 20 GPUs; per-adapter
 monthly billing hangs off the model id.
@@ -55,6 +54,5 @@ Or paste `scripts/serve_module.py` + `inference.yaml` into
 
 Fine-tuning strips alignment — a small LoRA can remove refusals entirely,
 and this serving stack will happily load it. Before hosting third-party
-adapters publicly: AUP clause + an eval gate (see
-`serve-coding-llms.md §8`). Adapter uploads are customer code — treat the
+adapters publicly: AUP clause + an eval gate. Adapter uploads are customer code — treat the
 S3 prefix as a trust boundary.

@@ -38,4 +38,4 @@ cluster:
 # Never re-declare ray / vllm / torch / transformers / numpy here — the
 # image owns them, and a customer `ray` line is rejected at submit.
 # List ONLY genuinely extra packages (rare for vLLM jobs).
-# See reson_docs/docs/inference/vllm/llmconfig.md §1 check 4.
+# See ../README.md "Requirements policy".

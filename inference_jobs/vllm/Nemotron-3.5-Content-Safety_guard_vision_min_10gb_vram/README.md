@@ -8,8 +8,7 @@ plain text**, with a reasoning trace on request. One engine, model id
 engine as a sidecar.
 
 Shared vLLM contract & defaults: [../README.md](../README.md).
-Guard models compared (what each one catches, where it sits in the stack):
-`reson_docs/docs/inference/models/safety.md`.
+Other guard models: the Guardrails row in [../README.md](../README.md#small-over-big-ladder).
 
 ## ⚠️ License: read before selling
 
@@ -17,10 +16,9 @@ Guard models compared (what each one catches, where it sits in the stack):
 [OpenMDW License Agreement 1.1](https://raw.githubusercontent.com/OpenMDW/OpenMDW/refs/heads/main/1.1/LICENSE.OpenMDW-1.1),
 the [Gemma Terms of Use](https://ai.google.dev/gemma/terms) and the Gemma
 Prohibited Use Policy (the base model is Gemma 3). Commercial use is
-allowed; the prohibited-use list binds the customer. Same handling as the
-`chat-gemma3-27b` row in `reson_docs/docs/inference/vllm/llms-catalog.md`:
-hand the terms to the customer's legal before the endpoint goes live. The
-training dataset is published (`nvidia/Nemotron-3.5-Content-Safety-Dataset`).
+allowed; the prohibited-use list binds the customer. Same handling as any
+Gemma 3 endpoint: hand the terms to the customer's legal before the
+endpoint goes live. The training dataset is published (`nvidia/Nemotron-3.5-Content-Safety-Dataset`).
 
 ## Resources
 

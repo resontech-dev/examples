@@ -5,14 +5,13 @@
 # context, Apache-2.0. Configured TP=1 for ONE card of 80 GB or more
 # (H100 / A100-80G / H200 / RTX PRO 6000 96 GB). Multi-card shapes are
 # listed below; every number here is an estimate, nothing has booted yet.
-# Phase-0 model for the Nick pilot (reson_docs clients/Nick).
 #
 # Shapes (yaml + serve_module.py must agree):
 #   TP=1  1× 80 GB+          as shipped
 #   TP=2  2× 48 GB (L40S, RTX PRO 5000) or 2× 80 GB
 #         → vllm.tensor_parallel_size: 2, cluster.gpus_per_worker: 2,
 #           tensor_parallel_size=2 + the placement_group_config block
-#   TP=4  4× 24 GB (the llms-catalog `chat-gptoss-120b` 4x24gb tier,
+#   TP=4  4× 24 GB (the 4x24gb tier,
 #         ~16 GB weights per card)
 #         → the same three edits with 4
 

@@ -19,8 +19,7 @@ Everything is selected per request through `chat_template_kwargs`
     custom_policy="…"                   your policy instead of the taxonomy
 
 Do NOT put these in `default_chat_template_kwargs` here: Ray 2.55.1 turns
-that into a Namespace and every chat request fails with a TypeError
-(reson_docs inference/vllm/known_issues.md).
+that into a Namespace and every chat request fails with a TypeError.
 
 Memory (estimate, 16 GB card): 16×0.85 = 13.6 − 8.6 weights − ~0.9
 vision tower / activations ≈ 4 GB KV. Gemma 3 keeps full KV only on its

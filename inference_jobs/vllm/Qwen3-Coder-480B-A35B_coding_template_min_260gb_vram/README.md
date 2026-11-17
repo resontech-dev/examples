@@ -1,7 +1,7 @@
 # ⚠️ TEMPLATE — Qwen3-Coder-480B-A35B (AWQ), TP=4 frontier coding
 
 **Not deployable on the current fleet.** This is the ready-to-test config
-for the frontier coding agent (`code-qwen3-coder-480b`, Apache-2.0):
+for the frontier coding agent (Apache-2.0):
 480B MoE / 35B active, the open-weights answer to Claude/GPT coding API
 tiers. It ships now so the day a 4×80 GB host joins the fleet, testing
 starts immediately — every number inside is a planning estimate.
@@ -43,6 +43,6 @@ python predict.py --tools        # hermes tool calling is enabled
 ## Notes
 
 - MoE 35B-active decode ≈ 35B-class token latency with a 480B brain —
-  plan capacity around total VRAM, not FLOPs (catalog 5-year bet #1).
+  plan capacity around total VRAM, not FLOPs.
 - Official FP8 (~490 GB) is the quality-ceiling alternative: 8×80 GB,
   TP=8 — same folder shape, different numbers.

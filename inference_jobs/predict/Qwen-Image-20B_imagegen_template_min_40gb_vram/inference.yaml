@@ -1,7 +1,7 @@
 # ⚠️ TEMPLATE — Qwen-Image (20B MMDiT) image generation (predictor mode).
 #
 # Best open text-rendering in images (posters, UI mockups, signage) —
-# `img-qwen-image`, Apache-2.0. NOT deployable on the consumer fleet:
+# Apache-2.0. NOT deployable on the consumer fleet:
 # the 20B MMDiT pipeline wants a 40–80 GB card (frontier tier). This
 # template exists so testing starts the day such a host lands; numbers
 # are planning estimates, UNVALIDATED.

@@ -2,7 +2,7 @@
 
 Speech-to-text at the lowest cost: same encoder as large-v3,
 decoder pruned 32 → 4 layers, **5–8× faster decode at ~1.6 GB**, MIT.
-Rung 1 of `reson_docs/docs/inference/using-small-over-big-models/speech-to-text.md`.
+Rung 1 of the speech-to-text [small-over-big ladder](../README.md#small-over-big-ladder).
 English and Italian: use it as is. Ukrainian: measure WER against
 `../whisper-large-v3_asr_min_6gb_vram` on an hour of your own calls first —
 turbo loses more on less common languages, and that is where fine-tuning

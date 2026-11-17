@@ -1,6 +1,6 @@
 # Devstral Small 24B (AWQ) — agentic coding (vLLM)
 
-Mistral's **agentic SWE specialist** (`code-devstral-24b`, Apache-2.0):
+Mistral's **agentic SWE specialist** (Apache-2.0):
 built for issue→patch loops on private repos (OpenHands / SWE-bench
 lineage). Strong at multi-step agent work; the Qwen coders beat it on raw
 completion. One 24 GB worker, AWQ 4-bit.

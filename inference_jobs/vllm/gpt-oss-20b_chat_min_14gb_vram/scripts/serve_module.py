@@ -2,8 +2,8 @@
 
 21B MoE with 3.6B active parameters, shipped natively in MXFP4 (~13 GB).
 OpenAI-lineage general assistant: strong reasoning with an adjustable
-effort knob, robust alignment, 128k native context. The default business
-assistant in the catalog (`chat-gptoss-20b`, priority v1).
+effort knob, robust alignment, 128k native context. A solid default
+business assistant.
 
 Exports `app`; the platform detects `engine: vllm_openai` and points
 serve_config's import_path at `serve_module:app`.

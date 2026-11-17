@@ -3,8 +3,8 @@
 Text-to-speech at the lowest cost, and today the only
 Apache/MIT-clean way to synthesize **Ukrainian**: ONNX voices, ~2–5× realtime
 per CPU core, espeak-ng embedded in the wheel. Quality is working-grade
-(IVR prompts, status read-outs), not studio. Rung 1 of
-`reson_docs/docs/inference/using-small-over-big-models/voice.md`.
+(IVR prompts, status read-outs), not studio. Rung 1 of the
+[small-over-big ladder](../../vllm/README.md#small-over-big-ladder).
 
 ## Resources
 

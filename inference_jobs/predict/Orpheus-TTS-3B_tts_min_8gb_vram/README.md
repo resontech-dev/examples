@@ -1,6 +1,6 @@
 # Orpheus-TTS 3B — expressive text-to-speech (predictor mode)
 
-The TTS **quality tier** (`tts-orpheus-3b`, Apache-2.0): a Llama-based 3B
+The TTS **quality tier** (Apache-2.0): a Llama-based 3B
 that generates emotive 24 kHz speech — inline emotion tags (`<laugh>`,
 `<sigh>`, `<gasp>`) work mid-sentence. 8 stock voices. License-clean, which
 in TTS is itself the selling point.

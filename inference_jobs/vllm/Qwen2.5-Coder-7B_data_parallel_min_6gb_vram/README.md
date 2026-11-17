@@ -9,7 +9,7 @@ and the one that exercises the platform's own scaling story
 
 Shared vLLM contract (yaml ↔ Python sync rule, requirements policy, auth,
 OpenAI routes): see [../README.md](../README.md). Full knob reference:
-`reson_docs/docs/inference/vllm/llmconfig.md`.
+[../../docs/openai_compatible_llm_flow.md](../../docs/openai_compatible_llm_flow.md).
 
 ## Resources
 
@@ -17,7 +17,7 @@ OpenAI routes): see [../README.md](../README.md). Full knob reference:
 |---|---|---|---|---|
 | 6 → 8 GB | 4 | 16 GB | ~21 GB (image 15 + 1.3×4.9 GB checkpoint) | 2 (one per replica) |
 
-Suggested GPUs (fleet matrix, `dc-hardware-requirements.md §2`): any 12 GB+
+Suggested GPUs: any 12 GB+
 card — RTX 5070 / 4070 / 3060-12G, T4 16 GB, L4. On 16–24 GB cards raise
 `max_model_len` and `max_num_seqs` — the KV pool is the only thing that grows.
 

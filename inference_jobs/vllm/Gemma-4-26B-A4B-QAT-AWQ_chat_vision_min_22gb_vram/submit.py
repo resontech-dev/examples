@@ -5,7 +5,7 @@ Ships this folder's ``inference.yaml`` (one file) and ``scripts/``
 (recursively) via explicit keyword paths. No weights upload: vLLM pulls
 the 17.2 GB checkpoint `cyankiwi/gemma-4-26B-A4B-it-qat-AWQ-INT4` from HF Hub on first boot.
 
-BLOCKED on the pinned image: needs vLLM >= 0.19 (ray-llm image re-pin, reson_docs spec item J). Written ahead; nothing has booted.
+BLOCKED on the pinned image: needs vLLM >= 0.19 (waits for the ray-llm image re-pin). Written ahead; nothing has booted.
 This size: vLLM >= 0.25.0.
 
 Run

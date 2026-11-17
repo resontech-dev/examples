@@ -1,6 +1,6 @@
 # FLUX.1-schnell — image generation (predictor mode).
 #
-# Best-quality Apache-clean image generation (`img-flux-schnell`).
+# Best-quality Apache-clean image generation.
 # 4-step distilled model: ~1–2 s/image on a big card, ~$0.0002 compute vs
 # ~$0.04/image API pricing.
 #

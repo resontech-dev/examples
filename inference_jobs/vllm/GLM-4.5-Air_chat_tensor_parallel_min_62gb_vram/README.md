@@ -1,6 +1,6 @@
 # GLM-4.5-Air 106B-A12B (AWQ) — premium chat, TP=4 (vLLM)
 
-The premium agentic/tool-use tier (`chat-glm45-air`, **MIT**): 106B MoE
+The premium agentic/tool-use tier (**MIT**): 106B MoE
 with 12B active — big-model intelligence at small-model decode cost,
 agentic benchmarks in genuine Sonnet-4 territory. AWQ ~60 GB sharded
 **TP=4 across 4×24 GB GPUs in one machine**.

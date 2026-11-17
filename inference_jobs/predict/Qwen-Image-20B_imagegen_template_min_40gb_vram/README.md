@@ -1,7 +1,7 @@
 # ⚠️ TEMPLATE — Qwen-Image (20B MMDiT) image generation
 
 **Not deployable on the current consumer fleet.** The scale-up image
-generator (`img-qwen-image`, Apache-2.0): a 20B MMDiT with the **best
+generator (Apache-2.0): a 20B MMDiT with the **best
 open text-rendering in images** — posters, UI mockups, signage with real
 typography. Ships now so testing starts the day a frontier host (40–80 GB)
 joins the fleet; everything inside is a planning estimate.

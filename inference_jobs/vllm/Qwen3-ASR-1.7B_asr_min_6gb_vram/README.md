@@ -4,13 +4,12 @@ Alibaba's 1.7B audio-language model (2026, Apache-2.0): a Qwen3 decoder
 behind an audio encoder, ~4 GB bf16. Language identification plus
 transcription for 30 languages and 22 Chinese dialects, singing voice and
 songs with background music. The rung between Whisper large-v3-turbo and
-Whisper large-v3 in
-`reson_docs/docs/inference/using-small-over-big-models/speech-to-text.md`:
+Whisper large-v3 on the [small-over-big ladder](../README.md#small-over-big-ladder):
 about twice the weights of turbo, and card numbers above large-v3.
 
 Card numbers (vendor, Open ASR leaderboard WER): 4.94 for Qwen3-ASR-1.7B
-against 7.44 for Whisper large-v3. Not ours; our measured numbers live in
-`reson_docs/docs/benchmarks/inference/` once this job has run.
+against 7.44 for Whisper large-v3. Not ours; this job has not been
+measured yet.
 
 **Ukrainian is not a supported language of this model.** The card lists
 zh, en, yue, ar, de, fr, es, pt, id, it, ko, ru, th, vi, ja, tr, hi, ms, nl,

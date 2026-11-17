@@ -1,6 +1,6 @@
 # Gemma 4 26B A4B (QAT, AWQ INT4): text + image on one 24 GB card (vLLM)
 
-> **BLOCKED on the pinned image: needs vLLM >= 0.19 (ray-llm image re-pin, reson_docs spec item J). Written ahead; nothing has booted.**
+> **BLOCKED on the pinned image: needs vLLM >= 0.19 (waits for the ray-llm image re-pin). Written ahead; nothing has booted.**
 > This size needs vLLM >= 0.25.0 per the vLLM recipe (Gemma 4 MoE; the RTX 5090 config there runs Red Hat's FP8 build).
 
 Google's Gemma 4 26B A4B (2026), Apache-2.0: a Mixture-of-Experts model with
@@ -96,7 +96,7 @@ python predict.py --tools                           # tool-calling round trip
 
 ## VERIFY before listing
 
-1. Image re-pin to vLLM >= 0.25.0 (spec item J): the recipe's floor for this MoE.
+1. Image re-pin to vLLM >= 0.25.0: the recipe's floor for this MoE.
 2. The community checkpoint: hash-check, quality set against `RedHatAI/gemma-4-26B-A4B-it-FP8-dynamic`.
 3. Marlin MoE kernels for the W4A16 experts on the target card (Ampere 3090 included).
 4. The vendored `tool_chat_template_gemma4.jinja` reaches the replica and matches the image's vLLM version.

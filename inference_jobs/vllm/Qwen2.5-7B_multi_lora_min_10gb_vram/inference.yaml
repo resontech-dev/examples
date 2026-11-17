@@ -1,6 +1,6 @@
 # Qwen2.5-7B + N customer LoRA adapters via vLLM — one 12 GB worker.
 #
-# The fine-tuned-business-model serving shape (`lora-qwen25-7b`, v1):
+# The fine-tuned-business-model serving shape:
 # ONE base model in VRAM, 8–16 customer adapters loaded on demand from
 # S3, selected per request via model="qwen-7b:<adapter>". Software-margin
 # economics: 20 fine-tunes ≠ 20 GPUs.

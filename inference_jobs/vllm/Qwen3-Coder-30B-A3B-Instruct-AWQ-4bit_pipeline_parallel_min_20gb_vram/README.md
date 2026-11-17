@@ -1,12 +1,10 @@
 # Qwen3-Coder-30B with pipeline parallelism (vLLM)
 
 One replica split into **2 pipeline stages across 2 single-GPU
-workers** — the Stage-0 shape from
-`reson_docs/docs/inference/vllm/plan16-jul-2026.md`. Use PP when the
-model doesn't fit one GPU and your GPUs live in **different machines**
-(the standard shape of our worker fleet).
+workers**. Use PP when the model doesn't fit one GPU and your GPUs live
+in **different machines** (the standard shape of our worker fleet).
 
-Full knob reference: `reson_docs/docs/inference/vllm/llmconfig.md`.
+Full knob reference: [../../docs/openai_compatible_llm_flow.md](../../docs/openai_compatible_llm_flow.md).
 Shared vLLM contract & defaults policy: [../README.md](../README.md).
 
 ## Resources
@@ -15,7 +13,7 @@ Shared vLLM contract & defaults policy: [../README.md](../README.md).
 |---|---|---|---|---|
 | 20 → 24 GB | 4 | 48 GB | ~40 GB (image 15 + 1.3×18 GB checkpoint — **each** PP worker downloads the full snapshot) | 2 (one per stage) |
 
-Suggested GPUs (fleet matrix, `dc-hardware-requirements.md §2`): 2× 12 GB
+Suggested GPUs: 2× 12 GB
 cards (RTX 5070 / 4070 / 3060-12G) as built here; a single 24 GB card
 (RTX 3090/4090, L4) runs it with PP=1 and a bigger KV pool; 2×24 GB in one
 box → prefer TP=2 (`STRICT_PACK`) for lower latency.

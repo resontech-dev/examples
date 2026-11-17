@@ -1,7 +1,6 @@
 # Qwen2.5-VL-7B (fp16) — document vision (vLLM)
 
-The **document-understanding workhorse** (`vision-qwen25-vl-7b`, priority
-v1, Apache-2.0): invoices, scans, receipts, screenshots, dashboards →
+The **document-understanding workhorse** (Apache-2.0): invoices, scans, receipts, screenshots, dashboards →
 structured JSON. A 24 GB worker processes tens of thousands of pages/day
 flat-rate vs Azure Doc Intelligence ≈ $1.5/1k pages.
 
