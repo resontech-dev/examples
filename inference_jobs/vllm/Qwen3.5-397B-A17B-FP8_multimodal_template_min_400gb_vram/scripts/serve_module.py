@@ -91,8 +91,10 @@ llm_config = LLMConfig(
         # ── Reasoning and tool calling (Qwen3.5 family, from the card) ──
         # Thinking is on unless the request sends
         # chat_template_kwargs={"enable_thinking": False}, as predict.py does.
-        # Don't set `default_chat_template_kwargs` here: Ray 2.55.1 turns it
-        # into a Namespace and every chat request then fails with a TypeError.
+        # `default_chat_template_kwargs` breaks Ray 2.55.1 (it becomes a
+        # Namespace and every chat request fails with a TypeError). Ray 2.58+
+        # fixed it (#65146); on the 2.60 image this line works:
+        # default_chat_template_kwargs={"enable_thinking": False},
         reasoning_parser="qwen3",
         enable_auto_tool_choice=True,
         tool_call_parser="qwen3_coder",

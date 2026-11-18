@@ -109,8 +109,13 @@ chat = LLMConfig(
         # YaRN — stretch Qwen3-8B's 32k window to ~131k on a bigger card.
         # 24 GB+ tier lever only: 128k of fp8 KV ≈ 9.5 GB for ONE
         # conversation — this bundle's 0.32 share can't afford it.
+        # Ray 2.55.1 (transformers 4.57):
         # hf_overrides={"rope_scaling": {"rope_type": "yarn", "factor": 4.0,
         #                                "original_max_position_embeddings": 32768}},
+        # Ray 2.60 (transformers 5.17 renamed the key and wants rope_theta):
+        # hf_overrides={"rope_parameters": {"rope_type": "yarn", "factor": 4.0,
+        #                                   "original_max_position_embeddings": 32768,
+        #                                   "rope_theta": 1000000}},
     ),
     **card_share(0.32),
 )

@@ -70,10 +70,11 @@ llm_config = LLMConfig(
         dtype="auto",
 
         # ── Tool calling (agentic editors: Aider, Cline, Continue…) ──
-        # Qwen chat/coder models speak hermes-style tool calls; this is
-        # what turns the endpoint into a usable agent backend.
+        # Qwen3-Coder writes tool calls as XML, not hermes JSON: with
+        # "hermes" the calls arrive as plain text. The model card sets
+        # qwen3_coder; try qwen3_xml if long inputs produce garbage.
         enable_auto_tool_choice=True,
-        tool_call_parser="hermes",
+        tool_call_parser="qwen3_coder",
 
         # No engine-level `api_key` on purpose. The platform edge (nginx + the
         # per-job predict key) is the auth boundary, and

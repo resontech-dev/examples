@@ -78,17 +78,25 @@ llm_config = LLMConfig(
 
         # Thinking: on unless the request sends
         # chat_template_kwargs={"enable_thinking": False}, as predict.py does.
-        # Don't set `default_chat_template_kwargs` here: Ray 2.55.1 turns it
-        # into a Namespace and every chat request then fails with a TypeError.
+        # `default_chat_template_kwargs` breaks Ray 2.55.1 (it becomes a
+        # Namespace and every chat request fails with a TypeError). Ray 2.58+
+        # fixed it (#65146); on the 2.60 image this line works:
+        # default_chat_template_kwargs={"enable_thinking": False},
         reasoning_parser="qwen3",
 
-        # Speculative decoding with the model's own MTP head: the model card
-        # lists `qwen3_next_mtp`. VERIFY on vLLM 0.18.0 (boot without it
-        # first, then add it and compare tok/s):
-        # speculative_config={"method": "qwen3_next_mtp", "num_speculative_tokens": 2},
+        # Speculative decoding with the model's own MTP head. "mtp" works on
+        # vLLM 0.18 and 0.29 ("qwen3_next_mtp" is a deprecated alias in 0.29).
+        # Boot without it first, then add it and compare tok/s; on 0.29 turn
+        # prefix caching off in the same edit (vLLM #53912):
+        # speculative_config={"method": "mtp", "num_speculative_tokens": 2},
 
-        # Deliberately NOT set on this hybrid model (add one at a time,
-        # verify output): kv_cache_dtype="fp8", enable_prefix_caching=True.
+        # Prefix caching stays OFF on this hybrid model until an output check
+        # on the new image. Set explicitly: vLLM 0.29 (Ray 2.60) turns it on
+        # by default for hybrids, 0.18 treated it as experimental. Agents
+        # resend the whole history, so test it first on 2.60. fp8 KV stays
+        # off too: this checkpoint ships no KV scales.
+        enable_prefix_caching=False,
+        # kv_cache_dtype="fp8",
         # If boot dies with a `causal_conv1d_update` assertion:
         # max_cudagraph_capture_size=256,
     ),

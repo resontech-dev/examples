@@ -1,8 +1,8 @@
 """
 Smoke-test Gemma 4 26B A4B (QAT, AWQ INT4): text, image, tool calling, thinking.
 
-BLOCKED on the pinned image (vLLM 0.18.0): run this after the job boots on
-an image with the vLLM version named in README.md.
+Needs the Ray 2.60.0 image (vLLM 0.29.0): run this after the job boots on it
+(README.md).
 
 Run
 ---
@@ -151,8 +151,8 @@ def _extra(think: bool) -> dict:
     """Per-request knobs. Card sampling: temperature 1.0, top_p 0.95, top_k 64.
 
     Thinking is switched per request through the chat template; the server sets
-    no default (Ray 2.55.1 breaks `default_chat_template_kwargs`, and the newer
-    image this job waits for should be checked before relying on it).
+    no default, so the model's own default applies: thinking off.
+    (`default_chat_template_kwargs` works from Ray 2.58 if a default is wanted.)
     """
     return {"extra_body": {"top_k": 64, "chat_template_kwargs": {"enable_thinking": think}}}
 

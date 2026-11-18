@@ -1,0 +1,33 @@
+# Qwen3.6-27B (official FP8) via vLLM: text + vision assistant for agents.
+#
+# NEEDS the Ray 2.60.0 image (vLLM 0.29.0, CUDA 13, driver R580+); prod stays
+# on Ray 2.55.1 until the switch. Written 2026-11-18; nothing has booted.
+#
+#   "assistant" -> Qwen/Qwen3.6-27B-FP8   /v1/chat/completions (text, images, tool calling)
+#
+# 30.9 GB checkpoint -> one 48 GB card as configured, one 96 GB card for
+# 262k context, or 2x24 GB with TP=2. Apache-2.0.
+
+engine: vllm_openai
+
+model:
+  module: "serve_module"
+
+vllm:
+  tensor_parallel_size: 1     # 2 for 2x24 GB (and gpus_per_worker: 2, engine_kwargs too)
+  pipeline_parallel_size: 1
+
+cluster:
+  num_workers: 1
+  device: "gpu"
+  gpus_per_worker: 1          # 2 for the TP=2 shape: both GPUs in ONE worker
+  cpus_per_worker: 8
+  min_vram_gb_per_worker: 40  # 30.9 GB weights + activations + KV for one 64k chat
+  min_compute_capability: 8.9 # native FP8 (Ada, Hopper, Blackwell)
+  min_driver_version: "580"   # CUDA 13 in the Ray 2.60 image
+  min_disk_gb_per_worker: 70  # image + 1.3 x 30.9 GB checkpoint
+  # Advisory fields: dashboard/accounting only.
+  mode: "data_parallel"
+  max_ongoing_requests: 16
+
+# No `requirements:`: the prebuilt ray-llm image owns the stack.

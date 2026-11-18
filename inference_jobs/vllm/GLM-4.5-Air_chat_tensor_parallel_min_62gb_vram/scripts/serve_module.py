@@ -45,12 +45,11 @@ llm_config = LLMConfig(
         gpu_memory_utilization=0.90,
         dtype="auto",
 
-        # ── Tool calling — VERIFY before enabling ──
-        # GLM-4.5 has a dedicated parser only in newer vLLM builds; check
-        # the pinned image first (wrong name = crash at engine boot):
-        #   docker run --rm <ray-llm-image> vllm serve --help | grep -A3 tool-call-parser
-        # enable_auto_tool_choice=True,
-        # tool_call_parser="glm45",
+        # ── Tool calling ──
+        # `glm45` is in vLLM 0.18.0 and 0.29.0 (checked in source,
+        # 2026-11-18; 0.29 serves it with the GLM-4.7 parser code).
+        enable_auto_tool_choice=True,
+        tool_call_parser="glm45",
     ),
 
     placement_group_config=dict(

@@ -97,10 +97,10 @@ chat = LLMConfig(
         enable_prefix_caching=True,
         enable_chunked_prefill=True,
         dtype="auto",
-        # Tool calling: harmony is native to gpt-oss — VERIFY parser flag
-        # before enabling (see ../README.md "Tool calling"):
-        # enable_auto_tool_choice=True,
-        # tool_call_parser="openai",
+        # Tool calling: the `openai` parser turns gpt-oss harmony calls into
+        # `tool_calls`; present in vLLM 0.18.0 and 0.29.0.
+        enable_auto_tool_choice=True,
+        tool_call_parser="openai",
     ),
     **card_share(0.60),
 )

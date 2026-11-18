@@ -50,8 +50,10 @@ Measure on your own workload before quoting any of it.
    card first: same kernel, same answer, no rental needed. If it fails
    with an unsupported-quantization error for FusedMoE, use the FP8
    checkpoint here.
-3. **MTP speculative decoding.** The card lists `qwen3_next_mtp`; the block
-   ships commented out. Boot without it, then add it and compare tok/s.
+3. **MTP speculative decoding.** `{"method": "mtp"}` (the card's
+   `qwen3_next_mtp` is a deprecated alias on vLLM 0.29); the block ships
+   commented out. Boot without it, then add it and compare tok/s. On the
+   Ray 2.60 image turn prefix caching off in the same edit (vLLM #53912).
 4. **Tool parser.** `qwen3_coder` is the official recipe; community reports
    `qwen3_xml` holds up better on long agentic runs.
 

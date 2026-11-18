@@ -1,0 +1,32 @@
+# Qwen3.6-35B-A3B (NVIDIA NVFP4) via vLLM: fast MoE text + vision assistant.
+#
+# NEEDS the Ray 2.60.0 image (vLLM 0.29.0, CUDA 13, driver R580+) and a
+# Blackwell card (NVFP4). Prod stays on Ray 2.55.1 until the switch.
+# Written 2026-11-18; nothing has booted.
+#
+#   "assistant" -> nvidia/Qwen3.6-35B-A3B-NVFP4   /v1/chat/completions (text, images, tool calling)
+#
+# 23.4 GB checkpoint -> one RTX 5090 32 GB as configured. Apache-2.0.
+
+engine: vllm_openai
+
+model:
+  module: "serve_module"
+
+vllm:
+  tensor_parallel_size: 1
+  pipeline_parallel_size: 1
+
+cluster:
+  num_workers: 1
+  device: "gpu"
+  gpus_per_worker: 1
+  cpus_per_worker: 8
+  min_vram_gb_per_worker: 28   # 23.4 GB weights + activations + KV
+  min_compute_capability: 10.0 # Blackwell: NVFP4 (B200 10.0, RTX 50xx / RTX PRO 12.0)
+  min_driver_version: "580"    # CUDA 13 in the Ray 2.60 image
+  # Advisory fields: dashboard/accounting only.
+  mode: "data_parallel"
+  max_ongoing_requests: 16
+
+# No `requirements:`: the prebuilt ray-llm image owns the stack.

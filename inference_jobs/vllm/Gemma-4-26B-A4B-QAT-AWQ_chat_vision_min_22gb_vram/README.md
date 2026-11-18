@@ -1,6 +1,6 @@
 # Gemma 4 26B A4B (QAT, AWQ INT4): text + image on one 24 GB card (vLLM)
 
-> **BLOCKED on the pinned image: needs vLLM >= 0.19 (waits for the ray-llm image re-pin). Written ahead; nothing has booted.**
+> **NEEDS the Ray 2.60.0 image (vLLM 0.29.0, CUDA 13, driver R580+); prod runs Ray 2.55.1 / vLLM 0.18.0 until the switch. Written ahead; nothing has booted.**
 > This size needs vLLM >= 0.25.0 per the vLLM recipe (Gemma 4 MoE; the RTX 5090 config there runs Red Hat's FP8 build).
 
 Google's Gemma 4 26B A4B (2026), Apache-2.0: a Mixture-of-Experts model with
@@ -72,7 +72,7 @@ prompts before using it for Ukrainian work.
   on the budget (default 280); raise it for OCR, lower it for classification.
 - Auth as every job here: the key as both `Authorization: Bearer` and `X-API-Key`.
 
-## Deploy & test (after the image re-pin)
+## Deploy & test (on the Ray 2.60 image)
 
 ```bash
 pip install -U "resontech>=0.2.1" openai python-dotenv   # Python 3.11+
@@ -96,10 +96,10 @@ python predict.py --tools                           # tool-calling round trip
 
 ## VERIFY before listing
 
-1. Image re-pin to vLLM >= 0.25.0: the recipe's floor for this MoE.
+1. The Ray 2.60.0 image on head and worker (vLLM 0.29.0); the recipe's floor for this MoE is 0.25.0.
 2. The community checkpoint: hash-check, quality set against `RedHatAI/gemma-4-26B-A4B-it-FP8-dynamic`.
 3. Marlin MoE kernels for the W4A16 experts on the target card (Ampere 3090 included).
-4. The vendored `tool_chat_template_gemma4.jinja` reaches the replica and matches the image's vLLM version.
+4. The vendored `tool_chat_template_gemma4.jinja` reaches the replica and matches the image's vLLM version (identical to v0.29.0, checked 2026-11-18).
 5. KV numbers above are estimates; read the KV pool size from the boot log.
 
 License: **Apache-2.0** (the first Gemma generation without the Gemma Terms of Use).

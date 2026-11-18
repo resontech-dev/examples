@@ -33,11 +33,10 @@ Or paste `scripts/serve_module.py` + `inference.yaml` into
 
 ## Tool calling / agentic use
 
-This model's *raison d'être* is agentic tool use — but the dedicated
-`glm45` parser exists only in newer vLLM builds, so the flags ship
-**commented out**. Run the parser check from [../README.md](../README.md),
-then uncomment `enable_auto_tool_choice` + `tool_call_parser="glm45"`.
-`python predict.py --tools` smoke-tests the round trip once enabled.
+This model's *raison d'être* is agentic tool use.
+`enable_auto_tool_choice` + `tool_call_parser="glm45"` are on: the parser
+exists in vLLM 0.18.0 and 0.29.0 (checked in source, 2026-11-18).
+`python predict.py --tools` smoke-tests the round trip.
 
 ## What to change
 

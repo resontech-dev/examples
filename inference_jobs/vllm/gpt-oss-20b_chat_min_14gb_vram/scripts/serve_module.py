@@ -46,13 +46,13 @@ llm_config = LLMConfig(
         gpu_memory_utilization=0.92,     # drop to 0.85 if the card drives a display
         dtype="auto",
 
-        # ── Tool calling — VERIFY before enabling ──
-        # gpt-oss speaks its own `harmony` format; vLLM handles it natively,
-        # but whether the pinned image wants an explicit parser flag must be
-        # checked first (wrong parser name = crash at engine boot):
-        #   docker run --rm <ray-llm-image> vllm serve --help | grep -A3 tool-call-parser
-        # enable_auto_tool_choice=True,
-        # tool_call_parser="openai",     # ← only if the help output lists it
+        # ── Tool calling ──
+        # gpt-oss writes calls in its `harmony` format; the `openai` parser
+        # turns them into `tool_calls`. Present in vLLM 0.18.0 and 0.29.0
+        # (checked in source, 2026-11-18). On 0.29 a request with tools runs
+        # under a strict tool-call grammar by default.
+        enable_auto_tool_choice=True,
+        tool_call_parser="openai",
 
         # Reasoning effort: gpt-oss reads it from the system prompt
         # ("Reasoning: low|medium|high") — a client-side knob, not an

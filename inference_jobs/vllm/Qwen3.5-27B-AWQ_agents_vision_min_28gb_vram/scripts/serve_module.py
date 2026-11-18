@@ -11,8 +11,9 @@ Apache-2.0, vLLM ≥ 0.16). Alternatives:
     "Qwen/Qwen3.5-27B"       official bf16, ~54 GB → 2×32 GB TP=2 or 80 GB
 
 Budget on a 32 GB card at 0.90 → 28.8 GB: ~22.5 GB weights + ~1.5 GB
-activations/vision → ~5 GB KV ≈ 150k cached tokens (hybrid KV ≈ 32 KB
-per token bf16). 32k × 8 seqs is comfortable. Sidecars on the same card:
+activations/vision → ~5 GB KV ≈ 80k cached tokens (hybrid KV ≈ 64 KB
+per token in bf16: 16 of 64 layers keep KV). 32k × 8 seqs queue rather
+than crash; two or three full 32k chats run at once. Sidecars on the same card:
 assistant 0.78 + embed 0.06 + rerank 0.06 (copy the two LLMConfigs from
 the Qwen3-8B bundle) — chat KV then drops to ~1.5 GB.
 
@@ -64,12 +65,19 @@ llm_config = LLMConfig(
 
         # ── Thinking ── on unless the request sends
         # chat_template_kwargs={"enable_thinking": False}, as predict.py does.
-        # Don't set `default_chat_template_kwargs` here: Ray 2.55.1 turns it into a
-        # Namespace and every chat request then fails with a TypeError.
+        # `default_chat_template_kwargs` breaks Ray 2.55.1 (it becomes a
+        # Namespace and every chat request fails with a TypeError). Ray 2.58+
+        # fixed it (#65146); on the 2.60 image this line works:
+        # default_chat_template_kwargs={"enable_thinking": False},
         reasoning_parser="qwen3",
 
-        # Deliberately NOT set on this hybrid model (add one at a time,
-        # verify output): kv_cache_dtype="fp8", enable_prefix_caching=True.
+        # Prefix caching stays OFF on this hybrid model until an output check
+        # on the new image. Set explicitly: vLLM 0.29 (Ray 2.60) turns it on
+        # by default for hybrids, 0.18 treated it as experimental. Agents
+        # resend the whole history, so test it first on 2.60. fp8 KV stays
+        # off too: this checkpoint ships no KV scales.
+        enable_prefix_caching=False,
+        # kv_cache_dtype="fp8",
         # If boot dies with a `causal_conv1d_update` assertion:
         # max_cudagraph_capture_size=256,
     ),

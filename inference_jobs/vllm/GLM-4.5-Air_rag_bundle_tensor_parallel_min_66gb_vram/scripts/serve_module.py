@@ -97,10 +97,9 @@ chat = LLMConfig(
         enable_prefix_caching=True,
         enable_chunked_prefill=True,
         dtype="auto",
-        # Tool calling — VERIFY the glm45 parser on the pinned image first
-        # (see ../README.md "Tool calling"):
-        # enable_auto_tool_choice=True,
-        # tool_call_parser="glm45",
+        # Tool calling: `glm45` is in vLLM 0.18.0 and 0.29.0.
+        enable_auto_tool_choice=True,
+        tool_call_parser="glm45",
     ),
     **card_share(0.70, gpus=4),
 )

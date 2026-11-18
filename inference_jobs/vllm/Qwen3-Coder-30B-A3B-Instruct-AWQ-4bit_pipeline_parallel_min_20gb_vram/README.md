@@ -20,10 +20,12 @@ box → prefer TP=2 (`STRICT_PACK`) for lower latency.
 
 ## Agentic use / tool calling
 
-`enable_auto_tool_choice=True` + `tool_call_parser="hermes"` are on in
-`engine_kwargs` — Qwen coder models speak hermes-style tool calls, so
-Aider / Cline / Continue / OpenHands function calling works against this
-endpoint out of the box (`python predict.py --tools` for a smoke test).
+`enable_auto_tool_choice=True` + `tool_call_parser="qwen3_coder"` are on in
+`engine_kwargs`. Qwen3-Coder writes tool calls as XML; with `hermes` they
+arrive as plain text. With the right parser Aider / Cline / Continue /
+OpenHands function calling works against this endpoint
+(`python predict.py --tools` for a smoke test). If long inputs produce
+garbage, try `qwen3_xml`.
 
 ## How vLLM examples differ from the predictor examples
 

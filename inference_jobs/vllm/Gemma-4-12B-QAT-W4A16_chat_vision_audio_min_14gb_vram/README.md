@@ -1,6 +1,6 @@
 # Gemma 4 12B (QAT W4A16): text + image + audio on one 16 GB card (vLLM)
 
-> **BLOCKED on the pinned image: needs vLLM >= 0.19 (waits for the ray-llm image re-pin). Written ahead; nothing has booted.**
+> **NEEDS the Ray 2.60.0 image (vLLM 0.29.0, CUDA 13, driver R580+); prod runs Ray 2.55.1 / vLLM 0.18.0 until the switch. Written ahead; nothing has booted.**
 > This size needs vLLM >= 0.23.0 per the vLLM recipe (the encoder-free 12B Unified class; the recipe names the `vllm/vllm-openai:gemma4-unified` image).
 
 Google's Gemma 4 12B Unified (2026), Apache-2.0: an encoder-free model that
@@ -57,12 +57,12 @@ prompts before using it for Ukrainian work.
 - **Images** go before the text. Each image costs 70 to 1,120 tokens depending
   on the budget (default 280); raise it for OCR, lower it for classification.
 - **Audio** (this size only among the 12B+ models): an `input_audio` part after
-  the text, 30 s maximum per clip. The image needs vLLM's audio extras
-  (`vllm[audio]`); VERIFY they are in the new image. For long recordings use the
-  Whisper jobs.
+  the text, 30 s maximum per clip. vLLM 0.29 parses `input_audio`, and the Ray
+  2.60 lock carries vLLM's audio extras (av, scipy, soundfile, soxr; checked
+  2026-11-18). For long recordings use the Whisper jobs.
 - Auth as every job here: the key as both `Authorization: Bearer` and `X-API-Key`.
 
-## Deploy & test (after the image re-pin)
+## Deploy & test (on the Ray 2.60 image)
 
 ```bash
 pip install -U "resontech>=0.2.1" openai python-dotenv   # Python 3.11+
@@ -88,10 +88,10 @@ python predict.py --tools                           # tool-calling round trip
 
 ## VERIFY before listing
 
-1. Image re-pin to vLLM >= 0.23.0; the 12B Unified class is the newest of the three.
-2. The vendored `tool_chat_template_gemma4.jinja` reaches the replica and matches the image's vLLM version.
-3. `vllm[audio]` extras present in the image; `python predict.py --audio` returns a transcript.
-4. Ray accepts `default_chat_template_kwargs` on the new image before anyone sets a thinking default.
+1. The Ray 2.60.0 image on head and worker (vLLM 0.29.0); this size needs vLLM >= 0.23.0, the 12B Unified class is the newest of the three.
+2. The vendored `tool_chat_template_gemma4.jinja` reaches the replica and matches the image's vLLM version (identical to v0.29.0, checked 2026-11-18).
+3. `python predict.py --audio` returns a transcript (the audio extras are in the 2.60 lock).
+4. `default_chat_template_kwargs` is fixed from Ray 2.58 (#65146); boot-test it before setting a thinking default.
 5. KV numbers above are estimates; read the KV pool size from the boot log.
 
 License: **Apache-2.0** (the first Gemma generation without the Gemma Terms of Use).

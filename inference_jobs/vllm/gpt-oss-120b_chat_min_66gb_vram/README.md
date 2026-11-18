@@ -46,7 +46,7 @@ cp .env.example .env        # RESON_API_KEY (rsk_…) + S3 keys
 python submit.py            # prints RESON_INFERENCE_URL + RESON_INFERENCE_API_KEY
 python predict.py "Compare two experimental designs for …"
 REASONING=low python predict.py "…"   # faster, shallower
-python predict.py --tools             # once the parser flag is verified
+python predict.py --tools             # tool-calling round trip
 ```
 
 Or paste `scripts/serve_module.py` + `inference.yaml` into the web wizard at
@@ -68,11 +68,11 @@ checkpoint on the host when you can.
 
 ## Tool calling / agentic use
 
-gpt-oss speaks its own **harmony** format and vLLM handles it natively,
-but whether the pinned image wants an explicit `tool_call_parser` flag is
-**unverified**, so the flags ship commented out in `serve_module.py`. Run
-the check from [../README.md](../README.md) ("Tool calling"), then
-uncomment. `python predict.py --tools` smoke-tests the round trip.
+gpt-oss writes tool calls in its own **harmony** format; the `openai`
+parser turns them into `tool_calls`. It exists in vLLM 0.18.0 and 0.29.0
+(checked in source, 2026-11-18), so `enable_auto_tool_choice` +
+`tool_call_parser="openai"` are on. `python predict.py --tools`
+smoke-tests the round trip.
 
 ## Notes
 

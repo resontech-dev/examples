@@ -44,13 +44,24 @@ Full knob reference: [../docs/openai_compatible_llm_flow.md](../docs/openai_comp
 | `Qwen3-Embedding-4B_rag_sidecars_premium_min_11gb_vram` | Qwen3-Embedding-4B + Qwen3-Reranker-4B, fp8-on-load **written, not booted** | 2 pooling engines, 1 GPU | 11 GB | 12gb / 16gb |
 | `Gemma-3-12B-W4A16_chat_vision_min_14gb_vram` | Gemma 3 12B W4A16 (Red Hat AI), text + vision, Gemma ToU **written, not booted** | single | 14 GB | 16gb |
 | `Gemma-3-27B-W4A16_chat_vision_min_26gb_vram` | Gemma 3 27B W4A16 (Red Hat AI), text + vision, Gemma ToU **written, not booted** | single | 26 GB | 32gb |
-| `Gemma-4-12B-QAT-W4A16_chat_vision_audio_min_14gb_vram` | Gemma 4 12B QAT W4A16 (Google), text + vision + audio, Apache-2.0 **blocked: vLLM ≥ 0.23** | single | 14 GB | 16gb |
-| `Gemma-4-26B-A4B-QAT-AWQ_chat_vision_min_22gb_vram` | Gemma 4 26B-A4B MoE, community AWQ of Google QAT, Apache-2.0 **blocked: vLLM ≥ 0.25** | single | 22 GB | 24gb |
-| `Gemma-4-31B-QAT-W4A16_chat_vision_min_28gb_vram` | Gemma 4 31B QAT W4A16 (Google), text + vision, Apache-2.0 **blocked: vLLM ≥ 0.19.1** | single | 28 GB | 32gb |
+| `Gemma-4-12B-QAT-W4A16_chat_vision_audio_min_14gb_vram` | Gemma 4 12B QAT W4A16 (Google), text + vision + audio, Apache-2.0 **needs Ray 2.60 (vLLM ≥ 0.23)** | single | 14 GB | 16gb |
+| `Gemma-4-26B-A4B-QAT-AWQ_chat_vision_min_22gb_vram` | Gemma 4 26B-A4B MoE, community AWQ of Google QAT, Apache-2.0 **needs Ray 2.60 (vLLM ≥ 0.25)** | single | 22 GB | 24gb |
+| `Gemma-4-31B-QAT-W4A16_chat_vision_min_28gb_vram` | Gemma 4 31B QAT W4A16 (Google), text + vision, Apache-2.0 **needs Ray 2.60 (vLLM ≥ 0.19.1)** | single | 28 GB | 32gb |
+| `Qwen3.6-27B-FP8_agents_vision_min_40gb_vram` | Qwen3.6-27B official FP8 (text + vision), Apache-2.0 **needs Ray 2.60, not booted** | single (TP=2 variant) | 40 GB | 48gb / 96gb / 80gb |
+| `Qwen3.6-35B-A3B-NVFP4_agents_vision_min_28gb_vram` | Qwen3.6-35B-A3B NVIDIA NVFP4 (text + vision, 3B active), Apache-2.0 **needs Ray 2.60 + Blackwell, not booted** | single | 28 GB | 32gb (RTX 5090) |
+| `Nemotron-3-Super-120B-A12B-NVFP4_agents_min_88gb_vram` | Nemotron 3 Super 120B-A12B NVFP4 (text, Mamba hybrid), NVIDIA Open Model License **needs Ray 2.60 + Blackwell, not booted** | single on 96 GB | 88 GB | 96gb (RTX PRO 6000) / B200 |
+| `DeepSeek-V4-Flash_reasoning_template_min_180gb_vram` | DeepSeek V4-Flash 0731 (284B-A13B), MIT **TEMPLATE, needs Ray 2.60** | TP=4 + EP | 180 GB | 4xh200 / 4x80gb |
+| `DeepSeek-V4-Pro_reasoning_template_min_900gb_vram` | DeepSeek V4-Pro 0813 (1.6T-A49B), MIT **TEMPLATE, needs Ray 2.60** | TP=8 + EP | 900 GB | 8xh200 / 8xb200 |
+| `Kimi-K2.6_agents_vision_template_min_600gb_vram` | Kimi K2.6 INT4 QAT (1T-A32B, text + vision), Modified MIT, `trust_remote_code` **TEMPLATE, needs Ray 2.60** | TP=8 | 600 GB | 8xh200 / 8xb200 |
+| `Mistral-Large-3-675B_chat_vision_template_min_690gb_vram` | Mistral Large 3 675B-A41B FP8 (text + vision, no thinking), Apache-2.0 **TEMPLATE, needs Ray 2.60** | TP=8 | 690 GB | 8xh200 / 8xb200 |
+| `GLM-5.3_agents_template_min_760gb_vram` | GLM-5.3 FP8 (743B-A39B, text), glm-5.3 licence **TEMPLATE, needs Ray 2.60** | TP=8 | 760 GB | 8xh200 / 8xb200 |
 | [`ukrainian_models/`](ukrainian_models/README.md) | MamayLM 12B/27B, Lapa 12B (Gemma 3, Ukrainian) | single int4 / TP=2 | 10–40 GB | own index |
 
-Rows marked **blocked: vLLM ≥ X** do not boot on the pinned image (vLLM 0.18.0); they wait for
-the ray-llm image re-pin.
+Rows marked **needs Ray 2.60** do not boot on the prod image (Ray 2.55.1, vLLM 0.18.0). They run on
+the Ray 2.60.0 image (vLLM 0.29.0, CUDA 13, driver R580+): on dev today, on prod after the switch in
+`reson_docs/docs/big_models_experiments/ray2.60.0-upgrade.md`. Head and workers must run the same Ray, so
+the whole platform switches, not one job. Smallest one to smoke-test the new image on a 16 GB card:
+`Gemma-4-12B-QAT-W4A16_chat_vision_audio_min_14gb_vram`.
 Rows marked **written, not booted** were added 2026-11-12: the folders follow this contract and compile, but no
 replica has started on hardware yet. Each README carries its VERIFY list; drop the marker here
 after the first successful boot and benchmark.
@@ -72,6 +83,11 @@ moves between rungs by changing the endpoint, not the code.
 | Fine-tuned adapters | `Qwen2.5-7B_multi_lora_min_10gb_vram` (shape; the agents bundle has the same block commented out) | `Mistral-Small-24B_multi_lora_min_16gb_vram` | — |
 | Guardrails | `Qwen3-8B-AWQ_agents_bundle_min_12gb_vram` (`WITH_GUARD`, Qwen3Guard-0.6B) | `Qwen3-8B-AWQ_guarded_rag_chat_min_22gb_vram` (Qwen3Guard-8B) · `Nemotron-3.5-Content-Safety_guard_vision_min_10gb_vram` (images, written policy; not booted) | `gpt-oss-safeguard-20b_policy_guard_min_14gb_vram` (policy audit) · `BrowseSafe_web_guard_min_34gb_vram` (fetched pages); not booted |
 | Premium RAG sidecars | `Qwen3-Embedding-4B_rag_sidecars_premium_min_11gb_vram` (fp8-on-load, not booted) | 8B siblings on 24 GB (README of the same job) | — |
+
+On the Ray 2.60 image the Qwen3.6 jobs are the next rung up from their Qwen3.5 siblings: same
+contract, higher scores (Qwen3.6-27B: GPQA 87.8, SWE-bench Verified 77.2 against 85.5 / 72.4). On a
+96 GB card Qwen3.6-27B FP8 matches or beats Qwen3.5-122B-A10B on those benchmarks and leaves ~54 GB for
+KV instead of ~6 GB.
 
 ## How vLLM jobs differ from `../predict/` jobs
 
@@ -109,8 +125,9 @@ TP spans GPUs **inside one worker** (PCIe/NVLink); PP spans **workers**
 
 ## Requirements policy (why `requirements:` is empty everywhere)
 
-vLLM jobs run the platform's prebuilt **ray-llm image** — `ray[serve,llm]==2.55.1`
-+ `vllm==0.18.0` + torch 2.10/cu128 + transformers, baked as one tested set.
+vLLM jobs run the platform's prebuilt **ray-llm image** — on prod `ray[serve,llm]==2.55.1`
++ `vllm==0.18.0` + torch 2.10/cu128 + transformers 4.57, baked as one tested set. The next image is
+Ray 2.60.0 + vLLM 0.29.0 + torch 2.13/cu130 + transformers 5.17 (Python 3.12, driver R580+).
 Never re-declare ray / vllm / torch / transformers / numpy in a job's
 `requirements:`; a customer `ray` line is rejected at submit. Extras only.
 
@@ -132,7 +149,8 @@ Never re-declare ray / vllm / torch / transformers / numpy in a job's
   label; any non-None value leaves replicas PENDING forever.
 - **YaRN rope scaling** (24 GB+ tiers only): Qwen models trained at 32k
   stretch to ~131k via
-  `hf_overrides={"rope_scaling": {"rope_type": "yarn", "factor": 4.0, "original_max_position_embeddings": 32768}}`.
+  `hf_overrides={"rope_scaling": {"rope_type": "yarn", "factor": 4.0, "original_max_position_embeddings": 32768}}`
+  on Ray 2.55.1. transformers 5 (Ray 2.60) renamed the key: `{"rope_parameters": {…same…, "rope_theta": 1000000}}`.
   Quality degrades gently at the far end, and the window is only usable if
   the KV pool affords it (~74 KB/token fp8 on Qwen3-8B → 128k ≈ 9.5 GB for
   ONE conversation). Shipped commented-out where it applies.
@@ -143,12 +161,19 @@ Set in `engine_kwargs` — the parser is **per model family**:
 
 | Family | engine_kwargs | Status |
 |---|---|---|
-| Qwen chat / coder | `enable_auto_tool_choice=True, tool_call_parser="hermes"` | stable — on by default in our Qwen jobs |
+| Qwen2.5 / Qwen3 chat | `enable_auto_tool_choice=True, tool_call_parser="hermes"` | stable — on by default in our Qwen2.5 / Qwen3-8B jobs |
+| Qwen3-Coder | `enable_auto_tool_choice=True, tool_call_parser="qwen3_coder"` | model card; with `hermes` the XML calls arrive as text. `qwen3_xml` if long inputs produce garbage |
 | Mistral Small / Devstral | `enable_auto_tool_choice=True, tool_call_parser="mistral"` | stable — on by default in our Mistral jobs |
-| Qwen3.5 (hybrid) | `enable_auto_tool_choice=True, tool_call_parser="qwen3_coder"` + `reasoning_parser="qwen3"` | official recipe; community reports `qwen3_xml` holds up better on long agentic runs — verify on your scenarios |
+| Qwen3.5 / Qwen3.6 (hybrid) | `enable_auto_tool_choice=True, tool_call_parser="qwen3_coder"` + `reasoning_parser="qwen3"` | official recipe. On vLLM 0.18 community reports `qwen3_xml` holds up better on long agentic runs; on 0.29 both names are one parser class |
 | Llama family | `tool_call_parser="llama3_json"` | not used here (license) |
-| gpt-oss | harmony format — vLLM handles it natively | ⚠️ VERIFY whether the pinned image wants a parser flag at all |
-| GLM-4.5 | `tool_call_parser="glm45"` | ⚠️ VERIFY — dedicated parser exists only in newer vLLM builds |
+| gpt-oss | `enable_auto_tool_choice=True, tool_call_parser="openai"` (harmony → `tool_calls`) | in vLLM 0.18.0 and 0.29.0 (checked in source); on in the gpt-oss examples, off in the catalog presets |
+| GLM-4.5 | `tool_call_parser="glm45"` | in vLLM 0.18.0 and 0.29.0; on in the GLM-4.5-Air examples |
+| Gemma 4 | `tool_call_parser="gemma4"` + `reasoning_parser="gemma4"` + vendored `tool_chat_template_gemma4.jinja` | Ray 2.60 only |
+| Nemotron 3 Super | `tool_call_parser="qwen3_coder"` + `reasoning_parser="nemotron_v3"` | Ray 2.60; no `super_v3` plugin needed |
+| DeepSeek V4 | `tool_call_parser="deepseek_v4"` + `reasoning_parser="deepseek_v4"` + `tokenizer_mode="deepseek_v4"` | Ray 2.60 |
+| Kimi K2.x | `tool_call_parser="kimi_k2"` + `reasoning_parser="kimi_k2"` | both images; K2.6 needs `trust_remote_code` |
+| GLM-5.x | `tool_call_parser="glm47"` + `reasoning_parser="glm47"` | Ray 2.60 |
+| Mistral Large 3 | `tool_call_parser="mistral"` + `tokenizer_mode` / `config_format` / `load_format="mistral"` | Ray 2.60; no reasoning parser |
 | Guard / embed / rerank models | none — classifiers, not agents | — |
 
 Authoritative check for the pinned image:
@@ -156,10 +181,16 @@ Authoritative check for the pinned image:
 ```bash
 docker run --rm <registry>/ray-llm:2.55.1-py311-cu128 \
   vllm serve --help | grep -A3 tool-call-parser
+docker run --rm <registry>/ray-llm:2.60.0-py312-cu130 \
+  vllm serve --help | grep -A3 tool-call-parser
 ```
 
-Rows marked ⚠️ ship **commented out** in `serve_module.py` — run the check,
-then uncomment. A wrong parser name fails at engine boot, not at submit.
+On vLLM 0.29 a request that carries `tools` with `tool_choice` auto, required or named runs under a
+strict tool-call grammar by default, and a `response_format` on the same request is dropped
+(`VLLM_ENFORCE_STRICT_TOOL_CALLING=0` turns it off). `mistral` and `gemma4` have no such grammar.
+
+A wrong parser name fails at engine boot, not at submit; run the check above for any parser not
+in this table.
 
 ## Deploy (same for every job)
 

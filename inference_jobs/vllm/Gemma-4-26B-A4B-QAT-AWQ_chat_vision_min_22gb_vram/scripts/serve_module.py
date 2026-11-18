@@ -1,6 +1,6 @@
 """Gemma 4 26B A4B (QAT, AWQ INT4) via vLLM: text + image, tool calling, thinking. One 24 GB card.
 
-BLOCKED on the pinned image: needs vLLM >= 0.19 (waits for the ray-llm image re-pin). Written ahead; nothing has booted.
+NEEDS the Ray 2.60.0 image (vLLM 0.29.0, CUDA 13, driver R580+); prod runs Ray 2.55.1 / vLLM 0.18.0 until the switch. Written ahead; nothing has booted.
 This size: vLLM >= 0.25.0 per the vLLM recipe (Gemma 4 MoE; the RTX 5090 config there runs Red Hat's FP8 build).
 
 Google's Gemma 4 26B A4B (2026), Apache-2.0: a Mixture-of-Experts model with
@@ -26,11 +26,11 @@ one full 32k sequence takes ~0.5 to 0.9 GB: about four full-length sequences at 
 Engine notes (vLLM recipe + model card, not booted here):
   * tool_call_parser and reasoning_parser are both "gemma4"; the recipe pairs
     them with vLLM's examples/tool_chat_template_gemma4.jinja, vendored next
-    to this file (Apache-2.0, vLLM main, fetched 2026-11-12). VERIFY: replace
-    it with the copy from the vLLM version in the new image.
+    to this file (Apache-2.0, fetched 2026-11-12; byte-identical to the
+    v0.29.0 copy, checked 2026-11-18).
   * Thinking is off unless a request sends chat_template_kwargs
-    {"enable_thinking": true}. No server default here: Ray 2.55.1 breaks
-    `default_chat_template_kwargs`; check the new Ray before using it.
+    {"enable_thinking": true}. No server default here;
+    `default_chat_template_kwargs` works from Ray 2.58 if one is wanted.
   * Card sampling: temperature 1.0, top_p 0.95, top_k 64 (predict.py sends them).
   * Image budget per image: 70 / 140 / 280 / 560 / 1120 tokens, default 280;
     raise it with mm_processor_kwargs for OCR and small print.

@@ -37,7 +37,7 @@ pip install -U "resontech>=0.2.1" openai python-dotenv   # Python 3.11+
 cp .env.example .env
 python submit.py
 python predict.py "Refactor a 2k-line God class into cohesive services."
-python predict.py --tools        # hermes tool calling is enabled
+python predict.py --tools        # qwen3_coder tool calling is enabled
 ```
 
 ## Notes

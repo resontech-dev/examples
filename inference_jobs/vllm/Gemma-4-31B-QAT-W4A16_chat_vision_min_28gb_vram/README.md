@@ -1,6 +1,6 @@
 # Gemma 4 31B (QAT W4A16): text + image on one 32 GB card (vLLM)
 
-> **BLOCKED on the pinned image: needs vLLM >= 0.19 (waits for the ray-llm image re-pin). Written ahead; nothing has booted.**
+> **NEEDS the Ray 2.60.0 image (vLLM 0.29.0, CUDA 13, driver R580+); prod runs Ray 2.55.1 / vLLM 0.18.0 until the switch. Written ahead; nothing has booted.**
 > This size needs vLLM >= 0.19.1 per the vLLM recipe (the first Gemma 4 release in vLLM was 0.19.0).
 
 Google's Gemma 4 31B (2026), Apache-2.0: the largest dense Gemma 4. Text and
@@ -59,7 +59,7 @@ prompts before using it for Ukrainian work.
   on the budget (default 280); raise it for OCR, lower it for classification.
 - Auth as every job here: the key as both `Authorization: Bearer` and `X-API-Key`.
 
-## Deploy & test (after the image re-pin)
+## Deploy & test (on the Ray 2.60 image)
 
 ```bash
 pip install -U "resontech>=0.2.1" openai python-dotenv   # Python 3.11+
@@ -84,8 +84,8 @@ python predict.py --tools                           # tool-calling round trip
 
 ## VERIFY before listing
 
-1. Image re-pin to vLLM >= 0.19.1.
-2. The vendored `tool_chat_template_gemma4.jinja` reaches the replica and matches the image's vLLM version.
+1. The Ray 2.60.0 image on head and worker (vLLM 0.29.0); this size needs >= 0.19.1.
+2. The vendored `tool_chat_template_gemma4.jinja` reaches the replica and matches the image's vLLM version (identical to v0.29.0, checked 2026-11-18).
 3. KV numbers above are estimates; read the KV pool size from the boot log, then raise `max_model_len` if it allows.
 4. Speculative decoding (commented) only after a clean baseline benchmark.
 

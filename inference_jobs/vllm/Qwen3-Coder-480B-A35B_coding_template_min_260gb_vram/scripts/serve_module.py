@@ -52,9 +52,9 @@ llm_config = LLMConfig(
         gpu_memory_utilization=0.92,
         dtype="auto",
 
-        # ── Tool calling (stable for the Qwen family) ──
+        # ── Tool calling: Qwen3-Coder writes XML calls, so not "hermes" ──
         enable_auto_tool_choice=True,
-        tool_call_parser="hermes",
+        tool_call_parser="qwen3_coder",                 # model card; qwen3_xml as fallback
     ),
 
     placement_group_config=dict(
