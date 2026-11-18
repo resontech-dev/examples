@@ -1,0 +1,31 @@
+# Voxtral Mini 4B Realtime via vLLM: streaming speech-to-text over the
+# WebSocket realtime API, text ~480 ms behind the speaker.
+#
+# Mistral, Apache-2.0, 4B parameters (~9 GB bf16). 13 languages, NOT
+# Ukrainian: en, fr, es, de, ru, zh, ja, it, pt, nl, ar, hi, ko.
+#
+# VALIDATE-BEFORE-LISTING: the /v1/realtime WebSocket route through the Ray
+# Serve LLM router and the per-job nginx is unproven. Plan B on the same
+# deployment: /v1/audio/transcriptions with whole files (predict.py --transcribe).
+
+engine: vllm_openai
+
+model:
+  module: "serve_module"
+
+vllm:
+  tensor_parallel_size: 1
+  pipeline_parallel_size: 1
+
+cluster:
+  num_workers: 1
+  device: "gpu"
+  gpus_per_worker: 1
+  cpus_per_worker: 8
+  min_vram_gb_per_worker: 16  # ~9 GB bf16 weights + KV for one-hour sessions (recipe: >= 16 GB)
+  # Advisory fields, dashboard/accounting only:
+  mode: "data_parallel"
+  max_ongoing_requests: 8
+
+# No `requirements:`: the prebuilt ray-llm image owns the stack.
+# mistral_common[audio] (>= 1.9) is expected in the image. VERIFY on first boot.

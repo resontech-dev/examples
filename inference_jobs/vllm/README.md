@@ -40,6 +40,7 @@ Full knob reference: [../docs/openai_compatible_llm_flow.md](../docs/openai_comp
 | `Nemotron-3.5-Content-Safety_guard_vision_min_10gb_vram` | Nemotron 3.5 Content Safety 4B (text + image guard) **written, not booted** | single | 10 GB | 12gb / 16gb (shares) |
 | `BrowseSafe_web_guard_min_34gb_vram` | BrowseSafe 30B-A3B fp8-on-load (HTML injection detector) **written, not booted** | single on 48 GB (TP=2 variant) | 34 GB | 48gb / 2x24gb / 80gb |
 | `Qwen3-ASR-1.7B_asr_min_6gb_vram` | Qwen3-ASR-1.7B (EN / IT / PL / DE, no UK) **written, not booted** | single, ASR | 6 GB | 12gb (shares) |
+| `Voxtral-Mini-4B-Realtime_asr_streaming_min_16gb_vram` | Voxtral Mini 4B Realtime, WebSocket `/v1/realtime` (13 languages, no UK), Apache-2.0 **written, not booted; realtime route through the router unproven** | single, streaming ASR | 16 GB | 16gb |
 | `Qwen3-Embedding-4B_rag_sidecars_premium_min_11gb_vram` | Qwen3-Embedding-4B + Qwen3-Reranker-4B, fp8-on-load **written, not booted** | 2 pooling engines, 1 GPU | 11 GB | 12gb / 16gb |
 | `Gemma-3-12B-W4A16_chat_vision_min_14gb_vram` | Gemma 3 12B W4A16 (Red Hat AI), text + vision, Gemma ToU **written, not booted** | single | 14 GB | 16gb |
 | `Gemma-3-27B-W4A16_chat_vision_min_26gb_vram` | Gemma 3 27B W4A16 (Red Hat AI), text + vision, Gemma ToU **written, not booted** | single | 26 GB | 32gb |
@@ -63,7 +64,9 @@ moves between rungs by changing the endpoint, not the code.
 |---|---|---|---|
 | Text + RAG | `Qwen3-8B-AWQ_agents_bundle_min_12gb_vram` | `Qwen3.5-9B-AWQ_assistant_vision_min_14gb_vram` · `gpt-oss-20b_chat_min_14gb_vram` (EN) · `Mistral-Small-24B_rag_bundle_min_20gb_vram` (IT, 24 GB) | `Qwen3.5-27B-AWQ_agents_vision_min_28gb_vram` |
 | Documents / photos | `Qwen2.5-VL-7B_vision_min_16gb_vram` (AWQ, measured) | `Qwen3.5-9B-AWQ_assistant_vision_min_14gb_vram` (same model as text) | `Qwen2.5-VL-32B-AWQ_vision_tensor_parallel_min_36gb_vram` · `Qwen3.5-27B-AWQ_…` |
-| Speech-to-text | `whisper-large-v3-turbo_asr_min_4gb_vram` | `whisper-large-v3_asr_min_6gb_vram` · `Qwen3-ASR-1.7B_asr_min_6gb_vram` (EN / IT / PL / DE only, not booted) | + LoRA (`examples/training/nvflare/job_speech`) |
+| Speech-to-text | `whisper-large-v3-turbo_asr_min_4gb_vram` · `../predict/Parakeet-TDT-0.6B-v3_asr_min_4gb_vram` (25 European languages incl. UK, NeMo; not booted) | `whisper-large-v3_asr_min_6gb_vram` · `Qwen3-ASR-1.7B_asr_min_6gb_vram` (EN / IT / PL / DE only, not booted) | + LoRA (`examples/training/nvflare/job_speech`) |
+| Live speech-to-text | `../predict/Nemotron-3.5-ASR-Streaming-0.6B_asr_min_4gb_vram` (uk-UA among 19 locales; whole files until a live route exists; not booted) | `Voxtral-Mini-4B-Realtime_asr_streaming_min_16gb_vram` (no UK; WebSocket, not booted) | — |
+| Who spoke when | `../predict/pyannote-community-1_diarization_min_2gb_vram` (offline diarization, pairs with any speech-to-text job; not booted) | — | — |
 | Text-to-speech | `../predict/Piper-TTS_tts_cpu_min_0gb_vram` (uk / en / it, CPU) | `../predict/Orpheus-TTS-3B_tts_min_8gb_vram` (EN) | — |
 | Ukrainian-tuned chat | `ukrainian_models/MamayLM-12B-W4A16_chat_min_10gb_vram` · `ukrainian_models/Lapa-12B-w4g128_chat_min_10gb_vram` | `ukrainian_models/MamayLM-12B-v2_chat_vision_tensor_parallel_min_26gb_vram` (2×16 GB) | `ukrainian_models/MamayLM-27B-v2-FP8_chat_vision_tensor_parallel_min_40gb_vram` (2×24 GB) |
 | Fine-tuned adapters | `Qwen2.5-7B_multi_lora_min_10gb_vram` (shape; the agents bundle has the same block commented out) | `Mistral-Small-24B_multi_lora_min_16gb_vram` | — |

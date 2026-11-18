@@ -1,0 +1,40 @@
+# Parakeet TDT 0.6B v3 (NVIDIA): speech-to-text in 25 European languages,
+# Ukrainian included, with segment timestamps (predictor mode).
+#
+# FastConformer encoder + TDT decoder, 600M parameters, CC-BY-4.0. Not a
+# vLLM model: NeMo runs it inside predict().
+#
+# VALIDATE before listing: written, not booted. VERIFY list in README.md.
+
+model:
+  # No `path`: NeMo pulls the ~2.5 GB .nemo checkpoint from HF Hub in __init__.
+  module: "parakeet_serve"
+  class_name: "ParakeetASR"
+  init_args:
+    model_id: "nvidia/parakeet-tdt-0.6b-v3"
+    # Above this length the encoder switches to local attention (up to ~3 h
+    # per request); shorter clips keep full attention, the more accurate one.
+    local_attention_after_s: 600
+    timestamps: true
+
+cluster:
+  num_workers: 1
+  mode: "data_parallel"
+  gpus_per_worker: 1
+  cpus_per_worker: 8
+  min_vram_gb_per_worker: 4   # ~2.4 GB fp32 weights + encoder activations of long audio
+  # One transcription at a time per replica (a lock in predict()); a few
+  # queued requests are fine, add replicas for throughput.
+  max_ongoing_requests: 4
+  device: "gpu"
+
+requirements:
+  - "torch"                        # bare: bound by nemo_toolkit
+  - "nemo_toolkit[asr]>=2.4"       # the model card's runtime is NeMo 2.4
+  - "soundfile>=0.12.1"            # bundles libsndfile with MP3 support: no FFmpeg on the worker
+  - "scipy"                        # resample_poly
+  - "numpy"
+  # The platform installs numpy<2 for every predictor job; pyarrow 26
+  # (pulled in through `datasets`) refuses to import under numpy 1.x and
+  # took Ray Serve down with it on 2026-11-18. Drop once the base allows numpy 2.
+  - "pyarrow<26"

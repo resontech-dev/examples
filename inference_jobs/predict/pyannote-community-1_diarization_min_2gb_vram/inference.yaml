@@ -1,0 +1,44 @@
+# pyannote Community-1: speaker diarization, who spoke when (predictor mode).
+#
+# pyannote.audio 4 pipeline (code MIT, weights CC-BY-4.0): segmentation +
+# speaker embeddings + clustering. Offline: the whole file in one request,
+# turns with speaker labels out. Pairs with a Whisper/Parakeet job for
+# "who said what" (predict.py --with-whisper).
+#
+# The weights are gated on Hugging Face: pack_weights.py downloads them with
+# YOUR token on your machine and packs them into the file below; submit.py
+# uploads it. No token is shipped with the job.
+#
+# BLOCKED on the platform today: pyannote.audio 4 needs numpy >= 2 (via
+# pyannote.core 6), and the platform installs numpy<2 for every predictor
+# job, so the install fails before anything boots. It works once predictor
+# jobs keep numpy 2 (Ray 2.60 images plus the dispatcher change proposed in
+# reson_docs docs/inference/using_requirements.md). Do not submit before.
+#
+# VALIDATE before listing: written, not booted. VERIFY list in README.md.
+
+model:
+  path: "model/speaker-diarization-community-1.tar.gz"   # mounted, then load_weights()
+  module: "pyannote_serve"
+  class_name: "Diarizer"
+  init_args: {}
+    # num_speakers: 2          # set when every recording has a known count
+    # min_speakers: 2
+    # max_speakers: 6
+
+cluster:
+  num_workers: 1
+  mode: "data_parallel"
+  gpus_per_worker: 1
+  cpus_per_worker: 8
+  min_vram_gb_per_worker: 2   # small models (~35 MB); runs on CPU too, several times slower
+  max_ongoing_requests: 4
+  device: "auto"
+
+requirements:
+  - "torch"                        # bare: bound by pyannote.audio
+  - "torchaudio"                   # imported by pyannote.audio unconditionally
+  - "pyannote.audio>=4.0,<5"       # Community-1 needs the 4.x pipeline classes
+  - "soundfile>=0.12.1"            # decoding here: pyannote gets a waveform, never torchcodec/FFmpeg
+  - "scipy"
+  - "numpy"
