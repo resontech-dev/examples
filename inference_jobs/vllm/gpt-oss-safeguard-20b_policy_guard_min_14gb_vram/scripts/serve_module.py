@@ -47,10 +47,11 @@ llm_config = LLMConfig(
     engine_kwargs=dict(
         tensor_parallel_size=1,          # = yaml vllm.tensor_parallel_size
         pipeline_parallel_size=1,        # = yaml vllm.pipeline_parallel_size
-        # KV budget on a 16 GB card: 16×0.92 = 14.7 − 13 weights − ~0.8
-        # activations ≈ 0.9 GB. gpt-oss KV is light (~24.5 KB/token at
-        # fp8) → ~37k cached tokens: two full 16k checks in flight, more
-        # via preemption. A 24 GB card gives ~7.8 GB ≈ 320k tokens.
+        # KV budget: under vLLM 0.29 a 16 GB card keeps only a few hundred MB
+        # for KV (see gpu_memory_utilization below). If boot says max_model_len
+        # is larger than the KV cache holds, use 11264 there or a 24 GB card.
+        # gpt-oss KV is light (~24.5 KB/token at fp8): a 24 GB card gives
+        # ~7.8 GB ≈ 320k tokens.
         # 16k = a 10k-token policy (the guide's upper bound) + content +
         # room for the reasoning channel; the model's native window is 128k.
         max_model_len=16384,
@@ -62,7 +63,25 @@ llm_config = LLMConfig(
         # never written to disk.
         enable_prefix_caching=True,
         enable_chunked_prefill=True,
-        gpu_memory_utilization=0.92,     # drop to 0.85 if the card drives a display
+        # Same architecture as gpt-oss-20b. Under vLLM 0.29 (Ray 2.60) on a
+        # 16 GB RTX 5070 Ti (2026-11-19) gpt-oss-20b took 13.8 GiB of weights
+        # and 0.46 GiB of activations, and since vLLM 0.21 CUDA graphs come
+        # out of this budget: KV was -0.64 GiB at 0.92 and -0.03 GiB at 0.95
+        # with graphs up to 8 tokens. 0.95 still leaves ~0.8 GiB for the CUDA
+        # context; on a 16 GB card it must not drive a display.
+        gpu_memory_utilization=0.95,
+        # Hence no CUDA graphs (torch.compile stays on; decode is slower):
+        # ~0.44 GiB of KV. On a 24 GB card drop this, set
+        # max_cudagraph_capture_size=8 (unset, vLLM captures gpt-oss up to
+        # 1024 tokens) and gpu_memory_utilization=0.90.
+        compilation_config=dict(cudagraph_mode="NONE"),
+        # FlashInfer (vLLM 0.29's pick on sm_120) allocates a 394 MiB
+        # workspace (VLLM_FLASHINFER_WORKSPACE_BUFFER_SIZE) at the first
+        # decode step, after the KV cache has taken the rest: OOM on 16 GB
+        # (2026-11-19). Triton attention has no such buffer and supports the
+        # gpt-oss sinks. Its fp8 KV needs SM 8.9+, so on RTX 30xx / A10G /
+        # A100 also set kv_cache_dtype="auto".
+        attention_config=dict(backend="TRITON_ATTN"),
         dtype="auto",
 
         # No tool parser: this is a classifier, it never calls tools.

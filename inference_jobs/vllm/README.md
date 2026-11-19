@@ -28,6 +28,7 @@ Full knob reference: [../docs/openai_compatible_llm_flow.md](../docs/openai_comp
 | `whisper-large-v3_asr_min_6gb_vram` | Whisper large-v3 | single, ASR | 6 GB | 12gb |
 | `Qwen3-8B-AWQ_guarded_rag_chat_min_22gb_vram` | Qwen3-8B AWQ + Qwen3Guard-8B + embed + rerank | 4 engines, 1 GPU | 22 GB | 24gb |
 | `Qwen3-8B-AWQ_agents_bundle_min_12gb_vram` | Qwen3-8B AWQ + embed + rerank (+ Qwen3Guard-0.6B) | 3–4 engines, 1 GPU | 12 GB | 16gb |
+| `Qwen3-8B-AWQ_media_studio_min_32gb_vram` | Qwen3-8B AWQ (plans, calls tools) + Z-Image-Turbo (`/v1/images/generations`) + Wan2.2-TI2V-5B (`/v1/videos`), Apache-2.0 **needs Ray 2.60, not booted** | vLLM engine + diffusers actor, 1 GPU (2 × 16 GB variant) | 32 GB | 32gb (RTX 5090) / 48gb |
 | `Qwen3.5-9B-AWQ_assistant_vision_min_14gb_vram` | Qwen3.5-9B AWQ (text + vision, hybrid attention) | single | 14 GB | 16gb |
 | `Qwen3.5-27B-AWQ_agents_vision_min_28gb_vram` | Qwen3.5-27B AWQ (text + vision) | single (TP=2 variant) | 28 GB | 32gb / 2x24gb |
 | `whisper-large-v3-turbo_asr_min_4gb_vram` | Whisper large-v3-turbo | single, ASR | 4 GB | 12gb (shares) |
@@ -49,6 +50,7 @@ Full knob reference: [../docs/openai_compatible_llm_flow.md](../docs/openai_comp
 | `Gemma-4-31B-QAT-W4A16_chat_vision_min_28gb_vram` | Gemma 4 31B QAT W4A16 (Google), text + vision, Apache-2.0 **needs Ray 2.60 (vLLM ≥ 0.19.1)** | single | 28 GB | 32gb |
 | `Qwen3.6-27B-FP8_agents_vision_min_40gb_vram` | Qwen3.6-27B official FP8 (text + vision), Apache-2.0 **needs Ray 2.60, not booted** | single (TP=2 variant) | 40 GB | 48gb / 96gb / 80gb |
 | `Qwen3.6-35B-A3B-NVFP4_agents_vision_min_28gb_vram` | Qwen3.6-35B-A3B NVIDIA NVFP4 (text + vision, 3B active), Apache-2.0 **needs Ray 2.60 + Blackwell, not booted** | single | 28 GB | 32gb (RTX 5090) |
+| `Qwen3.8-27B-FP8_agents_vision_min_40gb_vram` | Qwen3.8-27B official FP8 (text + vision), Apache-2.0 **needs Ray 2.60, not booted** | single (TP=2 variant) | 40 GB | 48gb / 80gb / 96gb / h200 |
 | `Nemotron-3-Super-120B-A12B-NVFP4_agents_min_88gb_vram` | Nemotron 3 Super 120B-A12B NVFP4 (text, Mamba hybrid), NVIDIA Open Model License **needs Ray 2.60 + Blackwell, not booted** | single on 96 GB | 88 GB | 96gb (RTX PRO 6000) / B200 |
 | `DeepSeek-V4-Flash_reasoning_template_min_180gb_vram` | DeepSeek V4-Flash 0731 (284B-A13B), MIT **TEMPLATE, needs Ray 2.60** | TP=4 + EP | 180 GB | 4xh200 / 4x80gb |
 | `DeepSeek-V4-Pro_reasoning_template_min_900gb_vram` | DeepSeek V4-Pro 0813 (1.6T-A49B), MIT **TEMPLATE, needs Ray 2.60** | TP=8 + EP | 900 GB | 8xh200 / 8xb200 |
@@ -57,11 +59,10 @@ Full knob reference: [../docs/openai_compatible_llm_flow.md](../docs/openai_comp
 | `GLM-5.3_agents_template_min_760gb_vram` | GLM-5.3 FP8 (743B-A39B, text), glm-5.3 licence **TEMPLATE, needs Ray 2.60** | TP=8 | 760 GB | 8xh200 / 8xb200 |
 | [`ukrainian_models/`](ukrainian_models/README.md) | MamayLM 12B/27B, Lapa 12B (Gemma 3, Ukrainian) | single int4 / TP=2 | 10–40 GB | own index |
 
-Rows marked **needs Ray 2.60** do not boot on the prod image (Ray 2.55.1, vLLM 0.18.0). They run on
-the Ray 2.60.0 image (vLLM 0.29.0, CUDA 13, driver R580+): on dev today, on prod after the switch in
-`reson_docs/docs/big_models_experiments/ray2.60.0-upgrade.md`. Head and workers must run the same Ray, so
-the whole platform switches, not one job. Smallest one to smoke-test the new image on a 16 GB card:
-`Gemma-4-12B-QAT-W4A16_chat_vision_audio_min_14gb_vram`.
+Prod runs the Ray 2.60.0 image (vLLM 0.29.0, CUDA 13, driver R580+). Rows marked **needs Ray 2.60** use
+features of that image and do not boot on older ones. Jobs without the marker were written against the
+earlier Ray 2.55.1 / vLLM 0.18.0 image; version notes inside them (for example "vLLM 0.18 has no
+`task`") describe that image.
 Rows marked **written, not booted** were added 2026-11-12: the folders follow this contract and compile, but no
 replica has started on hardware yet. Each README carries its VERIFY list; drop the marker here
 after the first successful boot and benchmark.
@@ -79,6 +80,7 @@ moves between rungs by changing the endpoint, not the code.
 | Live speech-to-text | `../predict/Nemotron-3.5-ASR-Streaming-0.6B_asr_min_4gb_vram` (uk-UA among 19 locales; whole files until a live route exists; not booted) | `Voxtral-Mini-4B-Realtime_asr_streaming_min_16gb_vram` (no UK; WebSocket, not booted) | — |
 | Who spoke when | `../predict/pyannote-community-1_diarization_min_2gb_vram` (offline diarization, pairs with any speech-to-text job; not booted) | — | — |
 | Text-to-speech | `../predict/Piper-TTS_tts_cpu_min_0gb_vram` (uk / en / it, CPU) | `../predict/Orpheus-TTS-3B_tts_min_8gb_vram` (EN) | — |
+| Images & video | `../predict/FLUX.2-klein-4B_imagegen_edit_min_16gb_vram` (images from text, edits from a screenshot or photo, Apache-2.0; not booted) · `../predict/Wan2.2-TI2V-5B_videogen_min_16gb_vram` (5 s clips from text or an image, no sound; not booted) | `../predict/LTX-2.3-22B_videogen_audio_min_16gb_vram` (video with sound, LTX-2 Community License; not booted) · `../predict/FLUX.1-schnell_imagegen_min_16gb_vram` (images; its 23.8 GB transformer needs a 24 GB+ card as written) | `Qwen3-8B-AWQ_media_studio_min_32gb_vram` (chat plans + images + video on one endpoint; not booted) · `../predict/Qwen-Image-2512-Edit-2511_imagegen_edit_template_min_80gb_vram` (klein's contract with 20B models: images from text + edits from 1–3 images, Apache-2.0, 80 GB card; not booted) |
 | Ukrainian-tuned chat | `ukrainian_models/MamayLM-12B-W4A16_chat_min_10gb_vram` · `ukrainian_models/Lapa-12B-w4g128_chat_min_10gb_vram` | `ukrainian_models/MamayLM-12B-v2_chat_vision_tensor_parallel_min_26gb_vram` (2×16 GB) | `ukrainian_models/MamayLM-27B-v2-FP8_chat_vision_tensor_parallel_min_40gb_vram` (2×24 GB) |
 | Fine-tuned adapters | `Qwen2.5-7B_multi_lora_min_10gb_vram` (shape; the agents bundle has the same block commented out) | `Mistral-Small-24B_multi_lora_min_16gb_vram` | — |
 | Guardrails | `Qwen3-8B-AWQ_agents_bundle_min_12gb_vram` (`WITH_GUARD`, Qwen3Guard-0.6B) | `Qwen3-8B-AWQ_guarded_rag_chat_min_22gb_vram` (Qwen3Guard-8B) · `Nemotron-3.5-Content-Safety_guard_vision_min_10gb_vram` (images, written policy; not booted) | `gpt-oss-safeguard-20b_policy_guard_min_14gb_vram` (policy audit) · `BrowseSafe_web_guard_min_34gb_vram` (fetched pages); not booted |
@@ -88,6 +90,10 @@ On the Ray 2.60 image the Qwen3.6 jobs are the next rung up from their Qwen3.5 s
 contract, higher scores (Qwen3.6-27B: GPQA 87.8, SWE-bench Verified 77.2 against 85.5 / 72.4). On a
 96 GB card Qwen3.6-27B FP8 matches or beats Qwen3.5-122B-A10B on those benchmarks and leaves ~54 GB for
 KV instead of ~6 GB.
+
+Qwen3.8-27B is the rung above Qwen3.6-27B on the same card and contract (GPQA 89.2, SWE-bench Pro
+61.7 against 87.8 / 53.5; Apache-2.0) and the strongest model here that fits one card. Its recipe
+states vLLM ≥ 0.17, but a boot on the 0.29 image is still to be verified.
 
 ## How vLLM jobs differ from `../predict/` jobs
 
@@ -125,9 +131,9 @@ TP spans GPUs **inside one worker** (PCIe/NVLink); PP spans **workers**
 
 ## Requirements policy (why `requirements:` is empty everywhere)
 
-vLLM jobs run the platform's prebuilt **ray-llm image** — on prod `ray[serve,llm]==2.55.1`
-+ `vllm==0.18.0` + torch 2.10/cu128 + transformers 4.57, baked as one tested set. The next image is
-Ray 2.60.0 + vLLM 0.29.0 + torch 2.13/cu130 + transformers 5.17 (Python 3.12, driver R580+).
+vLLM jobs run the platform's prebuilt **ray-llm image**: `ray[serve,llm]==2.60.0` + `vllm==0.29.0`
++ torch 2.13/cu130 + transformers 5.17 (Python 3.12, driver R580+), baked as one tested set. The
+image before it was Ray 2.55.1 + vLLM 0.18.0 + torch 2.10/cu128 + transformers 4.57.
 Never re-declare ray / vllm / torch / transformers / numpy in a job's
 `requirements:`; a customer `ray` line is rejected at submit. Extras only.
 
@@ -164,7 +170,7 @@ Set in `engine_kwargs` — the parser is **per model family**:
 | Qwen2.5 / Qwen3 chat | `enable_auto_tool_choice=True, tool_call_parser="hermes"` | stable — on by default in our Qwen2.5 / Qwen3-8B jobs |
 | Qwen3-Coder | `enable_auto_tool_choice=True, tool_call_parser="qwen3_coder"` | model card; with `hermes` the XML calls arrive as text. `qwen3_xml` if long inputs produce garbage |
 | Mistral Small / Devstral | `enable_auto_tool_choice=True, tool_call_parser="mistral"` | stable — on by default in our Mistral jobs |
-| Qwen3.5 / Qwen3.6 (hybrid) | `enable_auto_tool_choice=True, tool_call_parser="qwen3_coder"` + `reasoning_parser="qwen3"` | official recipe. On vLLM 0.18 community reports `qwen3_xml` holds up better on long agentic runs; on 0.29 both names are one parser class |
+| Qwen3.5 / Qwen3.6 / Qwen3.8 (hybrid) | `enable_auto_tool_choice=True, tool_call_parser="qwen3_coder"` + `reasoning_parser="qwen3"` | official recipe. On vLLM 0.18 community reports `qwen3_xml` holds up better on long agentic runs; on 0.29 both names are one parser class |
 | Llama family | `tool_call_parser="llama3_json"` | not used here (license) |
 | gpt-oss | `enable_auto_tool_choice=True, tool_call_parser="openai"` (harmony → `tool_calls`) | in vLLM 0.18.0 and 0.29.0 (checked in source); on in the gpt-oss examples, off in the catalog presets |
 | GLM-4.5 | `tool_call_parser="glm45"` | in vLLM 0.18.0 and 0.29.0; on in the GLM-4.5-Air examples |
@@ -179,8 +185,6 @@ Set in `engine_kwargs` — the parser is **per model family**:
 Authoritative check for the pinned image:
 
 ```bash
-docker run --rm <registry>/ray-llm:2.55.1-py311-cu128 \
-  vllm serve --help | grep -A3 tool-call-parser
 docker run --rm <registry>/ray-llm:2.60.0-py312-cu130 \
   vllm serve --help | grep -A3 tool-call-parser
 ```

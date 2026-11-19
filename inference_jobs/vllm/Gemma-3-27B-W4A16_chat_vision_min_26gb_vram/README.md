@@ -27,7 +27,7 @@ window on the rest), so about four full-length chats at once.
 `RedHatAI/gemma-3-27b-it-quantized.w4a16`: Red Hat AI's INT4 weight-only build (llm-compressor, W4A16,
 compressed-tensors), 19.7 GB on disk, vision tower and embeddings kept bf16.
 The card reports recovery against the bf16 original on OpenLLM and vision
-sets; it was made for vLLM >= 0.8, so our pinned 0.18.0 runs it.
+sets; it was made for vLLM >= 0.8, so the pinned 0.29.0 runs it.
 
 VERIFY: the repo's tokenizer.json carries a right-side truncation default of
 8,192 tokens (HF discussion "Tokenizer limited to 8K context"). Transformers

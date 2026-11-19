@@ -70,7 +70,7 @@ cluster:
 requirements:
   # DO NOT redeclare ray here. base_requirements.txt must include
   # ray[serve,llm]==<version>. See "Pip resolver conflict" below.
-  - "vllm>=0.18.0"
+  - "vllm>=0.29.0"
   - "transformers>=4.45.0"
 ```
 
@@ -176,7 +176,7 @@ Practical rules:
 
 | package         | pin?                          | reason                                                       |
 |-----------------|-------------------------------|--------------------------------------------------------------|
-| `vllm`          | `>=0.18.0` (within ray[llm] requirement) | tight coupling to ray[llm] version              |
+| `vllm`          | `>=0.29.0` (within ray[llm] requirement) | tight coupling to ray[llm] version              |
 | `transformers`  | `>=4.45.0` loose               | vLLM specifies the minimum                                   |
 | `huggingface_hub` | range with upper bound       | breaks `from_pretrained` periodically                       |
 | `torch`         | **don't declare**              | vllm pulls a specific build with CUDA bindings; let it choose |

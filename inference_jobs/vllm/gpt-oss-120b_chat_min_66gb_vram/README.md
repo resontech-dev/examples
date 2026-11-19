@@ -77,7 +77,7 @@ smoke-tests the round trip.
 ## Notes
 
 - Kernels: MXFP4 native on Blackwell, Marlin path on Hopper / Ampere since
-  vLLM 0.10.1; the pinned 0.18.0 covers every card above.
+  vLLM 0.10.1; the pinned 0.29.0 covers every card above.
 - Same alignment story as the 20b (OpenAI preparedness process, instruction
   hierarchy); still no moderation layer. For user-facing endpoints pair it
   with [`../gpt-oss-120b_rag_bundle_min_70gb_vram`](../gpt-oss-120b_rag_bundle_min_70gb_vram)

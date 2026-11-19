@@ -31,6 +31,6 @@ cluster:
   max_ongoing_requests: 16
 
 # No `requirements:` block on purpose. vLLM jobs run on the platform's
-# prebuilt ray-llm image (ray[serve,llm]==2.55.1 + vllm==0.18.0). The model
-# card pins vllm>=0.11.0,<=0.20.2: the pinned image is inside that range.
+# prebuilt ray-llm image (ray[serve,llm]==2.60.0 + vllm==0.29.0). The model
+# card pins vllm>=0.11.0,<=0.20.2: the pinned image is above that range, VERIFY.
 # See ../README.md "Requirements policy".

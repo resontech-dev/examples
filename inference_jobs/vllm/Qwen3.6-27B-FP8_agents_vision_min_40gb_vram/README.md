@@ -1,8 +1,6 @@
 # Qwen3.6-27B (FP8): text + vision assistant for agents (vLLM)
 
-**Needs the Ray 2.60.0 image (vLLM 0.29.0, CUDA 13, driver R580+).** Prod
-runs Ray 2.55.1 / vLLM 0.18.0 until the switch described in
-`reson_docs/docs/big_models_experiments/ray2.60.0-upgrade.md`. Written
+**Needs the Ray 2.60.0 image (vLLM 0.29.0, CUDA 13, driver R580+).** Written
 2026-11-18; nothing in this folder has booted.
 
 The successor of `../Qwen3.5-27B-AWQ_agents_vision_min_28gb_vram` on the

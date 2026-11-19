@@ -69,8 +69,8 @@ vision encoder turns each into tokens (a 1024×1024 image is roughly 1,000
 tokens, check `preprocessor_config.json`) and those count against the
 context window and the KV cache like text. Up to 8 images per prompt,
 video off. The key goes as both `Authorization: Bearer` and `X-API-Key`.
-The platform path currently caps a request at 300 s and 32 MB, which
-limits image batches and the longest reasoning answers.
+The platform caps a request at 32 MB and cuts it after 600 s, counted from its start, streams included (set on the Ray head node; the central Caddy proxy has no timeout of its own),
+which limits image batches and the longest reasoning answers.
 
 ## Variants
 

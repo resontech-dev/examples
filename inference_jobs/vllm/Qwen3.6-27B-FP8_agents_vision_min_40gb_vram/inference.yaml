@@ -1,7 +1,7 @@
 # Qwen3.6-27B (official FP8) via vLLM: text + vision assistant for agents.
 #
-# NEEDS the Ray 2.60.0 image (vLLM 0.29.0, CUDA 13, driver R580+); prod stays
-# on Ray 2.55.1 until the switch. Written 2026-11-18; nothing has booted.
+# NEEDS the Ray 2.60.0 image (vLLM 0.29.0, CUDA 13, driver R580+).
+# Written 2026-11-18; nothing has booted.
 #
 #   "assistant" -> Qwen/Qwen3.6-27B-FP8   /v1/chat/completions (text, images, tool calling)
 #

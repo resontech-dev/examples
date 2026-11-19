@@ -96,6 +96,12 @@ chat = LLMConfig(
         kv_cache_dtype="fp8",
         enable_prefix_caching=True,
         enable_chunked_prefill=True,
+        # Left unset, vLLM raises this to 1024 for gpt-oss (83 CUDA graphs).
+        # Under vLLM 0.29 (Ray 2.60) that capture ran the single-model chat
+        # job out of VRAM on a 16 GB card on 2026-11-18; here the card is
+        # shared with two sidecars, so the headroom is thinner still. With
+        # max_num_seqs=4 graphs past 4 tokens only cover prefill tails.
+        max_cudagraph_capture_size=256,
         dtype="auto",
         # Tool calling: the `openai` parser turns gpt-oss harmony calls into
         # `tool_calls`; present in vLLM 0.18.0 and 0.29.0.

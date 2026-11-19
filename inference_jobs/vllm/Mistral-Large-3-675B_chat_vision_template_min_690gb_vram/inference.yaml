@@ -1,7 +1,7 @@
 # ⚠️ TEMPLATE: Mistral Large 3 675B Instruct (FP8) via vLLM, TP=8 on one 8× H200 node. Text + image.
 #
-# NEEDS the Ray 2.60.0 image (vLLM 0.29.0, CUDA 13, driver R580+); prod stays
-# on Ray 2.55.1 until the switch. NOT deployable on the current fleet: one
+# NEEDS the Ray 2.60.0 image (vLLM 0.29.0, CUDA 13, driver R580+).
+# NOT deployable on the current fleet: one
 # worker with 8 NVLinked H200 or B200 and the 681.5 GB checkpoint pre-staged
 # on local NVMe (8x H100: the NVFP4 build, see README). Every number is
 # napkin math. Apache-2.0.

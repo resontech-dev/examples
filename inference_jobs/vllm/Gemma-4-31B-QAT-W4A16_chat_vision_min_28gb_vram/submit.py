@@ -5,7 +5,7 @@ Ships this folder's ``inference.yaml`` (one file) and ``scripts/``
 (recursively) via explicit keyword paths. No weights upload: vLLM pulls
 the 23.3 GB checkpoint `google/gemma-4-31B-it-qat-w4a16-ct` from HF Hub on first boot.
 
-NEEDS the Ray 2.60.0 image (vLLM 0.29.0, CUDA 13, driver R580+); prod runs Ray 2.55.1 / vLLM 0.18.0 until the switch. Written ahead; nothing has booted.
+NEEDS the Ray 2.60.0 image (vLLM 0.29.0, CUDA 13, driver R580+). Written ahead; nothing has booted.
 This size: vLLM >= 0.19.1.
 
 Run

@@ -25,7 +25,7 @@ over 10 minutes switch to local attention (`local_attention_after_s`).
 
 ## VERIFY on first boot
 
-- `nemo_toolkit[asr]` installs on the worker image (`rayproject/ray:2.55.1-py311-gpu`, Python 3.11) and boot fits the timeout;
+- `nemo_toolkit[asr]` installs on the worker image (Ray 2.60.0; confirm its Python version) and boot fits the timeout;
 - `pyarrow<26` stays in `requirements:` while the platform installs `numpy<2` for predictor jobs: the first boot (2026-11-18) died on `pyarrow requires NumPy 2.0 or newer, found 1.26.4`;
 - `from_pretrained` pulls the checkpoint; `transcribe()` returns hypotheses with `.text` and `.timestamp["segment"]`;
 - `change_attention_model("rel_pos", [-1, -1])` restores the checkpoint's own attention after a long file;
@@ -60,7 +60,7 @@ python predict.py ./call.mp3 --json   # the whole response
 
 ## Limits
 
-- 32 MB and 300 s per request at the central proxy: about an hour of 64 kbit/s MP3.
+- 32 MB per request: about an hour of 64 kbit/s MP3. One request to a predictor job is cut off after 300 s (set on the Ray head node; the predict wrapper answers 504 at 290 s).
 - One transcription at a time per replica (a lock); add replicas for parallel files.
 - Streaming exists in NeMo (chunked inference script), not on this route.
 

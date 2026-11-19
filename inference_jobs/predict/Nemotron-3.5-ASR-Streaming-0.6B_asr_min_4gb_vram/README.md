@@ -75,7 +75,7 @@ python predict.py ./call.mp3 --language uk-UA  # pinned
 
 ## Limits
 
-- 32 MB and 300 s per request at the central proxy (24 MB of audio with `--language`, which goes as base64).
+- 32 MB per request (24 MB of audio with `--language`, which goes as base64). One request to a predictor job is cut off after 300 s (set on the Ray head node; the predict wrapper answers 504 at 290 s).
 - Whole files only on this route; no live session yet.
 - One transcription at a time per replica (a lock).
 

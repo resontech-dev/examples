@@ -1,0 +1,45 @@
+# FLUX.2 [klein] 4B: text-to-image and image editing (predictor mode).
+#
+# Black Forest Labs' 4B step-distilled model, Apache-2.0: 4 steps per image,
+# a Qwen3 text encoder, up to 4 reference images per request. A prompt gives
+# a new image; a prompt plus a screenshot or photo gives the edited image
+# ("make the header dark blue", "put this product on a marble table").
+# Seconds per image, so the call is synchronous: no job ids, no polling.
+# Written 2026-11-19; nothing has booted.
+
+model:
+  # No `path`: diffusers pulls the pipeline from HF Hub in __init__
+  # (~16 GB: transformer ~8 GB + text encoder ~8 GB + VAE, bf16).
+  module: "klein_serve"
+  class_name: "KleinImageGen"
+  init_args:
+    model_id: "black-forest-labs/FLUX.2-klein-4B"
+    # auto: resident on ≥ 22 GB cards, otherwise model CPU offload (text
+    # encoder and transformer take turns on the GPU; fits 16 GB).
+    offload: "auto"
+    default_steps: 4            # the distilled schedule; more steps add little
+    max_steps: 8
+    default_side: 1024          # 1024×1024 when no size and no image is sent
+    max_area: 2359296           # 1536 × 1536 output cap
+    max_ref_area: 1048576       # reference images are downscaled to ~1 MP
+    max_refs: 4
+    max_images: 4               # num_images per request (sequential seeds)
+
+cluster:
+  num_workers: 1
+  mode: "data_parallel"
+  gpus_per_worker: 1
+  cpus_per_worker: 8
+  min_vram_gb_per_worker: 15       # model offload; 24 GB runs resident
+  min_host_ram_gb_per_worker: 24   # offloaded weights sit in RAM (~16 GB bf16)
+  min_disk_gb_per_worker: 35       # predictor image ~8 + 1.3 × ~16 GB pipeline
+  # One image at a time on the GPU (a lock in the predictor); a short queue.
+  max_ongoing_requests: 4
+  device: "gpu"
+
+requirements:
+  - "torch"                        # bare: the base image's build
+  - "diffusers>=0.37.0,<0.40"      # Flux2KleinPipeline landed in 0.37; 0.40+ needs transformers 5
+  - "transformers>=4.57,<5"        # Qwen3 text encoder
+  - "accelerate>=1.0"              # enable_model_cpu_offload
+  - "Pillow>=10.0.0"

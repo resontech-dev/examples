@@ -1,6 +1,6 @@
 """Gemma 4 26B A4B (QAT, AWQ INT4) via vLLM: text + image, tool calling, thinking. One 24 GB card.
 
-NEEDS the Ray 2.60.0 image (vLLM 0.29.0, CUDA 13, driver R580+); prod runs Ray 2.55.1 / vLLM 0.18.0 until the switch. Written ahead; nothing has booted.
+NEEDS the Ray 2.60.0 image (vLLM 0.29.0, CUDA 13, driver R580+). Written ahead; nothing has booted.
 This size: vLLM >= 0.25.0 per the vLLM recipe (Gemma 4 MoE; the RTX 5090 config there runs Red Hat's FP8 build).
 
 Google's Gemma 4 26B A4B (2026), Apache-2.0: a Mixture-of-Experts model with

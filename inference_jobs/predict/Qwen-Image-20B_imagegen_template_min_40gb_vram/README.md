@@ -6,6 +6,11 @@ open text-rendering in images** — posters, UI mockups, signage with real
 typography. Ships now so testing starts the day a frontier host (40–80 GB)
 joins the fleet; everything inside is a planning estimate.
 
+**Superseded:** this runs the August 2025 `Qwen/Qwen-Image` weights.
+[`../Qwen-Image-2512-Edit-2511_imagegen_edit_template_min_80gb_vram`](../Qwen-Image-2512-Edit-2511_imagegen_edit_template_min_80gb_vram/README.md)
+serves the December 2025 Qwen-Image-2512 plus the Edit-2511 editor on one
+endpoint, with the FLUX.2 klein job's request shape.
+
 ## Resources (catalog planning numbers — unvalidated)
 
 | VRAM min→rec | CPU | RAM | Min free disk | Tier |
@@ -40,3 +45,9 @@ Or paste `scripts/qwen_image_serve.py` + `inference.yaml` into
 Identical contract to the FLUX sibling (`prompt`, `width`, `height`,
 `steps`, `seed`, plus `negative_prompt` / `true_cfg_scale` — this is a
 full diffusion model, not distilled): clients swap endpoints, not code.
+
+**300 s per request.** One request to a predictor job is cut off after 300 s (set on the Ray head node; the predict wrapper answers 504 at 290 s). The
+wait in the queue counts too: `max_ongoing_requests: 1` keeps the job
+strictly serial, so a request queued behind others waits for them, and
+with several in flight the last ones can get 504. Send one request at a
+time.

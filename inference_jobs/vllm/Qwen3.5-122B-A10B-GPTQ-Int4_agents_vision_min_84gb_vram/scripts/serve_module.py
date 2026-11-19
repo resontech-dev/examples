@@ -13,7 +13,7 @@ before the first submit. Alternative:
     "Qwen/Qwen3.5-122B-A10B-FP8"   official FP8, ~125 GB: TP=2 on 2x H100 / 2x H200
 
 VERIFY, KERNEL: the Int4 expert layers run through vLLM's `moe_wna16`
-fused-MoE path, unverified on the pinned image (vLLM 0.18.0, which does
+fused-MoE path, unverified on the pinned image (vLLM 0.29.0, which does
 ship the Qwen3.5 model classes). Boot the sibling
 ../Qwen3.5-35B-A3B-GPTQ-Int4_agents_vision_min_22gb_vram on a 24 GB card
 first: same kernel, same answer, 4x cheaper. If that one fails with an

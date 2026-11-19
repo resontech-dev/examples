@@ -1,0 +1,60 @@
+# LTX-2.3 22B (Lightricks): text/image-to-video WITH SOUND (predictor mode).
+#
+# Lightricks' DistilledPipeline from their `ltx-pipelines` package: 8 steps
+# at half size, 2× upsample, 4 steps at full size. FP8 weights; layers
+# stream from pinned RAM on cards under 48 GB. 1280×704, 24 fps, 121
+# frames = 5 s by default, up to 241 (10 s). Clips render in a background
+# thread; predict.py polls. Written 2026-11-19; nothing has booted.
+#
+# ⚠️ LICENSE: LTX-2 Community License, NOT Apache. ≥ $10M annual revenue
+# needs a paid license; no use in a product competing with Lightricks'.
+# ⚠️ The Gemma 3 text encoder is gated: HF_TOKEN in .env, submit.py passes it.
+
+model:
+  # No `path`: the predictor downloads ~72 GB from HF Hub in __init__
+  # (46.2 GB checkpoint + 24.4 GB Gemma + 1 GB upsampler).
+  module: "ltx_serve"
+  class_name: "LtxVideoGen"
+  init_args:
+    model_repo: "Lightricks/LTX-2.3"
+    checkpoint: "ltx-2.3-22b-distilled-1.1.safetensors"   # bf16; cast to FP8 on load
+    upsampler_repo: "Lightricks/LTX-2.3"
+    spatial_upsampler: "ltx-2.3-spatial-upscaler-x2-1.1.safetensors"
+    gemma_repo: "google/gemma-3-12b-it-qat-q4_0-unquantized"
+    # fp8-cast: bf16 checkpoint downcast on the fly, 22 GB transformer.
+    # null = bf16 (44 GB). fp8-scaled-mm needs the FP8 checkpoint (README).
+    quantization: "fp8-cast"
+    # auto: resident on ≥ 48 GB (FP8), otherwise "cpu" = stream layers
+    # from pinned RAM (~5 GB VRAM for weights). "disk" if RAM is short.
+    offload: "auto"
+    default_frames: 121        # 8k+1; 121 = 5 s at 24 fps
+    max_frames: 241            # 10 s; longer clips cost memory and minutes
+    fps: 24.0
+    max_area: 901120           # 1280 × 704
+    default_wait_s: 20         # short, so a start returns the id fast; capped at 280 (300 s per request)
+    max_queued: 4
+    keep_results_s: 3600
+    hf_token: null             # submit.py fills it from HF_TOKEN in .env; do not commit a real one
+
+cluster:
+  num_workers: 1                   # ONE replica: job ids live in its memory
+  mode: "data_parallel"
+  gpus_per_worker: 1
+  cpus_per_worker: 8
+  min_vram_gb_per_worker: 16       # layer streaming; 24–32 GB faster, 48 GB resident
+  min_compute_capability: 8.9      # FP8: Ada (RTX 40xx, L40S), Hopper, Blackwell (RTX 50xx)
+  min_host_ram_gb_per_worker: 64   # pinned FP8 transformer ~22 GB + Gemma 24 GB + headroom
+  min_disk_gb_per_worker: 105      # image ~10 + 1.3 × 72 GB of weights
+  max_ongoing_requests: 8          # status polls; generation is one clip at a time
+  device: "gpu"
+
+requirements:
+  # Lightricks ships current code on GitHub only (PyPI is stuck at 1.0.0).
+  # Archive URLs, so the image needs no git. ltx-core pins
+  # transformers>=5.8,<5.15 and torch~=2.7, and pulls torchaudio/torchvision:
+  # check they match the base image's torch (README "Before listing").
+  - "torch"
+  - "ltx-core @ https://github.com/Lightricks/LTX-2/archive/refs/tags/v1.6.2.tar.gz#subdirectory=packages/ltx-core"
+  - "ltx-pipelines @ https://github.com/Lightricks/LTX-2/archive/refs/tags/v1.6.2.tar.gz#subdirectory=packages/ltx-pipelines"
+  - "huggingface_hub>=1.0"
+  - "Pillow>=10.0.0"

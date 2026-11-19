@@ -14,7 +14,7 @@ retrieval 68.5 vs 61.8. Both Apache-2.0, both 32k windows, 100+ languages.
 Memory. bf16 weights are ~8 GB per model, so both engines ship with
 `quantization="fp8"` (weights quantized at load, ~4.3 GB each; Marlin
 W8A16 on Ampere, native fp8 on Ada / Hopper / Blackwell). VERIFY: fp8
-on-the-fly for pooling models on vLLM 0.18.0 is unverified. If an engine
+on-the-fly for pooling models on vLLM 0.29.0 is unverified. If an engine
 refuses it, drop the kwarg and move to a 24 GB card (bf16, same shares).
 
 Budget on a 16 GB card, about 13.4 GB in total (each engine also takes
@@ -96,7 +96,7 @@ embed = LLMConfig(
         pipeline_parallel_size=1,
         runner="pooling",                        # vLLM 0.18 has no `task`; -> /v1/embeddings
         convert="embed",
-        quantization="fp8",                      # weights quantized at load, ~4.3 GB. VERIFY on 0.18.0
+        quantization="fp8",                      # weights quantized at load, ~4.3 GB. VERIFY on 0.29.0
         max_model_len=8192,                      # chunks are <= 512 tokens; the model allows 32k
         gpu_memory_utilization=0.42,
         kv_cache_memory_bytes=SIDECAR_KV_BYTES,
@@ -121,7 +121,7 @@ rerank = LLMConfig(
         runner="pooling",                        # vLLM 0.18 has no `task`; -> /v1/score
         convert="classify",
         chat_template=RERANK_TEMPLATE,
-        quantization="fp8",                      # VERIFY on 0.18.0, see the module docstring
+        quantization="fp8",                      # VERIFY on 0.29.0, see the module docstring
         max_model_len=8192,
         gpu_memory_utilization=0.42,
         kv_cache_memory_bytes=SIDECAR_KV_BYTES,

@@ -12,7 +12,7 @@
 #
 # VERIFY before the first submit (details in serve_module.py):
 #   * the official GPTQ-Int4 repo name,
-#   * the `moe_wna16` Int4 MoE kernel on the pinned vLLM 0.18.0 (the
+#   * the `moe_wna16` Int4 MoE kernel on the pinned vLLM 0.29.0 (the
 #     35B-A3B sibling job is the cheap test for the same question).
 # Nothing in this folder has booted yet; every number is an estimate.
 

@@ -44,7 +44,7 @@ Measure on your own workload before quoting any of it.
    repo name in the Qwen3.5 collection; confirm it exists. Fallback:
    `Qwen/Qwen3.5-122B-A10B-FP8` (~125 GB) on 2x H200.
 2. **Int4 MoE kernel.** The expert layers run through vLLM's `moe_wna16`
-   path, unverified on the pinned vLLM 0.18.0 (which ships the Qwen3.5
+   path, unverified on the pinned vLLM 0.29.0 (which ships the Qwen3.5
    model classes). Boot
    `../Qwen3.5-35B-A3B-GPTQ-Int4_agents_vision_min_22gb_vram` on a 24 GB
    card first: same kernel, same answer, no rental needed. If it fails

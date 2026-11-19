@@ -40,7 +40,7 @@ share it.
 
 ## VERIFY on first boot
 
-- the engine starts on the pinned image (vLLM 0.18) with `tokenizer_mode="mistral"` and `enforce_eager=True`: vLLM 0.18's own realtime example serves this model that way, the recipe asks for >= 0.20 with PIECEWISE CUDA graphs;
+- the engine starts on the pinned image (vLLM 0.29) with `tokenizer_mode="mistral"` and `enforce_eager=True`, the setup of vLLM 0.18's realtime example; 0.29 meets the recipe's >= 0.20, so try PIECEWISE CUDA graphs once eager works;
 - `mistral_common[audio]` (>= 1.9) is in the image;
 - **`/v1/realtime` through Ray Serve LLM's router**: `build_openai_app` serves the REST routes; a WebSocket route there is unproven. If the handshake gets 404, the route is not exposed: plan B is `predict.py --transcribe` on the same job, and a real fix is serving vLLM's own app in a predictor-style job;
 - the WebSocket upgrade through the per-job nginx and the central proxy;
@@ -64,7 +64,7 @@ python predict.py ./talk.wav --transcribe  # plan B, whole file
 |---|---|
 | `max_model_len` | longer sessions on a bigger card (131072 ≈ 3 h) |
 | `max_num_seqs` / `max_ongoing_requests` | parallel live sessions |
-| `enforce_eager` | drop after the image re-pin to vLLM >= 0.20 and set `compilation_config={"cudagraph_mode": "PIECEWISE"}` (recipe) |
+| `enforce_eager` | try dropping it (the pinned vLLM 0.29 meets the recipe's >= 0.20) and set `compilation_config={"cudagraph_mode": "PIECEWISE"}` (recipe) |
 | delay | `transcription_delay_ms` in the checkpoint's `tekken.json`: a fork of the checkpoint, not a serve flag |
 
 ## License

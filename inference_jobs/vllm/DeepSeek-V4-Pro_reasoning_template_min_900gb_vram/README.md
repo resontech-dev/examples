@@ -1,10 +1,8 @@
 # ⚠️ TEMPLATE: DeepSeek V4-Pro, TP=8 + expert parallel on one 8× H200 node
 
 **Needs the Ray 2.60.0 image (vLLM 0.29.0, CUDA 13, driver R580+). Not
-deployable on the current fleet.** Prod runs Ray 2.55.1 / vLLM 0.18.0
-until the switch described in
-`reson_docs/docs/big_models_experiments/ray2.60.0-upgrade.md`. Nothing here has
-booted; every number is napkin math.
+deployable on the current fleet.** Nothing here has booted; every number is
+napkin math.
 
 1.6T mixture-of-experts, 49B active per token, 1M context, text only, MIT.
 GPQA 90.1, HLE 37.7 (48.2 with tools), SWE-bench Verified 80.6. The same
@@ -40,7 +38,7 @@ Shared vLLM contract & defaults: [../README.md](../README.md).
 
 Model id `deepseek-v4-pro`. Same request contract as V4-Flash: thinking off
 by default, `chat_template_kwargs: {"thinking": true, "reasoning_effort": "high"}`
-per request. The platform path caps a request at 300 s today.
+per request. The platform cuts a request after 600 s, counted from its start, streams included (set on the Ray head node; the central Caddy proxy has no timeout of its own).
 
 ## Deploy (once the node exists)
 

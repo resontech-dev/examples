@@ -27,6 +27,7 @@ cluster:
   max_ongoing_requests: 8
 
 # No `requirements:` block on purpose. vLLM jobs run on the platform's
-# prebuilt ray-llm image (ray[serve,llm]==2.55.1 + vllm==0.18.0 + torch
-# cu128) — never re-declare ray / vllm / torch / transformers here.
+# prebuilt ray-llm image (since 2026-11-18 ray[serve,llm]==2.60.0 +
+# vllm==0.29.0 + torch cu130; before that 2.55.1 + vllm 0.18.0 + cu128) —
+# never re-declare ray / vllm / torch / transformers here.
 # See ../README.md "Requirements policy".

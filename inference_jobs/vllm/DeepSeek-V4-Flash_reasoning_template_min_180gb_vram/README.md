@@ -1,10 +1,8 @@
 # ⚠️ TEMPLATE: DeepSeek V4-Flash, TP=4 + expert parallel on one 4-GPU node
 
 **Needs the Ray 2.60.0 image (vLLM 0.29.0, CUDA 13, driver R580+). Not
-deployable on the consumer fleet.** Prod runs Ray 2.55.1 / vLLM 0.18.0
-until the switch described in
-`reson_docs/docs/big_models_experiments/ray2.60.0-upgrade.md`. Nothing here has
-booted; every number is napkin math.
+deployable on the consumer fleet.** Nothing here has booted; every number is
+napkin math.
 
 284B mixture-of-experts, 13B active per token, 1M context, text only, MIT.
 GPQA 88.1, HLE 34.8 (45.1 with tools), SWE-bench Verified 79.0,
@@ -50,8 +48,8 @@ Model id `deepseek-v4-flash`. Thinking is off by default; per request send
 `chat_template_kwargs: {"thinking": true, "reasoning_effort": "high"}`
 (`low`, `high` or `max`; `max` needs the 393k window shipped here). Agent
 sampling per the card: temperature 1.0, top_p 0.95. The key goes as both
-`Authorization: Bearer` and `X-API-Key`. The platform path caps a request
-at 300 s today, which cuts the longest Think Max answers.
+`Authorization: Bearer` and `X-API-Key`. The platform cuts a request
+after 600 s, counted from its start, streams included (set on the Ray head node; the central Caddy proxy has no timeout of its own); the longest Think Max answers can still hit it.
 
 ## Deploy (once the node exists)
 

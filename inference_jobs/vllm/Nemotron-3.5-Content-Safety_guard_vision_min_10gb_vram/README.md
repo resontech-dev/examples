@@ -31,8 +31,9 @@ Suggested GPUs: RTX 5070 Ti / 5080 / 4080 (16 GB: as configured,
 4070 (12 GB: fits with `max_num_seqs=2`). Vision tower is on by default
 (`limit_mm_per_prompt={"image": 1}`).
 
-Model card pins `vllm>=0.11.0,<=0.20.2`; the pinned image (vLLM 0.18.0)
-is inside the range. Gemma 3 is a vLLM-native architecture: no
+Model card pins `vllm>=0.11.0,<=0.20.2`; the pinned image (vLLM 0.29.0)
+is above that range: VERIFY the model boots and classifies correctly before
+listing. Gemma 3 is a vLLM-native architecture: no
 `trust_remote_code`.
 
 ## What it adds over Qwen3Guard, and what it lacks

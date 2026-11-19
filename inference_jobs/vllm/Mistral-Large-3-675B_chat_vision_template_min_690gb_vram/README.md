@@ -1,10 +1,8 @@
 # ⚠️ TEMPLATE: Mistral Large 3 675B Instruct, TP=8 on one 8× H200 node (text + image)
 
 **Needs the Ray 2.60.0 image (vLLM 0.29.0, CUDA 13, driver R580+). Not
-deployable on the current fleet.** Prod runs Ray 2.55.1 / vLLM 0.18.0
-until the switch described in
-`reson_docs/docs/big_models_experiments/ray2.60.0-upgrade.md`. Nothing here has
-booted; every number is napkin math.
+deployable on the current fleet.** Nothing here has booted; every number is
+napkin math.
 
 Mistral's 675B mixture-of-experts, 41B active per token, 256k context,
 text + image, **Apache-2.0**. An instruct model: no thinking mode, so it

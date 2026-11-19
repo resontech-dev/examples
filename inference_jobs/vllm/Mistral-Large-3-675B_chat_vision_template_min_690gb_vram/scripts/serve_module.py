@@ -1,9 +1,7 @@
 """⚠️ TEMPLATE: Mistral Large 3 675B Instruct (official FP8) via vLLM, TP=8 on one 8× H200 node. Text + image.
 
-NEEDS the Ray 2.60.0 image (vLLM 0.29.0, CUDA 13, driver R580+). Prod runs
-Ray 2.55.1 / vLLM 0.18.0 until the switch (reson_docs
-docs/big_models_experiments/ray2.60.0-upgrade.md). Written 2026-11-18; nothing
-has booted, every number is napkin math.
+NEEDS the Ray 2.60.0 image (vLLM 0.29.0, CUDA 13, driver R580+). Written
+2026-11-18; nothing has booted, every number is napkin math.
 
 Mistral's 675B mixture-of-experts (673B language model + 2.5B vision
 encoder), 41B active per token, 256k context, text + image, Apache-2.0.

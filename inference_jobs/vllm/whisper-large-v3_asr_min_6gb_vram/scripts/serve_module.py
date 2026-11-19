@@ -5,7 +5,7 @@ transcription support and the OpenAI audio route:
 
     POST /v1/audio/transcriptions   (multipart file + model)
 
-Confirm the pinned ray-llm image (ray 2.55.1 + vllm 0.18.0) exposes the
+Confirm the pinned ray-llm image (ray 2.60.0 + vllm 0.29.0) exposes the
 route end-to-end before selling. If it doesn't, the fallback is a
 predictor-mode job (faster-whisper inside predict()) — same platform
 contract, different folder.

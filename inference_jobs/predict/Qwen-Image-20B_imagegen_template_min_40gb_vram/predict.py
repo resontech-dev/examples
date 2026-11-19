@@ -36,8 +36,8 @@ DEFAULT_PROMPT = (
 def main() -> None:
     prompt = sys.argv[1] if len(sys.argv) > 1 else DEFAULT_PROMPT
 
-    # 50-step diffusion on a 20B MMDiT — generous timeout.
-    client = InferenceClient.from_env(timeout=900.0)
+    # The platform cuts a predictor request off after 300 s; this only has to outlast that.
+    client = InferenceClient.from_env(timeout=330.0)
     print(f"[predict] prompt: {prompt!r}")
 
     result = client.predict_json({"prompt": prompt})

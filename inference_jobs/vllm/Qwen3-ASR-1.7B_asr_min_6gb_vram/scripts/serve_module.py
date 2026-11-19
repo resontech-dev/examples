@@ -17,9 +17,9 @@ Italian, Polish, German.
 Stack facts (vLLM recipe, Qwen/Qwen3-ASR usage guide, 2026-01-29): plain
 `vllm serve Qwen/Qwen3-ASR-1.7B`, no extra flags; `vllm[audio]` extra for
 the audio decoders; day-0 support landed in the vLLM nightlies of January
-2026, so the pinned 0.18.0 is expected to carry the architecture. VERIFY
+2026, so the pinned 0.29.0 is expected to carry the architecture. VERIFY
 on first boot: an unknown-architecture error at engine start means the
-class is missing from 0.18.0 and this job waits for the image re-pin.
+class is missing from the image.
 
 Output format on the chat route: the model emits a language tag followed
 by the transcript (the `qwen-asr` package parses it with

@@ -1,0 +1,55 @@
+# Wan2.2-TI2V-5B: text-to-video and image-to-video (predictor mode).
+#
+# One 5B model, Apache-2.0, 1280×704 at 24 fps, up to 121 frames (5 s),
+# no sound. Clips take minutes, so the predictor renders in a background
+# thread and every call returns within wait_s: the clip, or a job id to
+# poll ({"action": "status", "id": ...}). predict.py does the polling.
+# Written 2026-11-19; nothing has booted.
+
+model:
+  # No `path`: diffusers pulls the 34.2 GB repo from HF Hub in __init__.
+  module: "wan_serve"
+  class_name: "WanVideoGen"
+  init_args:
+    model_id: "Wan-AI/Wan2.2-TI2V-5B-Diffusers"
+    # auto: weights resident on ≥ 40 GB cards, otherwise model CPU offload
+    # (one component on the GPU at a time). "group" streams layer by layer:
+    # the fallback if a 16 GB card runs out of memory, slower.
+    offload: "auto"
+    default_steps: 50          # official; 30 is a usable draft
+    default_frames: 121        # 4k+1; 121 = 5 s at 24 fps
+    max_frames: 121            # the model's training length
+    fps: 24
+    guidance_scale: 5.0        # official for TI2V-5B
+    max_area: 901120           # 1280 × 704: the model's native canvas
+    cache_threshold: 0.0       # 0.05–0.2 turns on first-block cache (faster, softer)
+    default_wait_s: 20         # short, so a start returns the id fast; capped at 280 (300 s per request)
+    max_queued: 4              # clips waiting behind the running one
+    keep_results_s: 3600       # finished clips stay fetchable this long
+
+cluster:
+  # ONE replica: job ids live in its memory, a second replica would not
+  # know the first one's ids.
+  num_workers: 1
+  mode: "data_parallel"
+  gpus_per_worker: 1
+  cpus_per_worker: 8
+  min_vram_gb_per_worker: 16       # model offload + VAE tiling; 24 GB comfortable, 40 GB resident
+  min_host_ram_gb_per_worker: 48   # offloaded weights sit in RAM (~25 GB bf16; fp32 transformer while loading)
+  min_disk_gb_per_worker: 55       # predictor image ~8 + 1.3 × 34.2 GB repo
+  # Status polls are cheap and never touch the GPU; generation itself is
+  # one clip at a time in the background thread.
+  max_ongoing_requests: 8
+  device: "gpu"
+
+requirements:
+  - "torch"                        # bare: the base image's build
+  - "diffusers>=0.36.0,<0.40"      # 0.36 fixed tiled VAE encode for Wan2.2 I2V; 0.40+ needs transformers 5
+  - "transformers>=4.57,<5"
+  - "accelerate>=1.0"              # enable_model_cpu_offload
+  - "ftfy"                         # Wan's prompt cleaning
+  - "sentencepiece"                # UMT5 tokenizer
+  - "protobuf"
+  - "imageio>=2.30"                # H.264 MP4 via ffmpeg; without it export_to_video writes mp4v
+  - "imageio-ffmpeg>=0.5"
+  - "Pillow>=10.0.0"

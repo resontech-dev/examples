@@ -1,6 +1,6 @@
 """Gemma 4 12B (QAT W4A16) via vLLM: text + image + audio, tool calling, thinking. One 16 GB card.
 
-NEEDS the Ray 2.60.0 image (vLLM 0.29.0, CUDA 13, driver R580+); prod runs Ray 2.55.1 / vLLM 0.18.0 until the switch. Written ahead; nothing has booted.
+NEEDS the Ray 2.60.0 image (vLLM 0.29.0, CUDA 13, driver R580+). Written ahead; nothing has booted.
 This size: vLLM >= 0.23.0 per the vLLM recipe (the encoder-free 12B Unified class; the recipe names the `vllm/vllm-openai:gemma4-unified` image).
 
 Google's Gemma 4 12B Unified (2026), Apache-2.0: an encoder-free model that

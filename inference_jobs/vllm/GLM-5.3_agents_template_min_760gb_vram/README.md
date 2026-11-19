@@ -1,10 +1,8 @@
 # ⚠️ TEMPLATE: GLM-5.3, TP=8 on one 8× H200 node (text)
 
 **Needs the Ray 2.60.0 image (vLLM 0.29.0, CUDA 13, driver R580+). Not
-deployable on the current fleet.** Prod runs Ray 2.55.1 / vLLM 0.18.0
-until the switch described in
-`reson_docs/docs/big_models_experiments/ray2.60.0-upgrade.md`. Nothing here has
-booted; every number is napkin math.
+deployable on the current fleet.** Nothing here has booted; every number is
+napkin math.
 
 Z.ai's 743B mixture-of-experts (39B active), sparse attention, 1M context,
 text only. Terminal-Bench 2.1 88.2: built for long agentic and coding work.
@@ -43,7 +41,8 @@ Shared vLLM contract & defaults: [../README.md](../README.md).
 Model id `glm-5.3`. Thinking is always on, so budget output tokens for it.
 Per request through `chat_template_kwargs`: `{"reasoning_effort": "low"}` or
 `"high"` (default `max`), `{"clear_thinking": true}` for plain chat. The
-platform path caps a request at 300 s today, which cuts `max`-effort runs.
+platform cuts a request after 600 s, counted from its start, streams included (set on the Ray head node; the central Caddy proxy has no timeout of its own);
+the longest `max`-effort runs can still hit it.
 
 ## Deploy (once the node exists)
 

@@ -14,7 +14,9 @@ Shared vLLM contract & defaults: [../README.md](../README.md).
 
 Suggested GPUs: RTX 3090 / 4090 / L4 /
 A10G (24 GB — as configured here, 64k context); RTX 4080 / 5080 / 5070 Ti
-(16 GB — fits at reduced `max_model_len` ≈ 8–16k and `gpu_memory_utilization=0.92`);
+(16 GB — fits at reduced `max_model_len` ≈ 8–16k and, under vLLM 0.29, only
+with `gpu_memory_utilization=0.95`, no CUDA graphs and no display on the card,
+which is how `serve_module.py` ships);
 2× 12 GB cards → PP=2 (copy the yaml/`engine_kwargs` shape from the sibling
 `Qwen3-Coder-30B…pipeline_parallel` example).
 

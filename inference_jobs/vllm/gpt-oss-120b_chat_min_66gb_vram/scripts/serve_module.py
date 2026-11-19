@@ -11,7 +11,7 @@ booted on real hardware yet. Measure before quoting.
 
 Kernels: MXFP4 runs natively on Blackwell (RTX PRO 6000, B200) and
 through Marlin kernels on Hopper / Ampere (H100, H200, A100) since vLLM
-0.10.1, so the pinned 0.18.0 image covers every card listed.
+0.10.1, so the pinned 0.29.0 image covers every card listed.
 
 Exports `app`; the platform detects `engine: vllm_openai` and points
 serve_config's import_path at `serve_module:app`.

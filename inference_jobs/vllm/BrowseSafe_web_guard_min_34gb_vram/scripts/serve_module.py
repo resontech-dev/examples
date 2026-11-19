@@ -21,7 +21,7 @@ Qwen3-30B-A3B KV ≈ 98 KB/token bf16, ~49 KB fp8 → ~225k cached tokens:
 8 full 16k pages in flight.
 
 ⚠️ VERIFY on first boot: dynamic fp8 on the Qwen3 MoE expert layers is
-expected to work on vLLM 0.18.0 (official Qwen3-30B-A3B-FP8 checkpoints
+expected to work on vLLM 0.29.0 (official Qwen3-30B-A3B-FP8 checkpoints
 run there, and ../Qwen3-Coder-30B-A3B…pipeline_parallel is the same
 architecture in AWQ), but this exact combination has not been run. If a
 vetted community FP8 / AWQ re-upload of browsesafe appears, point

@@ -1,0 +1,34 @@
+# Media studio: chat model that plans + image and video generators, ONE job, one GPU.
+#
+#   "assistant" → Qwen3-8B AWQ (vLLM)           /v1/chat/completions (tool calling, reasoning)
+#   images      → Z-Image-Turbo 6B (diffusers)  /v1/images/generations
+#   videos      → Wan2.2-TI2V-5B (diffusers)    /v1/videos, /v1/videos/{id}, /v1/videos/{id}/content
+#
+# NEEDS the Ray 2.60.0 image (vLLM 0.29.0, CUDA 13, driver R580+). All
+# three models Apache-2.0. Written 2026-11-19; nothing has booted.
+# diffusers goes into the media actor only (runtime_env pip in
+# serve_module.py), so `requirements:` stays empty like every vLLM job.
+
+engine: vllm_openai
+
+model:
+  module: "serve_module"
+
+vllm:
+  tensor_parallel_size: 1
+  pipeline_parallel_size: 1
+
+cluster:
+  num_workers: 1
+  device: "gpu"
+  gpus_per_worker: 1               # 2 with LAYOUT = "two_gpus" in serve_module.py
+  cpus_per_worker: 12              # vLLM + the media actor + MP4 encoding
+  min_vram_gb_per_worker: 32       # chat 9.6 GB + generators peak ~16 GB with offload
+  min_driver_version: "580"        # CUDA 13 in the Ray 2.60 image
+  min_host_ram_gb_per_worker: 64   # offloaded Wan (~24 GB) + Z-Image (~20 GB) bf16 + vLLM + load peaks
+  min_disk_gb_per_worker: 115      # image ~20 + 1.3 × (34.2 Wan + 32.9 Z-Image + 6.1 Qwen3) GB
+  # Advisory fields: dashboard/accounting only.
+  mode: "data_parallel"
+  max_ongoing_requests: 32
+
+# No `requirements:`: the prebuilt ray-llm image owns the stack.

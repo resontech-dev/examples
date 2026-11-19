@@ -1,10 +1,7 @@
 """Qwen3.6-27B (official FP8) via vLLM: text + vision assistant for agents.
 
-NEEDS the Ray 2.60.0 image (vLLM 0.29.0, CUDA 13, driver R580+). Prod runs
-Ray 2.55.1 / vLLM 0.18.0 until the switch (reson_docs
-docs/big_models_experiments/ray2.60.0-upgrade.md); on dev the head takes
-RAY_LLM_IMAGE=resontechtdev/ray-llm:2.60.0-py312-cu130. Written 2026-11-18;
-nothing has booted.
+NEEDS the Ray 2.60.0 image (vLLM 0.29.0, CUDA 13, driver R580+). Written
+2026-11-18; nothing has booted.
 
 Successor of Qwen3.5-27B on the same dense 27B body: GPQA 87.8, HLE 24.0,
 SWE-bench Verified 77.2 (Qwen3.5-27B: 85.5 / 24.3 / 72.4), text + images,

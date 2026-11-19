@@ -46,7 +46,7 @@ on a cold host takes a while; pre-mirror where the fleet allows.
 
 ## ⚠️ Verify before selling
 
-- **fp8 on the fly for a Qwen3 MoE on vLLM 0.18.0** is expected to work
+- **fp8 on the fly for a Qwen3 MoE on vLLM 0.29.0** is expected to work
   (official Qwen3-30B-A3B-FP8 checkpoints run on it, and
   `../Qwen3-Coder-30B-A3B…pipeline_parallel` is the same architecture in
   AWQ) but this exact combination has not been booted. If a vetted community

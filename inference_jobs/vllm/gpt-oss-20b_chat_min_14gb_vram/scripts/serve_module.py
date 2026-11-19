@@ -43,7 +43,27 @@ llm_config = LLMConfig(
         kv_cache_dtype="fp8",            # halves KV — default in every template
         enable_prefix_caching=True,      # chat clients resend history every turn
         enable_chunked_prefill=True,
-        gpu_memory_utilization=0.92,     # drop to 0.85 if the card drives a display
+        # vLLM 0.29 (Ray 2.60) on a 16 GB RTX 5070 Ti, 2026-11-19: weights
+        # 13.8 GiB (Marlin MXFP4 on sm_120), activations 0.46 GiB, and since
+        # vLLM 0.21 CUDA graphs are paid out of this budget too. KV left:
+        #   0.92, graphs up to 256 tokens (0.61 GiB) -> -0.64 GiB
+        #   0.95, graphs up to 8 tokens (0.47 GiB)   -> -0.03 GiB
+        # 0.95 still leaves ~0.8 GiB for the CUDA context; on a 16 GB card it
+        # must not drive a display.
+        gpu_memory_utilization=0.95,
+        # Hence no CUDA graphs, so the job also fits the 16 GB cards its
+        # min_vram_gb_per_worker lets the platform pick (torch.compile stays
+        # on; decode is slower). On a 24 GB card drop this, set
+        # max_cudagraph_capture_size=8 (unset, vLLM captures gpt-oss up to
+        # 1024 tokens) and gpu_memory_utilization=0.90.
+        compilation_config=dict(cudagraph_mode="NONE"),
+        # FlashInfer (vLLM 0.29's pick on sm_120) allocates a 394 MiB
+        # workspace (VLLM_FLASHINFER_WORKSPACE_BUFFER_SIZE) at the first
+        # decode step, after the KV cache has taken the rest: OOM on 16 GB
+        # (2026-11-19). Triton attention has no such buffer and supports the
+        # gpt-oss sinks. Its fp8 KV needs SM 8.9+, so on RTX 30xx / A10G /
+        # A100 also set kv_cache_dtype="auto".
+        attention_config=dict(backend="TRITON_ATTN"),
         dtype="auto",
 
         # ── Tool calling ──

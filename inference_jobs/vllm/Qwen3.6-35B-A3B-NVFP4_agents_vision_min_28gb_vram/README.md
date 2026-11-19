@@ -1,9 +1,7 @@
 # Qwen3.6-35B-A3B (NVFP4): fast MoE text + vision assistant (vLLM)
 
 **Needs the Ray 2.60.0 image (vLLM 0.29.0, CUDA 13, driver R580+) and a
-Blackwell card.** Prod runs Ray 2.55.1 / vLLM 0.18.0 until the switch
-described in `reson_docs/docs/big_models_experiments/ray2.60.0-upgrade.md`.
-Written 2026-11-18; nothing in this folder has booted.
+Blackwell card.** Written 2026-11-18; nothing in this folder has booted.
 
 The successor of `../Qwen3.5-35B-A3B-GPTQ-Int4_agents_vision_min_22gb_vram`:
 35B mixture-of-experts, 3B active per token, GPQA 86.0, HLE 21.4,

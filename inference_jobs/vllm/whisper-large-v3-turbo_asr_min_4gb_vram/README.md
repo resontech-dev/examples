@@ -48,7 +48,7 @@ Or paste `scripts/serve_module.py` + `inference.yaml` into
 ## Limits (same as large-v3)
 
 - 30 s windows, ≤ 448 decode tokens each (`max_model_len=448` is the model's shape).
-- Central nginx: 32 MB and 300 s per request → ~17 min of 16 kHz WAV or hours of MP3; chunk longer files client-side.
+- 32 MB per request → ~17 min of 16 kHz WAV or hours of MP3; chunk longer files client-side. A request to a vLLM job is cut off after 600 s, counted from its start, streams included (set on the Ray head node; the central Caddy proxy has no timeout of its own).
 - Speaker diarization and streaming-during-the-call are separate services, not this route.
 
 ## What to change

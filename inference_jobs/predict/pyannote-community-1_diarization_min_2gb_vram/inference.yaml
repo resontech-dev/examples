@@ -12,8 +12,7 @@
 # BLOCKED on the platform today: pyannote.audio 4 needs numpy >= 2 (via
 # pyannote.core 6), and the platform installs numpy<2 for every predictor
 # job, so the install fails before anything boots. It works once predictor
-# jobs keep numpy 2 (Ray 2.60 images plus the dispatcher change proposed in
-# reson_docs docs/inference/using_requirements.md). Do not submit before.
+# jobs keep numpy 2. Do not submit before.
 #
 # VALIDATE before listing: written, not booted. VERIFY list in README.md.
 

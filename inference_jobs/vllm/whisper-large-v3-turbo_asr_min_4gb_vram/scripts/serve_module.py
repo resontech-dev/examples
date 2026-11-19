@@ -9,7 +9,7 @@ languages).
 
 ⚠️ VALIDATE BEFORE LISTING: Whisper rides vLLM's transcription support
 through the Ray Serve LLM router — confirm the route on the pinned image
-(ray 2.55.1 + vllm 0.18.0) before selling. Plan B: predictor-mode job
+(ray 2.60.0 + vllm 0.29.0) before selling. Plan B: predictor-mode job
 with faster-whisper.
 
 Sharing a card: to run this next to the Qwen3-8B agents bundle, copy

@@ -10,7 +10,7 @@
 #
 # VERIFY before the first submit (details in serve_module.py):
 #   * the official GPTQ-Int4 repo name,
-#   * the `moe_wna16` Int4 MoE kernel on the pinned vLLM 0.18.0.
+#   * the `moe_wna16` Int4 MoE kernel on the pinned vLLM 0.29.0.
 # Nothing in this folder has booted yet; every number is an estimate.
 
 engine: vllm_openai

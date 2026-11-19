@@ -15,9 +15,9 @@ Route: vLLM's WebSocket realtime API.
       <- input_audio_buffer.commit {final: true}
       -> transcription.delta {delta} ... transcription.done {text}
 
-⚠️ VALIDATE BEFORE LISTING. vLLM 0.18 ships the realtime endpoint and its
-own example serves this model with --enforce-eager (the recipe asks for
->= 0.20 with PIECEWISE CUDA graphs). Unproven: whether Ray Serve LLM's
+⚠️ VALIDATE BEFORE LISTING. vLLM ships the realtime endpoint since 0.18,
+whose example serves this model with --enforce-eager (the recipe asks for
+>= 0.20 with PIECEWISE CUDA graphs, which the pinned 0.29 meets). Unproven: whether Ray Serve LLM's
 OpenAI router (build_openai_app) exposes a WebSocket route at all, and
 whether the per-job nginx passes the Upgrade. Plan B on the same
 deployment: POST /v1/audio/transcriptions with whole files.
@@ -50,7 +50,7 @@ llm_config = LLMConfig(
         # Required: the tokenizer loads only through mistral_common.
         tokenizer_mode="mistral",
         # vLLM 0.18's realtime example serves this model eager; the recipe's
-        # cudagraph_mode PIECEWISE wants vLLM >= 0.20 (drop this after the re-pin).
+        # cudagraph_mode PIECEWISE wants vLLM >= 0.20; the pinned 0.29 meets it, try without this.
         enforce_eager=True,
         # One token is ~80 ms of audio: 45k tokens ≈ one hour per session.
         # The default (131072, ~3 h) does not fit next to the weights on 16 GB.

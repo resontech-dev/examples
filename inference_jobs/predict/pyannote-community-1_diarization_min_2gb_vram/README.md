@@ -2,11 +2,9 @@
 
 > **Blocked on the platform today.** pyannote.audio 4 needs numpy >= 2
 > (through pyannote.core 6), and the platform installs `numpy<2` for every
-> predictor job (flare-dispatcher `src/include/base_requirements.txt`), so
-> the install fails before the job boots. pyannote.audio 3 has no
-> Community-1 pipeline. Submit this job once predictor jobs keep numpy 2:
-> Ray 2.60 images plus the dispatcher change proposed in reson_docs
-> `docs/inference/using_requirements.md` ("Що зміниться").
+> predictor job, so the install fails before the job boots. pyannote.audio 3
+> has no Community-1 pipeline. Submit this job once predictor jobs keep
+> numpy 2.
 
 The open pipeline of pyannote.audio 4 (code MIT, weights CC-BY-4.0):
 voice activity, speaker embeddings and clustering in one call. A recording
@@ -41,7 +39,7 @@ never shipped with the job.**
 
 ## VERIFY on first boot
 
-- `pyannote.audio>=4.0,<5` + `torchaudio` install on the worker image (`rayproject/ray:2.55.1-py311-gpu`) with a matching torch;
+- `pyannote.audio>=4.0,<5` + `torchaudio` install on the worker image (Ray 2.60.0) with a matching torch;
 - the import warns about torchcodec/FFmpeg (the image has no FFmpeg) and still works: audio reaches pyannote as a waveform, which never calls torchcodec;
 - `load_weights()` finds `config.yaml` in the unpacked folder and `Pipeline.from_pretrained(<folder>)` loads without network;
 - time and memory for a 10-minute and a 60-minute recording on GPU and on CPU;
@@ -81,7 +79,7 @@ Whisper on its own.
 
 ## Limits
 
-- 32 MB and 300 s per request at the central proxy: about an hour of 64 kbit/s MP3.
+- 32 MB per request: about an hour of 64 kbit/s MP3. One request to a predictor job is cut off after 300 s (set on the Ray head node; the predict wrapper answers 504 at 290 s); time an hour-long file on first boot.
 - Offline only: the whole recording per request. Live diarization (NVIDIA Sortformer streaming, up to 4 speakers) is a separate job.
 - Labels are per recording: `SPEAKER_00` in one file is not the same person in the next.
 

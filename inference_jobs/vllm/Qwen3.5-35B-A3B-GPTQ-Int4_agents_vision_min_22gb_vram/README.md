@@ -37,7 +37,7 @@ Throughput, estimate only: on a 5090 roughly 3x the 27B's decode rate,
    named in the vLLM recipe for this model; confirm it exists. Fallbacks
    are in `serve_module.py` (official FP8 at ~36 GB, community GPTQ).
 2. **Int4 MoE kernel.** The expert layers run through vLLM's `moe_wna16`
-   path, unverified on the pinned vLLM 0.18.0. The dense 27B and 9B jobs
+   path, unverified on the pinned vLLM 0.29.0. The dense 27B and 9B jobs
    prove the Qwen3.5 hybrid architecture, not this kernel. A boot failure
    with an unsupported-quantization error for FusedMoE means: switch to the
    FP8 checkpoint. **This job is the cheap test for the same question on

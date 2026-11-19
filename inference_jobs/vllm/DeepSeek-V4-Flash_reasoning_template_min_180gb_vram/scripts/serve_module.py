@@ -1,9 +1,7 @@
 """⚠️ TEMPLATE: DeepSeek V4-Flash (official 0731 release) via vLLM, TP=4 + expert parallel on one 4-GPU node.
 
-NEEDS the Ray 2.60.0 image (vLLM 0.29.0, CUDA 13, driver R580+). Prod runs
-Ray 2.55.1 / vLLM 0.18.0 until the switch (reson_docs
-docs/big_models_experiments/ray2.60.0-upgrade.md). Written 2026-11-18; nothing
-has booted, every number is napkin math.
+NEEDS the Ray 2.60.0 image (vLLM 0.29.0, CUDA 13, driver R580+). Written
+2026-11-18; nothing has booted, every number is napkin math.
 
 284B mixture-of-experts, 13B active per token, sparse attention with a
 lightning indexer, 1M context, text only, MIT. GPQA 88.1, HLE 34.8 (45.1

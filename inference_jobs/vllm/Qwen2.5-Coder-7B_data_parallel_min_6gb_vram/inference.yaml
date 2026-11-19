@@ -34,7 +34,7 @@ cluster:
 
 # No `requirements:` block on purpose. vLLM jobs run on the platform's
 # prebuilt ray-llm image, which bakes the tested stack as one matched set:
-# ray[serve,llm]==2.55.1 + vllm==0.18.0 + torch 2.10/cu128 + transformers.
+# ray[serve,llm]==2.60.0 + vllm==0.29.0 + torch 2.13/cu130 + transformers 5.17.
 # Never re-declare ray / vllm / torch / transformers / numpy here — the
 # image owns them, and a customer `ray` line is rejected at submit.
 # List ONLY genuinely extra packages (rare for vLLM jobs).

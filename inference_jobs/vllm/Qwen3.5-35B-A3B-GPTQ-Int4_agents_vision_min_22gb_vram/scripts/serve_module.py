@@ -14,7 +14,7 @@ Confirm the repo exists before the first submit. Alternatives:
     "liming22/Qwen3.5-35B-A3B-GPTQ-Int4"   community GPTQ of the same shape; vet the repo
 
 VERIFY, KERNEL: the Int4 expert layers run through vLLM's `moe_wna16`
-fused-MoE path. On the pinned image (vLLM 0.18.0) that path is unverified:
+fused-MoE path. On the pinned image (vLLM 0.29.0) that path is unverified:
 the dense 27B and 9B jobs prove the Qwen3.5 hybrid architecture, not the
 quantized MoE kernel. If boot fails with an unsupported-quantization error
 for FusedMoE, switch model_source to the FP8 checkpoint and the card size

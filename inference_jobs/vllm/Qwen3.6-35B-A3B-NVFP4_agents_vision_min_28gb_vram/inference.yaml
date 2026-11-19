@@ -1,8 +1,7 @@
 # Qwen3.6-35B-A3B (NVIDIA NVFP4) via vLLM: fast MoE text + vision assistant.
 #
 # NEEDS the Ray 2.60.0 image (vLLM 0.29.0, CUDA 13, driver R580+) and a
-# Blackwell card (NVFP4). Prod stays on Ray 2.55.1 until the switch.
-# Written 2026-11-18; nothing has booted.
+# Blackwell card (NVFP4). Written 2026-11-18; nothing has booted.
 #
 #   "assistant" -> nvidia/Qwen3.6-35B-A3B-NVFP4   /v1/chat/completions (text, images, tool calling)
 #

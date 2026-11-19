@@ -1,6 +1,6 @@
 """Gemma 4 31B (QAT W4A16) via vLLM: text + image, tool calling, thinking. One 32 GB card.
 
-NEEDS the Ray 2.60.0 image (vLLM 0.29.0, CUDA 13, driver R580+); prod runs Ray 2.55.1 / vLLM 0.18.0 until the switch. Written ahead; nothing has booted.
+NEEDS the Ray 2.60.0 image (vLLM 0.29.0, CUDA 13, driver R580+). Written ahead; nothing has booted.
 This size: vLLM >= 0.19.1 per the vLLM recipe (the first Gemma 4 release in vLLM was 0.19.0).
 
 Google's Gemma 4 31B (2026), Apache-2.0: the largest dense Gemma 4. Text and

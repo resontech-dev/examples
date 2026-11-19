@@ -1,9 +1,8 @@
 """Qwen3.6-35B-A3B (NVIDIA NVFP4) via vLLM: fast MoE text + vision assistant. One RTX 5090.
 
 NEEDS the Ray 2.60.0 image (vLLM 0.29.0, CUDA 13, driver R580+) and a
-Blackwell card: NVFP4 is a Blackwell format. Prod runs Ray 2.55.1 / vLLM
-0.18.0 until the switch (reson_docs docs/big_models_experiments/
-ray2.60.0-upgrade.md). Written 2026-11-18; nothing has booted.
+Blackwell card: NVFP4 is a Blackwell format. Written 2026-11-18; nothing has
+booted.
 
 The speed rung of the Qwen3.6 family: 35B mixture-of-experts with 3B active
 per token, GPQA 86.0, HLE 21.4, SWE-bench Verified 73.4 (Qwen3.5-35B-A3B:

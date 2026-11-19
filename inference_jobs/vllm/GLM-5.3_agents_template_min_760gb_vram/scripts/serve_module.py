@@ -1,9 +1,7 @@
 """⚠️ TEMPLATE: GLM-5.3 (official FP8) via vLLM, TP=8 on one 8× H200 node. Text only.
 
-NEEDS the Ray 2.60.0 image (vLLM 0.29.0, CUDA 13, driver R580+). Prod runs
-Ray 2.55.1 / vLLM 0.18.0 until the switch (reson_docs
-docs/big_models_experiments/ray2.60.0-upgrade.md). Written 2026-11-18; nothing
-has booted, every number is napkin math.
+NEEDS the Ray 2.60.0 image (vLLM 0.29.0, CUDA 13, driver R580+). Written
+2026-11-18; nothing has booted, every number is napkin math.
 
 Z.ai's 743B mixture-of-experts (39B active per the vLLM recipe), sparse
 attention with an indexer (GlmMoeDsaForCausalLM, the GLM-5.2 base with new

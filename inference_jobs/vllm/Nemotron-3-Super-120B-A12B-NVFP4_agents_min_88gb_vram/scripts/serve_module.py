@@ -1,9 +1,7 @@
 """Nemotron 3 Super 120B-A12B (NVIDIA NVFP4) via vLLM: text reasoning + agents on one 96 GB card.
 
 NEEDS the Ray 2.60.0 image (vLLM 0.29.0, CUDA 13, driver R580+) and a
-Blackwell card for NVFP4. Prod runs Ray 2.55.1 / vLLM 0.18.0 until the
-switch (reson_docs docs/big_models_experiments/ray2.60.0-upgrade.md). Written
-2026-11-18; nothing has booted.
+Blackwell card for NVFP4. Written 2026-11-18; nothing has booted.
 
 NVIDIA's open 120B mixture-of-experts, 12B active per token, hybrid
 Mamba-2 + MoE + attention (88 layers: 40 Mamba-2, 40 MoE, 8 attention),

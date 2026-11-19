@@ -43,10 +43,10 @@ fraction by the same amount; the model id `asr` stays.
 
 The recipe (`Qwen/Qwen3-ASR` usage guide, 2026-01-29) is `vllm serve
 Qwen/Qwen3-ASR-1.7B` with no flags, plus the `vllm[audio]` extra. Day-0
-support landed in the January 2026 nightlies, so 0.18.0 is expected to
-carry the architecture. VERIFY list on first boot:
+support landed in the January 2026 nightlies, so the pinned 0.29.0 is
+expected to carry the architecture. VERIFY list on first boot:
 
-- engine starts on the pinned image (unknown architecture = wait for the image re-pin);
+- engine starts on the pinned image (unknown architecture = the class is missing from the image);
 - the audio decoders are in the image (the Whisper jobs need them too);
 - usable minutes of audio per request at `max_model_len=8192`;
 - the language-tag format of the chat reply (`predict.py` splits leniently);
@@ -78,8 +78,9 @@ Or paste `scripts/serve_module.py` + `inference.yaml` into
 
 ## Limits
 
-- Central nginx: 32 MB and 300 s per request, so about 17 minutes of 16 kHz
-  WAV or hours of MP3; chunk longer files client-side.
+- 32 MB per request, so about 17 minutes of 16 kHz WAV or hours of MP3;
+  chunk longer files client-side. A request to a vLLM job is cut off after
+  600 s, counted from its start, streams included (set on the Ray head node; the central Caddy proxy has no timeout of its own).
 - One clip per request (`limit_mm_per_prompt={"audio": 1}`).
 - Streaming transcription and word timestamps exist in the `qwen-asr`
   toolkit (vLLM backend, forced aligner sibling), not on this route.

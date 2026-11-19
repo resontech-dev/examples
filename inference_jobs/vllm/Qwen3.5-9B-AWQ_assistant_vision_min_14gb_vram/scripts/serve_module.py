@@ -14,7 +14,7 @@ cheap. Native window 262k; we cap at 16k on 16 GB.
 ⚠️ CHECKPOINT — VERIFY before selling. There is no official 4-bit
 Qwen3.5-9B; `QuantTrio/Qwen3.5-9B-AWQ` is a data-free community AWQ
 (~12 GiB: vision tower and linear-attention layers stay bf16, Apache-2.0,
-needs vLLM ≥ 0.16 → fine on the pinned 0.18). Alternatives, same file:
+needs vLLM ≥ 0.16 → fine on the pinned 0.29). Alternatives, same file:
     "axteam/Qwen3.5-9B-AWQ-4bit"       W4A16 compressed-tensors, vision bf16
     "RedHatAI/Qwen3.5-9B-FP8-dynamic"  14 GB on disk → needs a 24 GB card
     "Qwen/Qwen3.5-9B"                  official bf16, 19 GB → 24 GB card

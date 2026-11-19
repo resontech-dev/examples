@@ -51,7 +51,7 @@ use on a 16 GB card.
 ## VERIFY before listing
 
 - `quantization="fp8"` on pooling models (embed / classify runners) on
-  vLLM 0.18.0 is unverified. If an engine refuses it at boot, drop the
+  vLLM 0.29.0 is unverified. If an engine refuses it at boot, drop the
   kwarg and run bf16 on a 24 GB card at the same shares.
 - The optional third engine `rerank-mxbai` (mixedbread-ai/mxbai-rerank-large-v2,
   1.5B, Apache-2.0, BEIR avg 61.4 published) ships commented out in

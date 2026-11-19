@@ -41,7 +41,7 @@ llm_config = LLMConfig(
         # Official GPTQ-Int4 (~220 GB) is the small-node variant, see the
         # module docstring in README "Variants". VERIFY the repo id
         # Qwen/Qwen3.5-397B-A17B-GPTQ-Int4 and the moe_wna16 kernel path on
-        # vLLM 0.18.0 before any deploy.
+        # the pinned vLLM 0.29.0 before any deploy.
     ),
 
     # Datacenter nodes MAY carry Ray accelerator labels (H200, H100).
