@@ -1,11 +1,13 @@
-# Nemotron 3.5 ASR Streaming 0.6B (NVIDIA): low-latency speech-to-text in
-# 40 language locales, Ukrainian (uk-UA) among the 19 transcription-ready
-# ones (predictor mode).
+# Nemotron 3.5 ASR Streaming 0.6B (NVIDIA): live speech-to-text in 40
+# language locales, Ukrainian (uk-UA) among the 19 transcription-ready ones
+# (predictor mode).
 #
 # Cache-aware streaming FastConformer + RNN-T, 600M parameters,
 # OpenMDW-1.1 (ready for commercial use). Released 2026-06-04; the
 # multilingual successor of nemotron-speech-streaming-en-0.6b. Not a vLLM
-# model: NeMo runs it inside predict(), whole files per request.
+# model: NeMo runs it inside predict(). Two routes on one endpoint: live
+# sessions (audio pieces in, text out a frame behind the speaker) and
+# whole files.
 #
 # VALIDATE before listing: written, not booted. VERIFY list in README.md.
 
@@ -15,27 +17,50 @@ model:
   class_name: "NemotronStreamingASR"
   init_args:
     model_id: "nvidia/nemotron-3.5-asr-streaming-0.6b"
-    # [left, right] attention context in 80 ms frames. The right value is the
-    # latency a live session would have: 0 (80 ms), 1, 3, 6, 13 (1.12 s, the
-    # most accurate). Files are not latency-bound, so 13.
+    # Whole files: [left, right] attention context in 80 ms frames. Files are
+    # not latency-bound, so the most accurate right context, 13.
     att_context_size: [56, 13]
     timestamps: false
+    # Live sessions: NeMo's cache-aware streaming pipeline on a second copy
+    # of the model. The right context sets the frame and so the delay behind
+    # the speaker: 0 (80 ms), 1 (160 ms), 3 (320 ms), 6 (560 ms), 13 (1.12 s).
+    live: true
+    live_att_context_size: [56, 6]
+    live_language: null          # null: "auto" if the model has it, else en-US; a client sends "uk-UA" per session
+    max_sessions: 32             # open sessions at once; each keeps an encoder cache on the GPU
+    session_idle_s: 60           # a session without audio for this long is closed
+    # Two passes: Nemotron streams the draft, this model writes the final text of
+    # every finished phrase and transcribes whole files. null: Nemotron only.
+    #   parakeet       nvidia/parakeet-tdt-0.6b-v3 (NeMo, ~2.5 GB; FLEURS uk WER 6.8 % vs Nemotron's 13.7 %)
+    #   whisper        openai/whisper-large-v3 (fp16 ~3.1 GB)
+    #   whisper-turbo  openai/whisper-large-v3-turbo (fp16 ~1.6 GB, faster)
+    # `python submit.py --final parakeet` submits a copy with this line set.
+    final_model: parakeet
+    final_model_id: null         # another checkpoint of the same family, e.g. a Ukrainian Whisper fine-tune
 
 cluster:
+  # ONE replica: live sessions live in its memory (a second replica would
+  # get appends for sessions it does not have).
   num_workers: 1
   mode: "data_parallel"
   gpus_per_worker: 1
   cpus_per_worker: 8
-  min_vram_gb_per_worker: 4   # ~2.4 GB fp32 weights; limited attention context keeps long files linear
-  max_ongoing_requests: 4
+  # Two copies of Nemotron (~2.4 GB fp32 each) + session caches; with
+  # final_model, one Nemotron copy + the final model (≤ 3.1 GB fp16).
+  min_vram_gb_per_worker: 8
+  # A live client sends one request per frame (~2 per second); a request
+  # takes tens of ms on the GPU, so many sessions share the replica.
+  max_ongoing_requests: 16
   device: "gpu"
 
 requirements:
   - "torch"                        # bare: bound by nemo_toolkit
   # The model card says NeMo main, but main now needs Python >= 3.12 and the
   # worker image is 3.11. NeMo 3.0.0 (PyPI, 2026-08-07) already has the
-  # model's class, EncDecRNNTBPEModelWithPrompt, with target_lang.
-  - "nemo_toolkit[asr]>=3.0"
+  # model's class, EncDecRNNTBPEModelWithPrompt, and the cache-aware
+  # streaming pipeline (nemo.collections.asr.inference) the live route uses.
+  - "nemo_toolkit[asr]>=3.0,<3.1"
+  - "transformers"                 # final_model: whisper*; NeMo pulls it in anyway, the version is NeMo's choice
   - "soundfile>=0.12.1"            # bundles libsndfile with MP3 support: no FFmpeg on the worker
   - "scipy"
   - "numpy"
